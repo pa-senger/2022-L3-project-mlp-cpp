@@ -1,5 +1,5 @@
-## University project
+# University project
 
-# applied mathematics undergrad
+## applied mathematics undergrad
 
-# neural network MPC c++ project
+## neural network MPC c++ project
