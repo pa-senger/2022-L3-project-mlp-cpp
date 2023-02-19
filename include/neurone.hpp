@@ -41,9 +41,8 @@ class neurone {
 
     // tests
     static bool unitTest1 (); // tests constuctor 
-    static bool unitTest2 (); // tests getters setters
+    static bool unitTest2 (); // tests getters setters // todo
     static bool unitTest3 (); // tests operators and methods
-
     private:
     int m_size;
     double (*pfSigma) (double);
