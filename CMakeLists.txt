@@ -8,9 +8,9 @@ file(
         src/*
 )
 
+
 add_executable(
         ${PROJECT_NAME}
         ${source_files}
 )
 
-add_compile_options(-std:c++17 -g -pedantic -Wall -Wextra -Werror -Wshadow -Weffc++ -01)
