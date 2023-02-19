@@ -9,7 +9,7 @@ file(
 )
 
 add_executable(
-        ${PROJECT_NAME}.e
+        ${PROJECT_NAME}
         ${source_files}
 )
 
