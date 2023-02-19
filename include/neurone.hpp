@@ -26,8 +26,8 @@ class neurone {
     void setDb (double db);
     void setW (double w, int i);
     void setDw (double dw, int i);
-    void setSigma (double (*pfS)(double d));
-    void setDsigma (double (*pfDs)(double d));
+    void setSigma (double (*pfS)(double));
+    void setDsigma (double (*pfDs)(double));
 
     // operator
     neurone operator= (const neurone & ne);
@@ -46,8 +46,8 @@ class neurone {
 
     private:
     int m_size;
-    double (*pfSigma) (double d);
-    double (*pfDsigma) (double d);
+    double (*pfSigma) (double);
+    double (*pfDsigma) (double);
     double *m_W;
     double *m_dW;
     double m_po;

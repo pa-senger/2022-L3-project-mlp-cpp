@@ -5,7 +5,7 @@
 
 int main() {
 
-    std::cout << neurone::unitTest1() << std::endl;
+    std::cout << neurone::unitTest2() << std::endl;
 
     return 0;
 }
