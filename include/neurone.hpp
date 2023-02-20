@@ -1,11 +1,12 @@
 #ifndef NEURONE_HPP
 #define NEURONE_HPP
 
+
 class neurone {
     public:
     // default constructor
     neurone () {
-        m_size = 0., m_po = 0.; m_biais = 0.; m_db = 0.;
+        m_size = 0, m_po = 0.; m_biais = 0.; m_db = 0.;
         pfSigma = nullptr, pfDsigma = nullptr, m_W = nullptr, m_dW = nullptr;
     }
     // construtor taking size of an entry vector 
@@ -20,12 +21,12 @@ class neurone {
     double getBiais () const;
     double getDb () const;
     double getW (int i) const;
-    double getDw (int i)const;
+    double getDW (int i)const;
     double getPo () const;
     void setBiais (double b);
     void setDb (double db);
     void setW (double w, int i);
-    void setDw (double dw, int i);
+    void setDW (double dw, int i);
     void setSigma (double (*pfS)(double));
     void setDsigma (double (*pfDs)(double));
 
@@ -33,14 +34,14 @@ class neurone {
     neurone operator= (const neurone & ne);
 
     // methods
-    void WOnes ();
-    void WRandom (); // Unif([-1m, 1m]) distribution
-    void dWZeros ();
+    void setWones ();
+    void setWrandom (); // Unif([-1m, 1m]) distribution
+    void setDWzeros ();
     void evaluation (const double *X);
-    int getSize (const double * arr) const; // return the size of any 1D array
+    int getSizeArr (const double * arr) const; // return the size of any 1D array
 
     // tests
-    static bool unitTest1 (); // tests constuctor 
+    static bool unitTest1 (); // tests constuctors 
     static bool unitTest2 (); // tests getters setters 
     static bool unitTest3 (); // tests operators and methods // todo
     private:
@@ -53,7 +54,6 @@ class neurone {
     double m_biais;
     double m_db;
 };
-
 
 
 #endif

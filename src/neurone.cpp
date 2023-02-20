@@ -3,6 +3,7 @@
 #include <cmath>
 #include <random>
 
+
 neurone:: neurone (int n) {
     m_size = n;
     m_po = 0.;
@@ -39,12 +40,12 @@ int neurone:: getSize () const { return m_size; }
 double neurone:: getBiais () const { return m_biais; }
 double neurone:: getDb () const { return m_db; }
 double neurone:: getW (int i) const { return m_W[i]; }
-double neurone:: getDw (int i) const { return m_dW[i] ; }
+double neurone:: getDW (int i) const { return m_dW[i] ; }
 double neurone:: getPo () const { return m_po; }
 void neurone:: setBiais (double b) { m_biais = b; }
 void neurone:: setDb (double db) { m_db = db; }
 void neurone:: setW (double w, int i) { m_W[i] = w; }
-void neurone:: setDw (double dw, int i) { m_dW[i] = dw; }
+void neurone:: setDW (double dw, int i) { m_dW[i] = dw; }
 void neurone:: setSigma (double (*pfS)(double)) { pfSigma = pfS; }
 void neurone:: setDsigma (double (*pfDs)(double)) { pfDsigma = pfDs; }
 neurone neurone:: operator= (const neurone & ne) {
@@ -57,11 +58,9 @@ neurone neurone:: operator= (const neurone & ne) {
         pfDsigma = ne.pfDsigma;
         if (m_W != nullptr) {
             delete [] m_W;
-           // double * m_W;
         }
         if (m_dW != nullptr) {
             delete [] m_dW;
-           // double * m_W;
         }
         m_W = new double [m_size];
         m_dW = new double [m_size];
@@ -72,27 +71,25 @@ neurone neurone:: operator= (const neurone & ne) {
     }
     return *this;
 }
-void neurone:: WOnes () {
+void neurone:: setWones () {
     if ( m_W != nullptr ) {
        delete [] m_W;
-       //double * m_W;
     }
     m_W = new double [m_size];   
     for (int i=0; i<m_size; ++i) {
         m_W[i] = 1.;
     }
 }
-void neurone:: dWZeros () {
+void neurone:: setDWzeros () {
     if ( m_dW != nullptr ) {
        delete [] m_dW;
-      // double * m_dW;
     }
     m_dW = new double [m_size];   
     for (int i=0; i<m_size; ++i) {
         m_dW[i] = 0.;
     }
 }
-void neurone:: WRandom () {
+void neurone:: setWrandom () {
     std::random_device rd;
     std::mt19937 gen(rd()); // standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<double> dis(-1'000'000, 1'000'000);
@@ -101,7 +98,7 @@ void neurone:: WRandom () {
 }
 void neurone:: evaluation (const double *X) {
     double dot = 0;
-    if ( m_size != getSize(X) ) {
+    if ( m_size != getSizeArr(X) ) {
         std::cout << "Error : W and X are not the same dimensions ! \n";
         exit(1);
     }
@@ -110,11 +107,10 @@ void neurone:: evaluation (const double *X) {
     }
     m_po = pfSigma(dot + m_biais);
 }
-int neurone:: getSize (const double * arr) const {
+int neurone:: getSizeArr (const double * arr) const {
     int size = sizeof(arr)/sizeof(double);
     return size;
 }
-
 
 
 

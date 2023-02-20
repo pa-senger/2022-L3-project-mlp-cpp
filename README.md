@@ -2,4 +2,4 @@
 
 ## applied mathematics undergrad
 
-## neural network MPC c++ project
+## MPC neural network c++ project
