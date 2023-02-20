@@ -96,21 +96,18 @@ void neurone:: setWrandom () {
     for (int i=0; i<m_size; ++i) 
         m_W[i] = dis(gen);
 }
-void neurone:: evaluation (const double *X) {
+void neurone:: evaluation (const double *X, int size) {
     double dot = 0;
-    if ( m_size != getSizeArr(X) ) {
+    if ( m_size != size ) {
         std::cout << "Error : W and X are not the same dimensions ! \n";
         exit(1);
     }
     for (int i=0; i<m_size; ++i) {
-        dot += m_W[i] * X[i];
+        dot += (m_W[i] * X[i]);
     }
     m_po = pfSigma(dot + m_biais);
 }
-int neurone:: getSizeArr (const double * arr) const {
-    int size = sizeof(arr)/sizeof(double);
-    return size;
-}
+
 
 
 

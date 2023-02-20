@@ -2,9 +2,9 @@
 #define ACTIV_FUNCTIONS_HPP
 #include <cmath>
 
-
-double sigma (double x);
-double dSigma (double x);
+int getSizeArr (const double * arr);
+double sigma (const double x);
+double dSigma (const double x);
 
 
 
