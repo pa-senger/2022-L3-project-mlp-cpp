@@ -1,11 +1,11 @@
 #include "../include/neurone.hpp"
 #include <iostream>
 #include <cmath>
-
+#include <random>
 
 int main() {
 
-    std::cout << neurone::unitTest2() << std::endl;
+
 
     return 0;
 }

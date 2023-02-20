@@ -13,7 +13,7 @@ class neurone {
     // copy constructor
     neurone (const neurone & ne);
     // destructor
-    ~neurone();
+    ~neurone ();
 
     // getter setter
     int getSize () const;
@@ -22,7 +22,7 @@ class neurone {
     double getW (int i) const;
     double getDw (int i)const;
     double getPo () const;
-    void setBiais (double d);
+    void setBiais (double b);
     void setDb (double db);
     void setW (double w, int i);
     void setDw (double dw, int i);
@@ -34,15 +34,15 @@ class neurone {
 
     // methods
     void WOnes ();
-    void WRandom (); // todo
+    void WRandom (); // Unif([-1m, 1m]) distribution
     void dWZeros ();
     void evaluation (const double *X);
     int getSize (const double * arr) const; // return the size of any 1D array
 
     // tests
     static bool unitTest1 (); // tests constuctor 
-    static bool unitTest2 (); // tests getters setters // todo
-    static bool unitTest3 (); // tests operators and methods
+    static bool unitTest2 (); // tests getters setters 
+    static bool unitTest3 (); // tests operators and methods // todo
     private:
     int m_size;
     double (*pfSigma) (double);

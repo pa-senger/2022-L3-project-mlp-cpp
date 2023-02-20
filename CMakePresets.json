@@ -4,22 +4,22 @@
         {
             "name": "debug",
             "displayName": "Debug",
-            "binaryDir": "${sourceDir}/build_debug",
+            "binaryDir": "${sourceDir}/build",
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_CXX_FLAGS_INIT": "-std=c++17 -g -Wall -Wextra -Wpedantic -Werror -O1"
+                "CMAKE_CXX_FLAGS_INIT": "-std=c++17 -g -Wall -Wextra -Wpedantic -Werror -O0"
             }
         },
         {
             "name": "release",
             "displayName": "Release",
-            "binaryDir": "${sourceDir}/build_release",
+            "binaryDir": "${sourceDir}/build",
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_CXX_FLAGS_INIT": "-std=c++17 -Wall -Wextra -Wpedantic -march=haswell -flto -O3"
+                "CMAKE_CXX_FLAGS_INIT": "-std=c++17 -march=haswell -flto -O3"
             }
         }
     ]

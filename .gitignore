@@ -43,4 +43,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
-build
+build_release
+build_debug
+log.txt
