@@ -82,7 +82,7 @@ bool neurone:: unitTest2 () { // tests getters setters
 
 bool neurone:: unitTest3 () {
     bool all_passed = false;
-    int passed = 0, total = 8;
+    int passed = 0, total = 13;
 
     neurone ne(5);
     neurone ne1(6);
@@ -136,7 +136,6 @@ bool neurone:: unitTest3 () {
     }
     if (k % 9 == 0)
         ++passed;
-
     // test proper memory allocation
     ne2.setW(3, 0); 
     if (ne.getW(0) != ne2.getW(0))
@@ -152,10 +151,36 @@ bool neurone:: unitTest3 () {
     ne3.setBiais(biais);
     double (*pfS) (double) = &sigma;
     ne3.setSigma(pfS);
-    ne3.evaluation(X, 4);
+    ne3.evaluation(X);
     if (ne3.getPo() == sigma(3.2))  
         ++passed;
 
+    // test operator ==
+    neurone neu1(4);
+    neurone neu2(4);
+    neurone neu3;
+    if ( (neu1==neu3) == false && (neu1==neu2) == true )
+        ++passed;
+    
+    neu1.setWones();
+    neu2.setWones();
+    if ( (neu1==neu2) == true)
+        ++passed;
+
+    neu1.setBiais(1) ; neu2.setBiais(1);
+    neu1.setSigma(pfS); neu2.setSigma(pfS);
+    neu1.setW(4.1, 2); neu2.setW(4.1, 2);
+    neu1.setDW(3.1, 2); neu2.setDW(3.1, 2);
+    neu1.evaluation(X); neu2.evaluation(X);
+    if ( (neu1==neu2) == true)
+        ++passed;
+
+    neu1.setW(5.2, 0);
+    if ( (neu1==neu2) == false)
+        ++passed;
+    
+    if ( (neu1!=neu2) == true )
+        ++passed;
     if (passed % total == 0)    
         all_passed = true;
     return all_passed;

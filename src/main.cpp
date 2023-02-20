@@ -1,4 +1,5 @@
 #include "../include/neurone.hpp"
+#include "../include/couche.hpp"
 #include "../include/activ_functions.hpp"
 
 #include <iostream>
@@ -8,6 +9,9 @@
 
 int main() {
 
+    neurone arr[2] = {neurone(), neurone()};
+
+    couche c(1,1);
 
 
 

@@ -33,8 +33,10 @@ neurone:: neurone (const neurone & ne) {
     }
 } 
 neurone:: ~neurone () { 
-    delete [] m_W;
-    delete [] m_dW;    
+    if ( m_W != nullptr)
+        delete [] m_W;
+    if ( m_dW != nullptr)
+        delete [] m_dW;    
 }
 int neurone:: getSize () const { return m_size; }
 double neurone:: getBiais () const { return m_biais; }
@@ -96,17 +98,28 @@ void neurone:: setWrandom () {
     for (int i=0; i<m_size; ++i) 
         m_W[i] = dis(gen);
 }
-void neurone:: evaluation (const double *X, int size) {
+void neurone:: evaluation (const double *X) {
     double dot = 0;
-    if ( m_size != size ) {
-        std::cout << "Error : W and X are not the same dimensions ! \n";
-        exit(1);
-    }
     for (int i=0; i<m_size; ++i) {
         dot += (m_W[i] * X[i]);
     }
     m_po = pfSigma(dot + m_biais);
 }
+bool neurone:: operator== (const neurone & ne) const {
+    bool res = true;
+    if(m_size != ne.m_size || pfSigma != ne.pfSigma || pfDsigma != ne.pfDsigma ||
+        m_po != ne.m_po || m_biais != ne.m_biais || m_db != ne.m_db)
+        return false;
+    for (int i=0; i<m_size; ++i) {
+        if (m_W[i] != ne.m_W[i] || m_dW[i] != ne.m_dW[i])
+        return false;
+    }
+    return res;
+}
+bool neurone:: operator!= (const neurone & ne) const {
+    return !( *this == ne);
+}
+
 
 
 

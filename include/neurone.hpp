@@ -32,17 +32,20 @@ class neurone {
 
     // operator
     neurone operator= (const neurone & ne);
+    bool operator== (const neurone & ne) const;
+    bool operator!= (const neurone & ne) const;
 
     // methods
     void setWones ();
     void setWrandom (); // Unif([-1m, 1m]) distribution
     void setDWzeros ();
-    void evaluation (const double *X, int size);
+    void evaluation (const double *X);
 
     // tests
     static bool unitTest1 (); // tests constuctors 
     static bool unitTest2 (); // tests getters setters 
     static bool unitTest3 (); // tests operators and methods 
+
     private:
     int m_size;
     double (*pfSigma) (double);
