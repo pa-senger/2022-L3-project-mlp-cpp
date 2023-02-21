@@ -14,34 +14,34 @@ int neurone:: unitTest1 () { // tests constuctors
     neurone n2(n1);
 
     // default constructor
-    if (n.m_size == 0 && n.m_po == 0. && n.m_biais == 0. && n.m_db == 0. 
-        && n.pfSigma == nullptr && n.pfDsigma == nullptr && n.m_W == nullptr && n.m_dW == nullptr)
+    if (n.size_ == 0 && n.po_ == 0. && n.biais_ == 0. && n.db_ == 0. 
+        && n.pf_sigma_ == nullptr && n.pf_d_sigma_ == nullptr && n.W_ == nullptr && n.dW_ == nullptr)
         ++passed;    
     //passed = 1
     // constructor taking the size of X
-    if (n1.m_size == 5 && n1.m_po == 0. && n1.m_biais == 0. && n1.m_db == 0. &&
-        n1.pfSigma == nullptr && n1.pfDsigma == nullptr && n1.m_W != nullptr && n1.m_dW != nullptr)
+    if (n1.size_ == 5 && n1.po_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
+        n1.pf_sigma_ == nullptr && n1.pf_d_sigma_ == nullptr && n1.W_ != nullptr && n1.dW_ != nullptr)
         ++passed;
     //passed = 2    
     int k = 0;
-    for (int i=0; i<n1.m_size; ++i) {
-        if (n1.m_W[i] == 0. && n1.m_dW[i] == 0.)   
+    for (int i=0; i<n1.size_; ++i) {
+        if (n1.W_[i] == 0. && n1.dW_[i] == 0.)   
             ++k;
     }
-    if (k % n1.m_size == 0)
+    if (k % n1.size_ == 0)
         ++passed;    
     //passed = 3
     // copy constructor
-    if (n2.m_size == n1.m_size && n2.m_po == n1.m_po && n2.m_biais == n1.m_biais &&
-        n2.m_db == n1.m_db && n2.pfSigma == n1.pfSigma && n2.pfDsigma == n1.pfDsigma )
+    if (n2.size_ == n1.size_ && n2.po_ == n1.po_ && n2.biais_ == n1.biais_ &&
+        n2.db_ == n1.db_ && n2.pf_sigma_ == n1.pf_sigma_ && n2.pf_d_sigma_ == n1.pf_d_sigma_ )
         ++passed;
     //passed = 4
     k = 0;
-    for (int i=0; i<n1.m_size; ++i) {
-        if (n2.m_W[i] == n1.m_W[i] && n2.m_dW[i] == n1.m_dW[i])   
+    for (int i=0; i<n1.size_; ++i) {
+        if (n2.W_[i] == n1.W_[i] && n2.dW_[i] == n1.dW_[i])   
             ++k;
     }
-    if (k % n2.m_size == 0)
+    if (k % n2.size_ == 0)
         ++passed;
     //passed = 5
 
@@ -65,16 +65,16 @@ int neurone:: unitTest2 () { // tests getters setters
         n.getPo() == 0. )
         ++passed;
     //passed = 1;
-    if (n.pfSigma == pfS)
+    if (n.pf_sigma_ == pfS)
         ++passed;
     //passed = 2    
-    if (n.pfSigma(2.2) - pfS(2.2) <= TOL)  // sigma(2.2) ~= 0.90024  
+    if (n.pf_sigma_(2.2) - pfS(2.2) <= TOL)  // sigma(2.2) ~= 0.90024  
         ++passed;
     //passed = 3
-    if (n.pfDsigma == pfDs)
+    if (n.pf_d_sigma_ == pfDs)
         ++passed;
     //passed = 4
-    if (n.pfDsigma(2.2) - pfDs(2.2) <= TOL)  // dSigma(2.2) ~= 0.109459 
+    if (n.pf_d_sigma_(2.2) - pfDs(2.2) <= TOL)  // dSigma(2.2) ~= 0.109459 
         ++passed;  
     //passed = 5
 
@@ -111,16 +111,16 @@ int neurone:: unitTest3 () {
     // test operator =
     ne1.setWones();
     ne1 = ne2;
-    if (ne2.m_size == ne1.m_size && ne2.m_po == ne1.m_po && ne2.m_biais == ne1.m_biais &&
-        ne2.m_db == ne1.m_db && ne2.pfSigma == ne1.pfSigma && ne2.pfDsigma == ne1.pfDsigma )
+    if (ne2.size_ == ne1.size_ && ne2.po_ == ne1.po_ && ne2.biais_ == ne1.biais_ &&
+        ne2.db_ == ne1.db_ && ne2.pf_sigma_ == ne1.pf_sigma_ && ne2.pf_d_sigma_ == ne1.pf_d_sigma_ )
         ++passed;
     //passed = 3
     k = 0;
-    for (int i=0; i<ne1.m_size; ++i) {
-        if (ne2.m_W[i] == ne1.m_W[i] && ne2.m_dW[i] == ne1.m_dW[i])   
+    for (int i=0; i<ne1.size_; ++i) {
+        if (ne2.W_[i] == ne1.W_[i] && ne2.dW_[i] == ne1.dW_[i])   
             ++k;
     }
-    if (k % ne2.m_size == 0)
+    if (k % ne2.size_ == 0)
         ++passed;
     //passed = 4
     // test proper memory allocation

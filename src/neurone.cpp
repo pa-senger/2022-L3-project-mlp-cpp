@@ -5,113 +5,113 @@
 
 
 neurone:: neurone (int n) {
-    m_size = n;
-    m_po = 0.;
-    m_biais = 0.;
-    m_db = 0.;
-    pfSigma = nullptr;
-    pfDsigma = nullptr;
-    m_W = new double [n];
-    m_dW = new double [n];
+    size_ = n;
+    po_ = 0.;
+    biais_ = 0.;
+    db_ = 0.;
+    pf_sigma_ = nullptr;
+    pf_d_sigma_ = nullptr;
+    W_ = new double [n];
+    dW_ = new double [n];
     for (int i=0; i<n; ++i) {
-        m_W[i] = 0.;
-        m_dW[i] = 0.;
+        W_[i] = 0.;
+        dW_[i] = 0.;
     }
 }
 neurone:: neurone (const neurone & ne) {
-    m_size = ne.m_size;
-    m_po = ne.m_po;
-    m_biais = ne.m_biais;
-    m_db = ne.m_db;
-    pfSigma = ne.pfSigma; // pointer to the same "object"
-    pfDsigma = ne.pfDsigma; // functions arent object so they cant be deep copied
-    m_W = new double [m_size];
-    m_dW = new double [m_size];
-    for (int i=0; i<m_size; ++i) {
-        m_W[i] = ne.m_W[i];
-        m_dW[i] = ne.m_dW[i];
+    size_ = ne.size_;
+    po_ = ne.po_;
+    biais_ = ne.biais_;
+    db_ = ne.db_;
+    pf_sigma_ = ne.pf_sigma_; // pointer to the same "object"
+    pf_d_sigma_ = ne.pf_d_sigma_; // functions arent object so they cant be deep copied
+    W_ = new double [size_];
+    dW_ = new double [size_];
+    for (int i=0; i<size_; ++i) {
+        W_[i] = ne.W_[i];
+        dW_[i] = ne.dW_[i];
     }
 } 
 neurone:: ~neurone () { 
-    if ( m_W != nullptr)
-        delete [] m_W;
-    if ( m_dW != nullptr)
-        delete [] m_dW;    
+    if ( W_ != nullptr)
+        delete [] W_;
+    if ( dW_ != nullptr)
+        delete [] dW_;    
 }
-int neurone:: getSize () const { return m_size; }
-double neurone:: getBiais () const { return m_biais; }
-double neurone:: getDb () const { return m_db; }
-double neurone:: getW (int i) const { return m_W[i]; }
-double neurone:: getDW (int i) const { return m_dW[i] ; }
-double neurone:: getPo () const { return m_po; }
-void neurone:: setBiais (double b) { m_biais = b; }
-void neurone:: setDb (double db) { m_db = db; }
-void neurone:: setW (double w, int i) { m_W[i] = w; }
-void neurone:: setDW (double dw, int i) { m_dW[i] = dw; }
-void neurone:: setSigma (double (*pfS)(double)) { pfSigma = pfS; }
-void neurone:: setDsigma (double (*pfDs)(double)) { pfDsigma = pfDs; }
+int neurone:: getSize () const { return size_; }
+double neurone:: getBiais () const { return biais_; }
+double neurone:: getDb () const { return db_; }
+double neurone:: getW (int i) const { return W_[i]; }
+double neurone:: getDW (int i) const { return dW_[i] ; }
+double neurone:: getPo () const { return po_; }
+void neurone:: setBiais (double b) { biais_ = b; }
+void neurone:: setDb (double db) { db_ = db; }
+void neurone:: setW (double w, int i) { W_[i] = w; }
+void neurone:: setDW (double dw, int i) { dW_[i] = dw; }
+void neurone:: setSigma (double (*pfS)(double)) { pf_sigma_ = pfS; }
+void neurone:: setDsigma (double (*pfDs)(double)) { pf_d_sigma_ = pfDs; }
 neurone neurone:: operator= (const neurone & ne) {
     if ( this != &ne ) {
-        m_size = ne.m_size;
-        m_po = ne.m_po;
-        m_biais = ne.m_biais;
-        m_db = ne.m_db;
-        pfSigma = ne.pfSigma;
-        pfDsigma = ne.pfDsigma;
-        if (m_W != nullptr) {
-            delete [] m_W;
+        size_ = ne.size_;
+        po_ = ne.po_;
+        biais_ = ne.biais_;
+        db_ = ne.db_;
+        pf_sigma_ = ne.pf_sigma_;
+        pf_d_sigma_ = ne.pf_d_sigma_;
+        if (W_ != nullptr) {
+            delete [] W_;
         }
-        if (m_dW != nullptr) {
-            delete [] m_dW;
+        if (dW_ != nullptr) {
+            delete [] dW_;
         }
-        m_W = new double [m_size];
-        m_dW = new double [m_size];
-        for (int i=0; i<m_size; ++i) {
-            m_W[i] = ne.m_W[i];
-            m_dW[i] = ne.m_dW[i];
+        W_ = new double [size_];
+        dW_ = new double [size_];
+        for (int i=0; i<size_; ++i) {
+            W_[i] = ne.W_[i];
+            dW_[i] = ne.dW_[i];
         }   
     }
     return *this;
 }
 void neurone:: setWones () {
-    if ( m_W != nullptr ) {
-       delete [] m_W;
+    if ( W_ != nullptr ) {
+       delete [] W_;
     }
-    m_W = new double [m_size];   
-    for (int i=0; i<m_size; ++i) {
-        m_W[i] = 1.;
+    W_ = new double [size_];   
+    for (int i=0; i<size_; ++i) {
+        W_[i] = 1.;
     }
 }
 void neurone:: setDWzeros () {
-    if ( m_dW != nullptr ) {
-       delete [] m_dW;
+    if ( dW_ != nullptr ) {
+       delete [] dW_;
     }
-    m_dW = new double [m_size];   
-    for (int i=0; i<m_size; ++i) {
-        m_dW[i] = 0.;
+    dW_ = new double [size_];   
+    for (int i=0; i<size_; ++i) {
+        dW_[i] = 0.;
     }
 }
 void neurone:: setWrandom () {
     std::random_device rd;
     std::mt19937 gen(rd()); // standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<double> dis(-1'000'000, 1'000'000);
-    for (int i=0; i<m_size; ++i) 
-        m_W[i] = dis(gen);
+    for (int i=0; i<size_; ++i) 
+        W_[i] = dis(gen);
 }
 void neurone:: evaluation (const double *X) {
     double dot = 0;
-    for (int i=0; i<m_size; ++i) {
-        dot += (m_W[i] * X[i]);
+    for (int i=0; i<size_; ++i) {
+        dot += (W_[i] * X[i]);
     }
-    m_po = pfSigma(dot + m_biais);
+    po_ = pf_sigma_(dot + biais_);
 }
 bool neurone:: operator== (const neurone & ne) const {
     bool res = true;
-    if(m_size != ne.m_size || pfSigma != ne.pfSigma || pfDsigma != ne.pfDsigma ||
-        m_po != ne.m_po || m_biais != ne.m_biais || m_db != ne.m_db)
+    if(size_ != ne.size_ || pf_sigma_ != ne.pf_sigma_ || pf_d_sigma_ != ne.pf_d_sigma_ ||
+        po_ != ne.po_ || biais_ != ne.biais_ || db_ != ne.db_)
         return false;
-    for (int i=0; i<m_size; ++i) {
-        if (m_W[i] != ne.m_W[i] || m_dW[i] != ne.m_dW[i])
+    for (int i=0; i<size_; ++i) {
+        if (W_[i] != ne.W_[i] || dW_[i] != ne.dW_[i])
         return false;
     }
     return res;

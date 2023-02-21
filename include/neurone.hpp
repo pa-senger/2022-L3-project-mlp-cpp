@@ -6,8 +6,8 @@ class neurone {
     public:
     // default constructor
     neurone () {
-        m_size = 0, m_po = 0.; m_biais = 0.; m_db = 0.;
-        pfSigma = nullptr, pfDsigma = nullptr, m_W = nullptr, m_dW = nullptr;
+        size_ = 0, po_ = 0.; biais_ = 0.; db_ = 0.;
+        pf_sigma_ = nullptr, pf_d_sigma_ = nullptr, W_ = nullptr, dW_ = nullptr;
     }
     // construtor taking size of an entry vector 
     neurone (int n);
@@ -47,14 +47,14 @@ class neurone {
     static int unitTest3 (); // tests operators and methods 
 
     private:
-    int m_size;
-    double (*pfSigma) (double);
-    double (*pfDsigma) (double);
-    double *m_W;
-    double *m_dW;
-    double m_po;
-    double m_biais;
-    double m_db;
+    int size_;
+    double (*pf_sigma_) (double);
+    double (*pf_d_sigma_) (double);
+    double *W_;
+    double *dW_;
+    double po_;
+    double biais_;
+    double db_;
 };
 
 

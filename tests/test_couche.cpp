@@ -8,17 +8,17 @@ int couche:: unitTest1() {
 
     // default contructor
     couche c;
-    if (c.m_nbNeurones == 0 && c.m_nbData == 0 && c.m_arrNeurones == nullptr )
+    if (c.nb_neurones_ == 0 && c.nb_data_ == 0 && c.arr_neurones_ == nullptr )
         ++passed;
     //passed = 1
     // contructor taking size of data and nb of neurone 
     couche c1(2, 5); // X=(x,y) , 5 neurones
-    if (c1.m_nbData == 2 && c1.m_nbNeurones == 5)
+    if (c1.nb_data_ == 2 && c1.nb_neurones_ == 5)
         ++passed;
     //passed = 2
     int k=0;
     for (int i=0; i<4; ++i) {
-        if (c1.m_arrNeurones[i] == c1.m_arrNeurones[i+1])
+        if (c1.arr_neurones_[i] == c1.arr_neurones_[i+1])
             ++k;
     }
     if (k % 4 == 0) 
@@ -26,16 +26,16 @@ int couche:: unitTest1() {
     //passed = 3
     // copy constructor
     couche c2(c1);
-    if (c1.m_nbNeurones == c2.m_nbNeurones && c1.m_nbData == c2.m_nbData && 
-        c1.m_arrNeurones != c2.m_arrNeurones ) // last checks if pointers arent the same
+    if (c1.nb_neurones_ == c2.nb_neurones_ && c1.nb_data_ == c2.nb_data_ && 
+        c1.arr_neurones_ != c2.arr_neurones_ ) // last checks if pointers arent the same
         ++passed;
     //passed = 4
     k = 0;
-    for (int i=0; i<c1.m_nbNeurones; ++i) {
-        if (c1.m_arrNeurones[i] == c2.m_arrNeurones[i])
+    for (int i=0; i<c1.nb_neurones_; ++i) {
+        if (c1.arr_neurones_[i] == c2.arr_neurones_[i])
             ++k;
     }
-    if (k % c1.m_nbNeurones == 0)
+    if (k % c1.nb_neurones_ == 0)
         ++passed;
     //passed = 5
 
