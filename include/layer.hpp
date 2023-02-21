@@ -10,16 +10,16 @@ class layer {
     layer (int nb_data, int nb_ne);
     ~layer ();
 
-    double getW (int i, int j) const; // i-th neuron, j-th weight
-    double getDW (int i, int j) const; // i-th neuron, j-th derivative of W
+    double getWeight (int i, int j) const; // i-th neuron, j-th Weight
+    double getDWeight (int i, int j) const; // i-th neuron, j-th derivative of Weight
     int getNbData () const;
-    double getNbneurons () const;
+    double getNbNeurons () const;
     double getPo (int i) const; // get post activation value of the i-th neuron
     double getBiais (int i) const;
     double getDb (int i) const;
 
-    void setW (double val, int i, int j);
-    void setDW (double val, int i, int j);
+    void setWeight (double val, int i, int j);
+    void setDWeight (double val, int i, int j);
     void setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i); // set to i-th neuron in the layer
     void setActivationFctName (std::string name, int i);
     void setBiais (double val, int i);
@@ -28,13 +28,16 @@ class layer {
     layer operator= (const layer &l);
     bool operator== (const layer &l) const;
     bool operator!= (const layer &l) const;
-    bool operator< (const layer &l) const;
-
+    bool operator<= (const layer &l) const;
     friend std::ostream& operator<< (std::ostream &os, const layer &l);
+
+    void addDWeight (double val, int i, int j); // i-th neuron, j-th Weight
 
 
     static int unitTest1(); // tests constructors
     static int unitTest2(); // tests getters setters
+    static int unitTest3(); // tests operators
+    static int unitTest4(); // tests the rest of the methods
 
   private:
     int nb_neurons_;

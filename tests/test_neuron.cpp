@@ -7,7 +7,7 @@
 
 
 int neuron:: unitTest1 () { // tests constuctors 
-    int passed = 0, total = 5;
+    int passed = 0;
 
     neuron n;
     neuron n1(5);
@@ -15,17 +15,17 @@ int neuron:: unitTest1 () { // tests constuctors
 
     // default constructor
     if (n.size_X_ == 0 && n.po_ == 0. && n.biais_ == 0. && n.db_ == 0. 
-        && n.pf_activation_ == nullptr && n.pf_activation_d_ == nullptr && n.W_ == nullptr && n.dW_ == nullptr)
+        && n.pf_activation_ == nullptr && n.pf_activation_d_ == nullptr && n.Weight_ == nullptr && n.dWeight_ == nullptr)
         ++passed;    
     //passed = 1
     // constructor taking the size of X
     if (n1.size_X_ == 5 && n1.po_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
-        n1.pf_activation_ == nullptr && n1.pf_activation_d_ == nullptr && n1.W_ != nullptr && n1.dW_ != nullptr)
+        n1.pf_activation_ == nullptr && n1.pf_activation_d_ == nullptr && n1.Weight_ != nullptr && n1.dWeight_ != nullptr)
         ++passed;
     //passed = 2    
     int k = 0;
     for (int i=0; i<n1.size_X_; ++i) {
-        if (n1.W_[i] == 0. && n1.dW_[i] == 0.)   
+        if (n1.Weight_[i] == 0. && n1.dWeight_[i] == 0.)   
             ++k;
     }
     if (k % n1.size_X_ == 0)
@@ -38,29 +38,29 @@ int neuron:: unitTest1 () { // tests constuctors
     //passed = 4
     k = 0;
     for (int i=0; i<n1.size_X_; ++i) {
-        if (n2.W_[i] == n1.W_[i] && n2.dW_[i] == n1.dW_[i])   
+        if (n2.Weight_[i] == n1.Weight_[i] && n2.dWeight_[i] == n1.dWeight_[i])   
             ++k;
     }
     if (k % n2.size_X_ == 0)
         ++passed;
     //passed = 5
 
-    return passed % total; // return 0 if all succesful
+    return passed % 5; // return 0 if all successful
 }
 
 int neuron:: unitTest2 () { // tests getters setters
-    int passed = 0, total = 5;
+    int passed = 0;
 
     neuron n(10);
-    n.setW(1.1, 10);
-    n.setDW(2.2, 0);
+    n.setWeight(1.1, 9);
+    n.setDWeight(2.2, 0);
     n.setBiais(3.3);
     n.setDb(4.4);
     double (*pf_s) (double) = &sigma;
     double (*pf_ds) (double) = &dSigma;
     n.setActivationFcts(pf_s, pf_ds);
 
-    if (n.getW(10) == 1.1 && n.getDW(0) == 2.2 && n.getBiais() == 3.3 && n.getDb() == 4.4 && 
+    if (n.getWeight(9) == 1.1 && n.getDWeight(0) == 2.2 && n.getBiais() == 3.3 && n.getDb() == 4.4 && 
         n.getPo() == 0. && n.getSizeX() == 10)
         ++passed;
     //passed = 1;
@@ -77,38 +77,38 @@ int neuron:: unitTest2 () { // tests getters setters
         ++passed;  
     //passed = 5
 
-    return passed % total;
+    return passed % 5;
 }
 
 int neuron:: unitTest3 () {
-    int passed = 0, total = 13;
+    int passed = 0;
 
     neuron ne(5);
     neuron ne1(6);
     neuron ne2(10);
 
-    // test setWOnes
-    ne.setWones();
+    // test setWeightOnes
+    ne.setWeightsOnes();
     int k = 0;
     for (int i=0; i<5; ++i) {
-        if (ne.getW(i) == 1)
+        if (ne.getWeight(i) == 1)
             ++k;
     }
     if (k % 5 == 0)
         ++passed;
     //passed = 1
-    // test setWZeros
-    ne.setDWzeros();
+    // test setWeightZeros
+    ne.setDWeightsZeros();
     k = 0;
     for (int i=0; i<5; ++i) {
-        if (ne.getDW(i) == 0)
+        if (ne.getDWeight(i) == 0)
             ++k;
     }
     if (k % 5 == 0)
         ++passed;
     //passed = 2
     // test operator =
-    ne1.setWones();
+    ne1.setWeightsOnes();
     ne1 = ne2;
     if (ne2.size_X_ == ne1.size_X_ && ne2.po_ == ne1.po_ && ne2.biais_ == ne1.biais_ &&
         ne2.db_ == ne1.db_ && ne2.pf_activation_ == ne1.pf_activation_ && ne2.pf_activation_d_ == ne1.pf_activation_d_ )
@@ -116,37 +116,37 @@ int neuron:: unitTest3 () {
     //passed = 3
     k = 0;
     for (int i=0; i<ne1.size_X_; ++i) {
-        if (ne2.W_[i] == ne1.W_[i] && ne2.dW_[i] == ne1.dW_[i])   
+        if (ne2.Weight_[i] == ne1.Weight_[i] && ne2.dWeight_[i] == ne1.dWeight_[i])   
             ++k;
     }
     if (k % ne2.size_X_ == 0)
         ++passed;
     //passed = 4
     // test proper memory allocation
-    ne2.setW(4, 0); 
-    if (ne1.getW(0) != ne2.getW(0))
+    ne2.setWeight(4, 0); 
+    if (ne1.getWeight(0) != ne2.getWeight(0))
         ++passed;
     //passed = 5
-    // test setWrandom
-    ne2.setWrandom();
+    // test setWeightrandom
+    ne2.setWeightsRandom();
     ne = ne2;
     k = 0;
     for (int i=0; i<9; ++i) {
-        if (ne2.getW(i) != ne2.getW(i+1))   
+        if (ne2.getWeight(i) != ne2.getWeight(i+1))   
             ++k;
     }
     if (k % 9 == 0)
         ++passed;
     //passed = 6
     // test proper memory allocation
-    ne2.setW(3, 0); 
-    if (ne.getW(0) != ne2.getW(0))
+    ne2.setWeight(3, 0); 
+    if (ne.getWeight(0) != ne2.getWeight(0))
         ++passed;
     //passed = 7
     // test evaluation
     neuron ne3(4);
     for (int i=0; i<4; ++i) {
-        ne3.setW(i+1, i);
+        ne3.setWeight(i+1, i);
     }
     double X[4] = {.1, .2, .3, .4};
     double biais = .2;
@@ -165,20 +165,20 @@ int neuron:: unitTest3 () {
     if ( (neu1==neu3) == false && (neu1==neu2) == true )
         ++passed;
     //passed = 9
-    neu1.setWones();
-    neu2.setWones();
+    neu1.setWeightsOnes();
+    neu2.setWeightsOnes();
     if ( (neu1==neu2) == true)
         ++passed;
     //passed = 10
     neu1.setBiais(1) ; neu2.setBiais(1);
     neu1.setActivationFcts(pf_s, pf_ds); neu2.setActivationFcts(pf_s, pf_ds);
-    neu1.setW(4.1, 2); neu2.setW(4.1, 2);
-    neu1.setDW(3.1, 2); neu2.setDW(3.1, 2);
+    neu1.setWeight(4.1, 2); neu2.setWeight(4.1, 2);
+    neu1.setDWeight(3.1, 2); neu2.setDWeight(3.1, 2);
     neu1.evaluation(X); neu2.evaluation(X);
     if ( (neu1==neu2) == true)
         ++passed;
     //passed = 11
-    neu1.setW(5.2, 0);
+    neu1.setWeight(5.2, 0);
     if ( (neu1==neu2) == false)
         ++passed;
     //passed = 12
@@ -186,14 +186,11 @@ int neuron:: unitTest3 () {
         ++passed;
     //passed = 13
 
-    return passed % total;
+    return passed % 13;
 }
 
 
 int main () {
-    if (neuron:: unitTest1() == 0 && neuron:: unitTest2() == 0 &&
-        neuron:: unitTest3() == 0)
-        return 0;
 
-    return 1;
+    return (neuron::unitTest1() + neuron::unitTest2() + neuron::unitTest3());
 }

@@ -9,9 +9,8 @@
 
 int main() {
 
-
-
-     
+    layer l1(5, 0);
+   
     return 0;
 }
 

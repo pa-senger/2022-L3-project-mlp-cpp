@@ -4,7 +4,7 @@
 
 
 int layer:: unitTest1() {
-    int passed = 0, total = 5;
+    int passed = 0;
 
     // default contructor
     layer c;
@@ -39,43 +39,98 @@ int layer:: unitTest1() {
         ++passed;
     //passed = 5
 
-    return passed % total;
+    return passed % 5;
 } 
 int layer:: unitTest2() { // tests getters setters
-    int passed = 0, total = 2;
+    int passed = 0;
 
     layer l1;
     layer l2(2, 5); // X=(x,y) , 5 neurons (0..4)
     layer l3(2, 3);
-    l2.setW(1.1, 4, 1); // 4th neuron, 1st weight
-    l2.setDW(2.2, 0, 0);
+    l2.setWeight(1.1, 4, 1); // 4th neuron, 1st Weighteight
+    l2.setDWeight(2.2, 0, 0);
     double (*pf_a)(double) = &sigma;
     double (*pf_da)(double) = &dSigma;
     l2.setActivationFcts(pf_a, pf_da, 4);
     l2.setActivationFctName("sigma", 4);
     l2.setBiais(4.4, 0);
     l2.setDb(5.5, 4);
-    if (l2.getNbData() == 2 && l2.getNbneurons() == 5 && l2.getW(4, 1) == 1.1 &&
-        l2.getDW(0, 0) == 2.2 && l2.getBiais(0) == 4.4 && l2.getDb(4) == 5.5)
+    if (l2.getNbData() == 2 && l2.getNbNeurons() == 5 && l2.getWeight(4, 1) == 1.1 &&
+        l2.getDWeight(0, 0) == 2.2 && l2.getBiais(0) == 4.4 && l2.getDb(4) == 5.5)
         ++passed;
     // passed = 1;
-    l3.setW(0.1, 1, 1); // value, neuron , W index
-    l3.setW(0.2, 1, 1);
+    l3.setWeight(0.1, 1, 1); // value, neuron , Weight index
+    l3.setWeight(0.2, 1, 1);
     l3.setBiais(0.3, 1); // value, neuron index in the layer
     l3.setActivationFcts(pf_a, pf_da, 1);
     double X[2] = {1, 2};
     l3.arr_neurons_[1].evaluation(X);
     if ( l3.arr_neurons_[1].getPo() == pf_a(0.8))
         ++passed;
-std::cout << l3.arr_neurons_[1].getPo() << std::endl;
     // passed = 2
 
-    return passed % total;
+    return passed % 2;
+}
+int layer:: unitTest3() { // tests operators
+    int passed = 0;
+
+    layer l1;
+    layer l2(2, 3); // X=(x1, x2), 3 neurons
+    layer l3(5, 0);
+    l2.setBiais(1.1, 2);
+    l2.setWeight(2.2, 2, 1);
+    double X[3] = {1,3,5};
+    double (*pf_a)(double) = &sigma;
+    double (*pf_da)(double) = &dSigma;
+    l2.setActivationFcts(pf_a, pf_da, 2);
+    l2.arr_neurons_[2].evaluation(X);
+
+    l1 = l2;
+    if (l1.getNbData() == l2.getNbData() && l1.getNbNeurons() == l2.getNbNeurons())
+        ++passed;
+    // passed = 1
+    int k = 0;
+    for (int i=0; i<2; ++i) {
+        if (l1.arr_neurons_[i] == l2.arr_neurons_[i]) // operator == if overloaded for neurons
+            ++k;
+    }
+    if (k % 2 == 0)
+        ++passed;
+    //passed = 2
+    if (l1 == l2)
+        ++passed;
+    //passed = 3
+    if (!(l1 != l2))
+        ++passed;
+    //passed = 4
+    if (l3 <= l1)
+        ++passed;
+    //passed = 5
+    if (!(l1 <= l3))
+        ++passed;
+    //passed = 6
+
+    return passed % 6;
+}
+int layer:: unitTest4() {
+    int passed = 0;
+
+    layer l1(2, 3);
+    l1.setDWeight(1.1, 2, 0);
+    l1.addDWeight(0.3, 2, 0);
+    if (l1.getDWeight(2, 0) == 1.4)
+        ++passed;
+    //passed = 1
+    l1.addDWeight(-1, 2, 0);
+    if (l1.getDWeight(2, 0) == .4)
+        ++passed;
+    //passed = 2
+    
+
+    return passed % 2;
 }
 
 int main () {
-    if (layer:: unitTest1() == 0 and layer:: unitTest2() == 0)
-        return 0;
 
-    return 1;
+    return (layer::unitTest1() + layer::unitTest2() + layer::unitTest3() + layer::unitTest4());
 }
