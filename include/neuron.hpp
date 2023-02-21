@@ -34,9 +34,9 @@ class neuron {
     void setActivationFctName (std::string sigma);
 
     // operator
-    neuron operator= (const neuron & ne);                                     
-    bool operator== (const neuron & ne) const;
-    bool operator!= (const neuron & ne) const;
+    neuron operator= (const neuron &ne);                                     
+    bool operator== (const neuron &ne) const;
+    bool operator!= (const neuron &ne) const;
     friend std::ostream& operator<< (std::ostream& os, const neuron& ne);
 
     // methods

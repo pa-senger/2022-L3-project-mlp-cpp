@@ -11,25 +11,37 @@ neuron:: neuron (int n) {
     db_ = 0.;
     pf_activation_ = nullptr;
     pf_activation_d_ = nullptr;
-    W_ = new double [n];
-    dW_ = new double [n];
-    for (int i=0; i<n; ++i) {
-        W_[i] = 0.;
-        dW_[i] = 0.;
+    if (n == 0) {
+        W_ = nullptr;
+        dW_ = nullptr;
+    }
+    else {
+        W_ = new double [n];
+        dW_ = new double [n];
+        for (int i=0; i<n; ++i) {
+            W_[i] = 0.;
+            dW_[i] = 0.;
+        }
     }
 }
-neuron:: neuron (const neuron & ne) {
+neuron:: neuron (const neuron &ne) {
     size_X_ = ne.size_X_;
     po_ = ne.po_;
     biais_ = ne.biais_;
     db_ = ne.db_;
     pf_activation_ = ne.pf_activation_; // pointer to the same "object"
     pf_activation_d_ = ne.pf_activation_d_; // functions arent object so they cant be deep copied
-    W_ = new double [size_X_];
-    dW_ = new double [size_X_];
-    for (int i=0; i<size_X_; ++i) {
-        W_[i] = ne.W_[i];
-        dW_[i] = ne.dW_[i];
+    if (size_X_ == 0) {
+        W_ = nullptr;
+        dW_ = nullptr;
+    }
+    else {
+        W_ = new double [size_X_];
+        dW_ = new double [size_X_];
+        for (int i=0; i<size_X_; ++i) {
+            W_[i] = ne.W_[i];
+            dW_[i] = ne.dW_[i];
+        }
     }
 } 
 neuron:: ~neuron () { 
@@ -52,7 +64,7 @@ void neuron:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double)
     pf_activation_ = pf_a;
     pf_activation_d_ = pf_da;
 }
-neuron neuron:: operator= (const neuron & ne) {
+neuron neuron:: operator= (const neuron &ne) {
     if ( this != &ne ) {
         size_X_ = ne.size_X_;
         po_ = ne.po_;
@@ -66,11 +78,17 @@ neuron neuron:: operator= (const neuron & ne) {
         if (dW_ != nullptr) {
             delete [] dW_;
         }
-        W_ = new double [size_X_];
-        dW_ = new double [size_X_];
-        for (int i=0; i<size_X_; ++i) {
-            W_[i] = ne.W_[i];
-            dW_[i] = ne.dW_[i];
+        if (size_X_ == 0) {
+            W_ = nullptr;
+            dW_ = nullptr;
+        }
+        else {
+            W_ = new double [size_X_];
+            dW_ = new double [size_X_];
+            for (int i=0; i<size_X_; ++i) {
+                W_[i] = ne.W_[i];
+                dW_[i] = ne.dW_[i];
+            }
         }   
     }
     return *this;
@@ -107,7 +125,7 @@ void neuron:: evaluation (const double *X) {
     }
     po_ = pf_activation_(dot + biais_);
 }
-bool neuron:: operator== (const neuron & ne) const {
+bool neuron:: operator== (const neuron &ne) const {
     bool res = true;
     if(size_X_ != ne.size_X_ || pf_activation_ != ne.pf_activation_ || pf_activation_d_ != ne.pf_activation_d_ ||
         po_ != ne.po_ || biais_ != ne.biais_ || db_ != ne.db_)
@@ -118,7 +136,7 @@ bool neuron:: operator== (const neuron & ne) const {
     }
     return res;
 }
-bool neuron:: operator!= (const neuron & ne) const {
+bool neuron:: operator!= (const neuron &ne) const {
     return !( *this == ne);
 }
 void neuron:: printArr (const double *arr) const {

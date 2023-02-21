@@ -2,7 +2,6 @@
 #include <iostream>
 
 
-
 int layer:: unitTest1() {
     int passed = 0, total = 5;
 

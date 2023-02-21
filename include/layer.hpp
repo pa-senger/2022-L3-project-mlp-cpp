@@ -14,12 +14,13 @@ class layer {
     double getDW (int i, int j) const; // i-th neuron, j-th derivative of W
     int getNbData () const;
     double getNbneurons () const;
-    double getPo (int i) const; // get po of the i-th neuron
+    double getPo (int i) const; // get post activation value of the i-th neuron
     void setW (double val, int i, int j);
     void setDW (double val, int i, int j);
-    void setActivationFcts ();
+    void setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i); // set to i-th neuron in the layer
+    void setActivationFctName (std::string name, int i);
 
-
+    layer operator= (const layer &l);
 
     static int unitTest1(); // tests constructors
     static int unitTest2(); // tests getters setters

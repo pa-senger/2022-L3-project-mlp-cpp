@@ -6,9 +6,14 @@
 layer:: layer (const layer & co) {
     nb_neurons_ = co.nb_neurons_;
     nb_data_ = co.nb_data_;
-    arr_neurons_ = new neuron[nb_neurons_];
-    for (int i=0; i<nb_neurons_; ++i)
-        arr_neurons_[i] = co.arr_neurons_[i];
+    if (co.arr_neurons_ == nullptr) {
+        arr_neurons_ = nullptr;   
+    }
+    else {
+        arr_neurons_ = new neuron[nb_neurons_];
+        for (int i=0; i<nb_neurons_; ++i)
+            arr_neurons_[i] = co.arr_neurons_[i];
+    }
 }
 layer:: layer (int nb_data, int nb_ne) {
     nb_neurons_ = nb_ne;
@@ -41,7 +46,7 @@ double layer:: getPo (int i) const { // get po of the i-th neuron
         res = arr_neurons_[i].getPo();
     }
     else {
-        std::cout << "Error : there is not as many neuron in the layer !" << std::endl;
+        std::cout << "Error : there isn't as many neuron in the layer !" << std::endl;
     }    
     return res;
 }
@@ -50,7 +55,7 @@ void layer:: setW (double val, int i, int j) {
         arr_neurons_[i].setW(val, j);
     }
     else {
-        std::cout << "Error : there is not as many neuron in the layer or as many weight in the neuron !" 
+        std::cout << "Error : there isn't as many neuron in the layer or as many weight in the neuron !" 
         << std::endl;
     }
 }
@@ -59,7 +64,40 @@ void layer:: setDW (double val, int i, int j) {
         arr_neurons_[i].setDW(val, j);
     }
     else {
-        std::cout << "Error : there is not as many neuron in the layer or as many weight in dW !" 
+        std::cout << "Error : there isn't as many neuron in the layer or as many weight in dW !" 
         << std::endl;
     }    
+}
+void layer:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i) {// set to i-th neuron in the layer
+    if (i < nb_neurons_) {
+        arr_neurons_[i].setActivationFcts(pf_a, pf_da);
+    }
+    else {
+        std::cout << "Error : there isn't as many neurons in the layer !" << std::endl;
+    }
+}
+void layer:: setActivationFctName (std::string name, int i) {
+    if (i < nb_neurons_) {
+        arr_neurons_[i].setActivationFctName(name);
+    }
+    else {
+        std::cout << "Error : there isn't as many neurons in the layer !" << std::endl;
+    }
+}
+layer layer:: operator= (const layer &l) {
+    if (this != &l) {
+        nb_neurons_ = l.nb_neurons_;
+        nb_data_ = l.nb_data_;
+        if (arr_neurons_ != nullptr)
+            delete [] arr_neurons_;
+        if (l.arr_neurons_ == nullptr) {
+            arr_neurons_ = nullptr;
+        }
+        else {
+            arr_neurons_ = new neuron[nb_neurons_];
+            for (int i=0; i<nb_neurons_; ++i)
+                arr_neurons_[i] = l.arr_neurons_[i]; 
+        }
+    }
+    return *this;
 }
