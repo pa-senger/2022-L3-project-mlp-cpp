@@ -14,34 +14,34 @@ int neurone:: unitTest1 () { // tests constuctors
     neurone n2(n1);
 
     // default constructor
-    if (n.size_ == 0 && n.po_ == 0. && n.biais_ == 0. && n.db_ == 0. 
+    if (n.size_X_ == 0 && n.po_ == 0. && n.biais_ == 0. && n.db_ == 0. 
         && n.pf_sigma_ == nullptr && n.pf_d_sigma_ == nullptr && n.W_ == nullptr && n.dW_ == nullptr)
         ++passed;    
     //passed = 1
     // constructor taking the size of X
-    if (n1.size_ == 5 && n1.po_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
+    if (n1.size_X_ == 5 && n1.po_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
         n1.pf_sigma_ == nullptr && n1.pf_d_sigma_ == nullptr && n1.W_ != nullptr && n1.dW_ != nullptr)
         ++passed;
     //passed = 2    
     int k = 0;
-    for (int i=0; i<n1.size_; ++i) {
+    for (int i=0; i<n1.size_X_; ++i) {
         if (n1.W_[i] == 0. && n1.dW_[i] == 0.)   
             ++k;
     }
-    if (k % n1.size_ == 0)
+    if (k % n1.size_X_ == 0)
         ++passed;    
     //passed = 3
     // copy constructor
-    if (n2.size_ == n1.size_ && n2.po_ == n1.po_ && n2.biais_ == n1.biais_ &&
+    if (n2.size_X_ == n1.size_X_ && n2.po_ == n1.po_ && n2.biais_ == n1.biais_ &&
         n2.db_ == n1.db_ && n2.pf_sigma_ == n1.pf_sigma_ && n2.pf_d_sigma_ == n1.pf_d_sigma_ )
         ++passed;
     //passed = 4
     k = 0;
-    for (int i=0; i<n1.size_; ++i) {
+    for (int i=0; i<n1.size_X_; ++i) {
         if (n2.W_[i] == n1.W_[i] && n2.dW_[i] == n1.dW_[i])   
             ++k;
     }
-    if (k % n2.size_ == 0)
+    if (k % n2.size_X_ == 0)
         ++passed;
     //passed = 5
 
@@ -62,7 +62,7 @@ int neurone:: unitTest2 () { // tests getters setters
     n.setDsigma(pfDs);
 
     if (n.getW(10) == 1.1 && n.getDW(0) == 2.2 && n.getBiais() == 3.3 && n.getDb() == 4.4 && 
-        n.getPo() == 0. )
+        n.getPo() == 0. && n.getSizeX() == 10)
         ++passed;
     //passed = 1;
     if (n.pf_sigma_ == pfS)
@@ -111,16 +111,16 @@ int neurone:: unitTest3 () {
     // test operator =
     ne1.setWones();
     ne1 = ne2;
-    if (ne2.size_ == ne1.size_ && ne2.po_ == ne1.po_ && ne2.biais_ == ne1.biais_ &&
+    if (ne2.size_X_ == ne1.size_X_ && ne2.po_ == ne1.po_ && ne2.biais_ == ne1.biais_ &&
         ne2.db_ == ne1.db_ && ne2.pf_sigma_ == ne1.pf_sigma_ && ne2.pf_d_sigma_ == ne1.pf_d_sigma_ )
         ++passed;
     //passed = 3
     k = 0;
-    for (int i=0; i<ne1.size_; ++i) {
+    for (int i=0; i<ne1.size_X_; ++i) {
         if (ne2.W_[i] == ne1.W_[i] && ne2.dW_[i] == ne1.dW_[i])   
             ++k;
     }
-    if (k % ne2.size_ == 0)
+    if (k % ne2.size_X_ == 0)
         ++passed;
     //passed = 4
     // test proper memory allocation

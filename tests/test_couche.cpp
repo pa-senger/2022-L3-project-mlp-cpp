@@ -41,8 +41,11 @@ int couche:: unitTest1() {
 
     return passed % total;
 } 
+int couche:: unitTest2() { // tests getters setters
+    int passed = 0, total = 1;
 
-
+    return passed % total;
+}
 
 int main () {
     if (couche:: unitTest1() == 0)

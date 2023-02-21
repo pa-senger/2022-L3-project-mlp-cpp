@@ -1,12 +1,15 @@
 #ifndef NEURONE_HPP
 #define NEURONE_HPP
 
+#include <iostream>
+#include <string>
+
 
 class neurone {
-    public:
+  public:
     // default constructor
     neurone () {
-        size_ = 0, po_ = 0.; biais_ = 0.; db_ = 0.;
+        size_X_ = 0, po_ = 0.; biais_ = 0.; db_ = 0.;
         pf_sigma_ = nullptr, pf_d_sigma_ = nullptr, W_ = nullptr, dW_ = nullptr;
     }
     // construtor taking size of an entry vector 
@@ -17,7 +20,7 @@ class neurone {
     ~neurone ();
 
     // getter setter
-    int getSize () const;
+    int getSizeX () const;
     double getBiais () const;
     double getDb () const;
     double getW (int i) const;
@@ -29,25 +32,28 @@ class neurone {
     void setDW (double dw, int i);
     void setSigma (double (*pfS)(double));
     void setDsigma (double (*pfDs)(double));
+    void setActivFctName (std::string sigma);
 
     // operator
-    neurone operator= (const neurone & ne);
+    neurone operator= (const neurone & ne);                                     
     bool operator== (const neurone & ne) const;
     bool operator!= (const neurone & ne) const;
+    friend std::ostream& operator<< (std::ostream& os, const neurone& ne);
 
     // methods
     void setWones ();
     void setWrandom (); // Unif([-1m, 1m]) distribution
     void setDWzeros ();
     void evaluation (const double *X);
+    void printArr (const double *arr) const;
 
     // tests
     static int unitTest1 (); // tests constuctors 
     static int unitTest2 (); // tests getters setters 
     static int unitTest3 (); // tests operators and methods 
 
-    private:
-    int size_;
+  private:
+    int size_X_;
     double (*pf_sigma_) (double);
     double (*pf_d_sigma_) (double);
     double *W_;
@@ -55,6 +61,7 @@ class neurone {
     double po_;
     double biais_;
     double db_;
+    std::string activ_fct_name_;
 };
 
 
