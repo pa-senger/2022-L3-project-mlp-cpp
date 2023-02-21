@@ -11,7 +11,7 @@ class couche {
     ~couche ();
 
 
-    static bool unitTest1(); // tests constructors
+    static int unitTest1(); // tests constructors
 
     private:
     int m_nbNeurones;

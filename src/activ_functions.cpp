@@ -12,3 +12,8 @@ double dSigma (const double x) {
     res = (double) exp(-x) / (1 + exp(-x) * (1 + exp(-x)));
     return res;
 }
+int heavyside ( const double x) {
+    if (x <= 0) 
+        return 0;
+    return 1;
+}

@@ -42,9 +42,9 @@ class neurone {
     void evaluation (const double *X);
 
     // tests
-    static bool unitTest1 (); // tests constuctors 
-    static bool unitTest2 (); // tests getters setters 
-    static bool unitTest3 (); // tests operators and methods 
+    static int unitTest1 (); // tests constuctors 
+    static int unitTest2 (); // tests getters setters 
+    static int unitTest3 (); // tests operators and methods 
 
     private:
     int m_size;
