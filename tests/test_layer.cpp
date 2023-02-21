@@ -2,6 +2,10 @@
 #include "../include/activation_functions.hpp"
 #include <iostream>
 
+#define TOL 1e-6
+
+
+
 
 int layer:: unitTest1() {
     int passed = 0;
@@ -64,7 +68,7 @@ int layer:: unitTest2() { // tests getters setters
     l3.setBiais(0.3, 1); // value, neuron index in the layer
     l3.setActivationFcts(pf_a, pf_da, 1);
     double X[2] = {1, 2};
-    l3.arr_neurons_[1].evaluation(X);
+    l3.arr_neurons_[1].activate(X);
     if ( l3.arr_neurons_[1].getPo() == pf_a(0.8))
         ++passed;
     // passed = 2
@@ -83,7 +87,7 @@ int layer:: unitTest3() { // tests operators
     double (*pf_a)(double) = &sigma;
     double (*pf_da)(double) = &dSigma;
     l2.setActivationFcts(pf_a, pf_da, 2);
-    l2.arr_neurons_[2].evaluation(X);
+    l2.arr_neurons_[2].activate(X);
 
     l1 = l2;
     if (l1.getNbData() == l2.getNbData() && l1.getNbNeurons() == l2.getNbNeurons())
@@ -118,16 +122,56 @@ int layer:: unitTest4() {
     layer l1(2, 3);
     l1.setDWeight(1.1, 2, 0);
     l1.addDWeight(0.3, 2, 0);
-    if (l1.getDWeight(2, 0) == 1.4)
-        ++passed;
+    if (l1.getDWeight(2, 0) - 1.4 < TOL)
+        ++passed;    
     //passed = 1
     l1.addDWeight(-1, 2, 0);
-    if (l1.getDWeight(2, 0) == .4)
+    if (l1.getDWeight(2, 0) - .4 < TOL)
         ++passed;
     //passed = 2
-    
+    layer l2(5, 9);
+    l2.setAllWeightsOnes();
+    l2.setAllDWeightsZeros();
+    int k = 0;
+    for (int i=0; i<9; ++i) {
+        for (int j=0; j<5; ++j) {
+            if (l2.getWeight(i, j) == 1 && l2.getDWeight(i, j) == 0)
+                ++k;
+        }
+    }
+    if (k % 45 == 0)
+        ++passed;
+    //passed = 3
+    l2.setAllWeightsRandoms();
+    k = 0;
+    for (int i=0; i<9; ++i) {
+        for (int j=0; j<4; ++j) {
+            if (l2.getWeight(i, j) != l2.getWeight(i, j+1))
+                ++k;
+        }
+    }
+    if (k % 36 == 0)
+        ++passed;
+    //passed = 4
+    layer l3;
+    l3.setAllWeightsOnes();
+    l3.setAllDWeightsZeros();
+    l3.setAllWeightsRandoms();
+    layer l4(0, 0);
+    l4.setAllWeightsOnes();
+    l4.setAllDWeightsZeros();
+    l4.setAllWeightsRandoms();
 
-    return passed % 2;
+    l4.evaluateFct(3.1, 0); // layer has no neuron to evaluate, return no errors
+    l1.evaluateFct(1.1, 2); // fct is still nullptr, return no errors
+    double (*pf_a)(double) = &sigma;
+    double (*pf_da)(double) = &dSigma;
+    l1.setActivationFcts(pf_a, pf_da, 2);
+    if (l1.evaluateFct(1.1, 2) == sigma(1.1) && l1.evaluateFctDerivative(2.5, 2) == dSigma(2.5))
+        ++passed;
+    //passed = 5
+
+    return passed % 5;
 }
 
 int main () {

@@ -32,6 +32,11 @@ class layer {
     friend std::ostream& operator<< (std::ostream &os, const layer &l);
 
     void addDWeight (double val, int i, int j); // i-th neuron, j-th Weight
+    void setAllWeightsOnes ();
+    void setAllWeightsRandoms ();
+    void setAllDWeightsZeros ();
+    double evaluateFct(double x, int i) const; // evaluateFct(double) of the i-th neuron
+    double evaluateFctDerivative(double x, int i) const; 
 
 
     static int unitTest1(); // tests constructors

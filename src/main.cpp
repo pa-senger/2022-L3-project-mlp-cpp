@@ -9,7 +9,12 @@
 
 int main() {
 
-    layer l1(5, 0);
+    layer l1(2, 3);
+    l1.setAllWeightsOnes();
+    l1.setAllDWeightsZeros();
+    l1.setAllWeightsRandoms();
+
+    std::cout << l1;
    
     return 0;
 }

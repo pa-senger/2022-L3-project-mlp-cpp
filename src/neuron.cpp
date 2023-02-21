@@ -110,31 +110,49 @@ neuron neuron:: operator= (const neuron &ne) {
     return *this;
 }
 void neuron:: setWeightsOnes () {
-    if ( Weight_ != nullptr ) {
+    if (Weight_ != nullptr) {
        delete [] Weight_;
     }
-    Weight_ = new double [size_X_];   
-    for (int i=0; i<size_X_; ++i) {
-        Weight_[i] = 1.;
+    if (size_X_ == 0) {
+        Weight_ = nullptr;
+    }
+    else {
+        Weight_ = new double [size_X_];   
+        for (int i=0; i<size_X_; ++i) {
+            Weight_[i] = 1;
+    }
     }
 }
 void neuron:: setDWeightsZeros () {
-    if ( dWeight_ != nullptr ) {
+    if (dWeight_ != nullptr) {
        delete [] dWeight_;
     }
-    dWeight_ = new double [size_X_];   
-    for (int i=0; i<size_X_; ++i) {
-        dWeight_[i] = 0.;
+    if (size_X_ == 0) {
+        Weight_ = nullptr;
+    }
+    else {
+        dWeight_ = new double [size_X_];   
+        for (int i=0; i<size_X_; ++i) {
+            dWeight_[i] = 0;
+        }
     }
 }
 void neuron:: setWeightsRandom () {
     std::random_device rd;
     std::mt19937 gen(rd()); // standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<double> dis(-1'000'000, 1'000'000);
-    for (int i=0; i<size_X_; ++i) 
-        Weight_[i] = dis(gen);
+    if (Weight_ != nullptr)
+        delete [] Weight_;
+    if (size_X_ == 0) {
+        Weight_ = nullptr;
+    }
+    else {
+        Weight_ = new double[size_X_];
+        for (int i=0; i<size_X_; ++i) 
+            Weight_[i] = dis(gen);
+    }
 }
-void neuron:: evaluation (const double *X) {
+void neuron:: activate (const double *X) {
     double dot = 0;
     for (int i=0; i<size_X_; ++i) {
         dot += (Weight_[i] * X[i]);
@@ -185,7 +203,18 @@ std::ostream& operator<< (std::ostream& os, const neuron& ne) {
 
     return os;
 }
-
+double neuron:: evaluateFct (double x) const {
+    double res = 0;
+    if (pf_activation_ != nullptr)
+        res = pf_activation_(x);
+    return res;
+}
+double neuron:: evaluateFctDerivative (double x) const {
+    double res = 0;
+    if (pf_activation_d_ != nullptr)
+        res = pf_activation_d_(x);
+    return res;
+}
 
 
 

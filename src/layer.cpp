@@ -168,10 +168,43 @@ bool layer:: operator<= (const layer &l) const {
         res = true;
     return res;
 }
-void layer:: addDWeight (double val, int i, int j) { // i-th neuron, j-th Weighteight
+void layer:: addDWeight (double val, int i, int j) { // i-th neuron, j-th Weight
     if (i < nb_neurons_ && j < arr_neurons_[i].getSizeX() && arr_neurons_!= nullptr
         && nb_neurons_!= 0) {
         double w = getDWeight(i, j);
         setDWeight(w + val, i, j);
     }
+}
+void layer:: setAllWeightsOnes () {
+    if (nb_neurons_ != 0 && arr_neurons_ != nullptr) {
+        for (int i=0; i<nb_neurons_; ++i) {
+            arr_neurons_[i].setWeightsOnes();
+        }
+    }
+}
+void layer:: setAllWeightsRandoms () {
+    if (nb_neurons_ != 0 && arr_neurons_ != nullptr) {
+        for (int i=0; i<nb_neurons_; ++i) {
+            arr_neurons_[i].setWeightsRandom();
+        }
+    }
+}
+void layer:: setAllDWeightsZeros () {
+    if (nb_neurons_ != 0 && arr_neurons_ != nullptr) {
+        for (int i=0; i<nb_neurons_; ++i) {
+            arr_neurons_[i].setDWeightsZeros();
+        }
+    }
+}
+double layer:: evaluateFct(double x, int i) const { // evaluateFct(double) of the i-th neuron
+    double res = 0;
+    if (i < nb_neurons_ && arr_neurons_ != nullptr && nb_neurons_ != 0)
+        res = arr_neurons_[i].evaluateFct(x);
+    return res;
+}
+double layer:: evaluateFctDerivative(double x, int i) const { 
+    double res = 0;
+    if (i < nb_neurons_ && arr_neurons_ != nullptr && nb_neurons_ != 0)
+        res = arr_neurons_[i].evaluateFctDerivative(x);
+    return res;
 }

@@ -143,7 +143,7 @@ int neuron:: unitTest3 () {
     if (ne.getWeight(0) != ne2.getWeight(0))
         ++passed;
     //passed = 7
-    // test evaluation
+    // test activate
     neuron ne3(4);
     for (int i=0; i<4; ++i) {
         ne3.setWeight(i+1, i);
@@ -154,7 +154,7 @@ int neuron:: unitTest3 () {
     double (*pf_s) (double) = &sigma;
     double (*pf_ds) (double) = &dSigma;
     ne3.setActivationFcts(pf_s, pf_ds);
-    ne3.evaluation(X);
+    ne3.activate(X);
     if (ne3.getPo() == sigma(3.2))  
         ++passed;
     //passed = 8
@@ -174,7 +174,7 @@ int neuron:: unitTest3 () {
     neu1.setActivationFcts(pf_s, pf_ds); neu2.setActivationFcts(pf_s, pf_ds);
     neu1.setWeight(4.1, 2); neu2.setWeight(4.1, 2);
     neu1.setDWeight(3.1, 2); neu2.setDWeight(3.1, 2);
-    neu1.evaluation(X); neu2.evaluation(X);
+    neu1.activate(X); neu2.activate(X);
     if ( (neu1==neu2) == true)
         ++passed;
     //passed = 11
@@ -185,8 +185,11 @@ int neuron:: unitTest3 () {
     if ( (neu1!=neu2) == true )
         ++passed;
     //passed = 13
+    if (ne3.evaluateFct(5) == sigma(5) && ne3.evaluateFctDerivative(1.1) == dSigma(1.1))
+        ++passed;
+    //passed = 14
 
-    return passed % 13;
+    return passed % 14;
 }
 
 

@@ -44,8 +44,10 @@ class neuron {
     void setWeightsOnes ();
     void setWeightsRandom (); // Unif([-1m, 1m]) distribution
     void setDWeightsZeros ();
-    void evaluation (const double *X);
+    void activate (const double *X);
     void printWeights (const double *arr) const;
+    double evaluateFct (double x) const;
+    double evaluateFctDerivative (double x) const;
 
     // tests
     static int unitTest1 (); // tests constuctors 
@@ -54,8 +56,8 @@ class neuron {
 
   private:
     int size_X_;
-    double (*pf_activation_)(double);
-    double (*pf_activation_d_)(double);
+    double (*pf_activation_) (double);
+    double (*pf_activation_d_) (double);
     double *Weight_;
     double *dWeight_;
     double po_;
