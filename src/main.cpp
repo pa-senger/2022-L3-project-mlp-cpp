@@ -1,6 +1,6 @@
-#include "../include/neurone.hpp"
-#include "../include/couche.hpp"
-#include "../include/activ_functions.hpp"
+#include "../include/neuron.hpp"
+#include "../include/layer.hpp"
+#include "../include/activation_functions.hpp"
 
 #include <iostream>
 #include <cmath>
@@ -10,7 +10,7 @@
 int main() {
 
 
-    couche c1(2, 5);
+    layer c1(2, 5);
 
     std::cout << c1.getDW(4, 1) << std::endl;  
 
@@ -18,9 +18,9 @@ int main() {
     
     std::cout << c1.getDW(4, 1) << std::endl;  
 
-    neurone n1(5);
+    neuron n1(5);
     
-    n1.setActivFctName("sigma");
+    n1.setActivationFctName("sigma");
     std::cout << n1;
 
 

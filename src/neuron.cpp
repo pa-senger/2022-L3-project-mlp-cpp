@@ -1,16 +1,16 @@
-#include "../include/neurone.hpp"
+#include "../include/neuron.hpp"
 #include <iostream>
 #include <cmath>
 #include <random>
 
 
-neurone:: neurone (int n) {
+neuron:: neuron (int n) {
     size_X_ = n;
     po_ = 0.;
     biais_ = 0.;
     db_ = 0.;
-    pf_sigma_ = nullptr;
-    pf_d_sigma_ = nullptr;
+    pf_activation_ = nullptr;
+    pf_activation_d_ = nullptr;
     W_ = new double [n];
     dW_ = new double [n];
     for (int i=0; i<n; ++i) {
@@ -18,13 +18,13 @@ neurone:: neurone (int n) {
         dW_[i] = 0.;
     }
 }
-neurone:: neurone (const neurone & ne) {
+neuron:: neuron (const neuron & ne) {
     size_X_ = ne.size_X_;
     po_ = ne.po_;
     biais_ = ne.biais_;
     db_ = ne.db_;
-    pf_sigma_ = ne.pf_sigma_; // pointer to the same "object"
-    pf_d_sigma_ = ne.pf_d_sigma_; // functions arent object so they cant be deep copied
+    pf_activation_ = ne.pf_activation_; // pointer to the same "object"
+    pf_activation_d_ = ne.pf_activation_d_; // functions arent object so they cant be deep copied
     W_ = new double [size_X_];
     dW_ = new double [size_X_];
     for (int i=0; i<size_X_; ++i) {
@@ -32,32 +32,34 @@ neurone:: neurone (const neurone & ne) {
         dW_[i] = ne.dW_[i];
     }
 } 
-neurone:: ~neurone () { 
+neuron:: ~neuron () { 
     if ( W_ != nullptr)
         delete [] W_;
     if ( dW_ != nullptr)
         delete [] dW_;    
 }
-int neurone:: getSizeX () const { return size_X_; }
-double neurone:: getBiais () const { return biais_; }
-double neurone:: getDb () const { return db_; }
-double neurone:: getW (int i) const { return W_[i]; }
-double neurone:: getDW (int i) const { return dW_[i] ; }
-double neurone:: getPo () const { return po_; }
-void neurone:: setBiais (double b) { biais_ = b; }
-void neurone:: setDb (double db) { db_ = db; }
-void neurone:: setW (double w, int i) { W_[i] = w; }
-void neurone:: setDW (double dw, int i) { dW_[i] = dw; }
-void neurone:: setSigma (double (*pfS)(double)) { pf_sigma_ = pfS; }
-void neurone:: setDsigma (double (*pfDs)(double)) { pf_d_sigma_ = pfDs; }
-neurone neurone:: operator= (const neurone & ne) {
+int neuron:: getSizeX () const { return size_X_; }
+double neuron:: getBiais () const { return biais_; }
+double neuron:: getDb () const { return db_; }
+double neuron:: getW (int i) const { return W_[i]; }
+double neuron:: getDW (int i) const { return dW_[i] ; }
+double neuron:: getPo () const { return po_; }
+void neuron:: setBiais (double b) { biais_ = b; }
+void neuron:: setDb (double db) { db_ = db; }
+void neuron:: setW (double w, int i) { W_[i] = w; }
+void neuron:: setDW (double dw, int i) { dW_[i] = dw; }
+void neuron:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double)) {
+    pf_activation_ = pf_a;
+    pf_activation_d_ = pf_da;
+}
+neuron neuron:: operator= (const neuron & ne) {
     if ( this != &ne ) {
         size_X_ = ne.size_X_;
         po_ = ne.po_;
         biais_ = ne.biais_;
         db_ = ne.db_;
-        pf_sigma_ = ne.pf_sigma_;
-        pf_d_sigma_ = ne.pf_d_sigma_;
+        pf_activation_ = ne.pf_activation_;
+        pf_activation_d_ = ne.pf_activation_d_;
         if (W_ != nullptr) {
             delete [] W_;
         }
@@ -73,7 +75,7 @@ neurone neurone:: operator= (const neurone & ne) {
     }
     return *this;
 }
-void neurone:: setWones () {
+void neuron:: setWones () {
     if ( W_ != nullptr ) {
        delete [] W_;
     }
@@ -82,7 +84,7 @@ void neurone:: setWones () {
         W_[i] = 1.;
     }
 }
-void neurone:: setDWzeros () {
+void neuron:: setDWzeros () {
     if ( dW_ != nullptr ) {
        delete [] dW_;
     }
@@ -91,23 +93,23 @@ void neurone:: setDWzeros () {
         dW_[i] = 0.;
     }
 }
-void neurone:: setWrandom () {
+void neuron:: setWrandom () {
     std::random_device rd;
     std::mt19937 gen(rd()); // standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<double> dis(-1'000'000, 1'000'000);
     for (int i=0; i<size_X_; ++i) 
         W_[i] = dis(gen);
 }
-void neurone:: evaluation (const double *X) {
+void neuron:: evaluation (const double *X) {
     double dot = 0;
     for (int i=0; i<size_X_; ++i) {
         dot += (W_[i] * X[i]);
     }
-    po_ = pf_sigma_(dot + biais_);
+    po_ = pf_activation_(dot + biais_);
 }
-bool neurone:: operator== (const neurone & ne) const {
+bool neuron:: operator== (const neuron & ne) const {
     bool res = true;
-    if(size_X_ != ne.size_X_ || pf_sigma_ != ne.pf_sigma_ || pf_d_sigma_ != ne.pf_d_sigma_ ||
+    if(size_X_ != ne.size_X_ || pf_activation_ != ne.pf_activation_ || pf_activation_d_ != ne.pf_activation_d_ ||
         po_ != ne.po_ || biais_ != ne.biais_ || db_ != ne.db_)
         return false;
     for (int i=0; i<size_X_; ++i) {
@@ -116,10 +118,10 @@ bool neurone:: operator== (const neurone & ne) const {
     }
     return res;
 }
-bool neurone:: operator!= (const neurone & ne) const {
+bool neuron:: operator!= (const neuron & ne) const {
     return !( *this == ne);
 }
-void neurone:: printArr (const double *arr) const {
+void neuron:: printArr (const double *arr) const {
     if ( arr != nullptr) {
         std::cout << "[";
         for (int i=0; i<size_X_-1; ++i) {
@@ -132,19 +134,19 @@ void neurone:: printArr (const double *arr) const {
     }
 
 }
-void neurone:: setActivFctName (std::string sigma) {
-    activ_fct_name_ = sigma;
+void neuron:: setActivationFctName (std::string sigma) {
+    activation_fct_name_ = sigma;
 }
 
-std::ostream& operator<< (std::ostream& os, const neurone& ne) {
-    os << "The neuron is define with : \n"
+std::ostream& operator<< (std::ostream& os, const neuron& ne) {
+    os << "This neuron is define with : \n"
         << "    An entry vector of size : " << ne.size_X_ << "\n"
         << "    Its weights : ";
     ne.printArr(ne.W_);
     os    << "    The derivatives of its weights : ";
     ne.printArr(ne.dW_);
     os << "    Its biais : " << ne.biais_ << "\n"
-        << "    Its activation function : " << ne.activ_fct_name_ << "\n"
+        << "    Its activation function : " << ne.activation_fct_name_ << "\n"
         << "    Its value post activation : " << ne.po_ << "\n";
 
     return os;

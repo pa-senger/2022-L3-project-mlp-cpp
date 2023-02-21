@@ -1,26 +1,26 @@
-#include "../include/neurone.hpp"
-#include "../include/activ_functions.hpp"
+#include "../include/neuron.hpp"
+#include "../include/activation_functions.hpp"
 
 #include <cmath>
 #include <iostream>
 #define TOL 1e-6
 
 
-int neurone:: unitTest1 () { // tests constuctors 
+int neuron:: unitTest1 () { // tests constuctors 
     int passed = 0, total = 5;
 
-    neurone n;
-    neurone n1(5);
-    neurone n2(n1);
+    neuron n;
+    neuron n1(5);
+    neuron n2(n1);
 
     // default constructor
     if (n.size_X_ == 0 && n.po_ == 0. && n.biais_ == 0. && n.db_ == 0. 
-        && n.pf_sigma_ == nullptr && n.pf_d_sigma_ == nullptr && n.W_ == nullptr && n.dW_ == nullptr)
+        && n.pf_activation_ == nullptr && n.pf_activation_d_ == nullptr && n.W_ == nullptr && n.dW_ == nullptr)
         ++passed;    
     //passed = 1
     // constructor taking the size of X
     if (n1.size_X_ == 5 && n1.po_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
-        n1.pf_sigma_ == nullptr && n1.pf_d_sigma_ == nullptr && n1.W_ != nullptr && n1.dW_ != nullptr)
+        n1.pf_activation_ == nullptr && n1.pf_activation_d_ == nullptr && n1.W_ != nullptr && n1.dW_ != nullptr)
         ++passed;
     //passed = 2    
     int k = 0;
@@ -33,7 +33,7 @@ int neurone:: unitTest1 () { // tests constuctors
     //passed = 3
     // copy constructor
     if (n2.size_X_ == n1.size_X_ && n2.po_ == n1.po_ && n2.biais_ == n1.biais_ &&
-        n2.db_ == n1.db_ && n2.pf_sigma_ == n1.pf_sigma_ && n2.pf_d_sigma_ == n1.pf_d_sigma_ )
+        n2.db_ == n1.db_ && n2.pf_activation_ == n1.pf_activation_ && n2.pf_activation_d_ == n1.pf_activation_d_ )
         ++passed;
     //passed = 4
     k = 0;
@@ -48,45 +48,44 @@ int neurone:: unitTest1 () { // tests constuctors
     return passed % total; // return 0 if all succesful
 }
 
-int neurone:: unitTest2 () { // tests getters setters
+int neuron:: unitTest2 () { // tests getters setters
     int passed = 0, total = 5;
 
-    neurone n(10);
+    neuron n(10);
     n.setW(1.1, 10);
     n.setDW(2.2, 0);
     n.setBiais(3.3);
     n.setDb(4.4);
-    double (*pfS) (double) = &sigma;
-    n.setSigma(pfS);
-    double (*pfDs) (double) = &dSigma;
-    n.setDsigma(pfDs);
+    double (*pf_s) (double) = &sigma;
+    double (*pf_ds) (double) = &dSigma;
+    n.setActivationFcts(pf_s, pf_ds);
 
     if (n.getW(10) == 1.1 && n.getDW(0) == 2.2 && n.getBiais() == 3.3 && n.getDb() == 4.4 && 
         n.getPo() == 0. && n.getSizeX() == 10)
         ++passed;
     //passed = 1;
-    if (n.pf_sigma_ == pfS)
+    if (n.pf_activation_ == pf_s)
         ++passed;
     //passed = 2    
-    if (n.pf_sigma_(2.2) - pfS(2.2) <= TOL)  // sigma(2.2) ~= 0.90024  
+    if (n.pf_activation_(2.2) - pf_s(2.2) <= TOL)  // sigma(2.2) ~= 0.90024  
         ++passed;
     //passed = 3
-    if (n.pf_d_sigma_ == pfDs)
+    if (n.pf_activation_d_ == pf_ds)
         ++passed;
     //passed = 4
-    if (n.pf_d_sigma_(2.2) - pfDs(2.2) <= TOL)  // dSigma(2.2) ~= 0.109459 
+    if (n.pf_activation_d_(2.2) - pf_ds(2.2) <= TOL)  // dSigma(2.2) ~= 0.109459 
         ++passed;  
     //passed = 5
 
     return passed % total;
 }
 
-int neurone:: unitTest3 () {
+int neuron:: unitTest3 () {
     int passed = 0, total = 13;
 
-    neurone ne(5);
-    neurone ne1(6);
-    neurone ne2(10);
+    neuron ne(5);
+    neuron ne1(6);
+    neuron ne2(10);
 
     // test setWOnes
     ne.setWones();
@@ -112,7 +111,7 @@ int neurone:: unitTest3 () {
     ne1.setWones();
     ne1 = ne2;
     if (ne2.size_X_ == ne1.size_X_ && ne2.po_ == ne1.po_ && ne2.biais_ == ne1.biais_ &&
-        ne2.db_ == ne1.db_ && ne2.pf_sigma_ == ne1.pf_sigma_ && ne2.pf_d_sigma_ == ne1.pf_d_sigma_ )
+        ne2.db_ == ne1.db_ && ne2.pf_activation_ == ne1.pf_activation_ && ne2.pf_activation_d_ == ne1.pf_activation_d_ )
         ++passed;
     //passed = 3
     k = 0;
@@ -145,23 +144,24 @@ int neurone:: unitTest3 () {
         ++passed;
     //passed = 7
     // test evaluation
-    neurone ne3(4);
+    neuron ne3(4);
     for (int i=0; i<4; ++i) {
         ne3.setW(i+1, i);
     }
     double X[4] = {.1, .2, .3, .4};
     double biais = .2;
     ne3.setBiais(biais);
-    double (*pfS) (double) = &sigma;
-    ne3.setSigma(pfS);
+    double (*pf_s) (double) = &sigma;
+    double (*pf_ds) (double) = &dSigma;
+    ne3.setActivationFcts(pf_s, pf_ds);
     ne3.evaluation(X);
     if (ne3.getPo() == sigma(3.2))  
         ++passed;
     //passed = 8
     // test operator ==
-    neurone neu1(4);
-    neurone neu2(4);
-    neurone neu3;
+    neuron neu1(4);
+    neuron neu2(4);
+    neuron neu3;
     if ( (neu1==neu3) == false && (neu1==neu2) == true )
         ++passed;
     //passed = 9
@@ -171,7 +171,7 @@ int neurone:: unitTest3 () {
         ++passed;
     //passed = 10
     neu1.setBiais(1) ; neu2.setBiais(1);
-    neu1.setSigma(pfS); neu2.setSigma(pfS);
+    neu1.setActivationFcts(pf_s, pf_ds); neu2.setActivationFcts(pf_s, pf_ds);
     neu1.setW(4.1, 2); neu2.setW(4.1, 2);
     neu1.setDW(3.1, 2); neu2.setDW(3.1, 2);
     neu1.evaluation(X); neu2.evaluation(X);
@@ -191,8 +191,8 @@ int neurone:: unitTest3 () {
 
 
 int main () {
-    if (neurone:: unitTest1() == 0 && neurone:: unitTest2() == 0 &&
-        neurone:: unitTest3() == 0)
+    if (neuron:: unitTest1() == 0 && neuron:: unitTest2() == 0 &&
+        neuron:: unitTest3() == 0)
         return 0;
 
     return 1;

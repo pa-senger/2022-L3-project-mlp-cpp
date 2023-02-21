@@ -1,4 +1,4 @@
-#include "../include/activ_functions.hpp"
+#include "../include/activation_functions.hpp"
 #include <cmath>
 
 
