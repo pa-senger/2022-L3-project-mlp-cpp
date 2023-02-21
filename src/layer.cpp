@@ -101,3 +101,62 @@ layer layer:: operator= (const layer &l) {
     }
     return *this;
 }
+std::ostream& operator<< (std::ostream& os, const layer &l) {
+    os << "This layer is define with : \n"
+        << "    An entry data vector of size : " << l.nb_data_ << "\n"
+        << "    A number of neurons : " << l.nb_neurons_ << "\n";
+
+    return os;
+}
+void layer:: setBiais (double val, int i) {
+    if (i < nb_neurons_) {
+        arr_neurons_[i].setBiais(val);
+    }
+    else {
+        std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    }
+}
+void layer:: setDb (double val, int i) {
+    if (i < nb_neurons_) {
+        arr_neurons_[i].setDb(val);
+    }
+    else {
+        std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    }
+}
+double layer:: getBiais (int i) const {
+    double res = 0;
+    if (i < nb_neurons_) {
+        res = arr_neurons_[i].getBiais();
+    }
+    else {
+        std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    }
+    return res;
+}
+double layer:: getDb (int i) const {
+    double res = 0;
+    if (i < nb_neurons_) {
+        res = arr_neurons_[i].getBiais();
+    }
+    else {
+        std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    }
+    return res;
+}
+bool layer:: operator== (const layer &l) const {
+    bool res = false;
+    if (nb_neurons_ == l.nb_neurons_)
+        res = true;
+    return res;
+}
+bool layer:: operator!= (const layer &l) const {
+    return !(*this == l);
+}
+bool layer:: operator< (const layer &l) const {
+    bool res = false;
+    if (nb_neurons_ < l.nb_neurons_)
+        res = true;
+    return res;
+}
+

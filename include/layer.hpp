@@ -15,12 +15,23 @@ class layer {
     int getNbData () const;
     double getNbneurons () const;
     double getPo (int i) const; // get post activation value of the i-th neuron
+    double getBiais (int i) const;
+    double getDb (int i) const;
+
     void setW (double val, int i, int j);
     void setDW (double val, int i, int j);
     void setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i); // set to i-th neuron in the layer
     void setActivationFctName (std::string name, int i);
+    void setBiais (double val, int i);
+    void setDb (double val, int i);
 
     layer operator= (const layer &l);
+    bool operator== (const layer &l) const;
+    bool operator!= (const layer &l) const;
+    bool operator< (const layer &l) const;
+
+    friend std::ostream& operator<< (std::ostream &os, const layer &l);
+
 
     static int unitTest1(); // tests constructors
     static int unitTest2(); // tests getters setters

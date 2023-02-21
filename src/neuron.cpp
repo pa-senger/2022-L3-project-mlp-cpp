@@ -158,14 +158,14 @@ void neuron:: setActivationFctName (std::string sigma) {
 
 std::ostream& operator<< (std::ostream& os, const neuron& ne) {
     os << "This neuron is define with : \n"
-        << "    An entry vector of size : " << ne.size_X_ << "\n"
-        << "    Its weights : ";
+        << "    An entry vector X of size : " << ne.size_X_ << "\n"
+        << "    A vector W of weights : ";
     ne.printArr(ne.W_);
-    os    << "    The derivatives of its weights : ";
+    os    << "    A vector dW of weight's derivatives : ";
     ne.printArr(ne.dW_);
-    os << "    Its biais : " << ne.biais_ << "\n"
-        << "    Its activation function : " << ne.activation_fct_name_ << "\n"
-        << "    Its value post activation : " << ne.po_ << "\n";
+    os << "    A biais b : " << ne.biais_ << "\n"
+        << "    An activation function named : " << ne.activation_fct_name_ << "\n"
+        << "    A post activation value po of : " << ne.po_ << "\n";
 
     return os;
 }

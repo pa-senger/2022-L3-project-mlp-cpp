@@ -15,7 +15,7 @@ class neuron {
     // construtor taking size of an entry vector 
     neuron (int n);
     // copy constructor
-    neuron (const neuron & ne);
+    neuron (const neuron &ne);
     // destructor
     ~neuron ();
 
