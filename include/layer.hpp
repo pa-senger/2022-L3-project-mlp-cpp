@@ -1,6 +1,6 @@
 #ifndef LAYER_HPP
 #define LAYER_HPP
-#include "../include/neuron.hpp"
+#include "neuron.hpp"
 
 
 class layer {

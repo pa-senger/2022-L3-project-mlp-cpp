@@ -190,7 +190,6 @@ int layer:: unitTest4() {
     nn2 = l(3);
     //passed = 8
     
-
     return passed % 8;
 }
 
