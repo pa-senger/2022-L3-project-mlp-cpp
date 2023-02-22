@@ -4,8 +4,8 @@
 
 #define TOL 1e-6
 
-
-
+double (*pf_a)(double) = &sigma;
+double (*pf_da)(double) = &dSigma;
 
 int layer:: unitTest1() {
     int passed = 0;
@@ -53,8 +53,6 @@ int layer:: unitTest2() { // tests getters setters
     layer l3(2, 3);
     l2.setWeight(1.1, 4, 1); // 4th neuron, 1st Weighteight
     l2.setDWeight(2.2, 0, 0);
-    double (*pf_a)(double) = &sigma;
-    double (*pf_da)(double) = &dSigma;
     l2.setActivationFcts(pf_a, pf_da, 4);
     l2.setActivationFctName("sigma", 4);
     l2.setBiais(4.4, 0);
@@ -84,8 +82,6 @@ int layer:: unitTest3() { // tests operators
     l2.setBiais(1.1, 2);
     l2.setWeight(2.2, 2, 1);
     double X[3] = {1,3,5};
-    double (*pf_a)(double) = &sigma;
-    double (*pf_da)(double) = &dSigma;
     l2.setActivationFcts(pf_a, pf_da, 2);
     l2.arr_neurons_[2].activate(X, 3);
 
@@ -164,8 +160,6 @@ int layer:: unitTest4() {
 
     l4.evaluateFct(3.1, 0); // layer has no neuron to evaluate, return no errors
     l1.evaluateFct(1.1, 2); // fct is still nullptr, return no errors
-    double (*pf_a)(double) = &sigma;
-    double (*pf_da)(double) = &dSigma;
     l1.setActivationFcts(pf_a, pf_da, 2);
     if (l1.evaluateFct(1.1, 2) == sigma(1.1) && l1.evaluateFctDerivative(2.5, 2) == dSigma(2.5))
         ++passed;

@@ -19,7 +19,9 @@ class neuron {
         dWeight_ = new double[1] {0};
     }
     // construtor taking size of an entry vector 
-    neuron (unsigned int n);
+    neuron (int n);
+    neuron (int n, double (*pf_a)(double), double (*pf_da)(double),
+                                                    std::string fct_name = "n/a" );
     // copy constructor
     neuron (const neuron &ne);
     // destructor
@@ -29,15 +31,16 @@ class neuron {
     int getSizeX () const;
     double getBiais () const;
     double getDb () const;
-    double getWeight (unsigned int i) const;
-    double getDWeight (unsigned int i)const;
+    double getWeight (int i) const;
+    double getDWeight (int i)const;
     double getPo () const;
 
     void setBiais (double b);
     void setDb (double db);
-    void setWeight (double Weight, unsigned int i);
-    void setDWeight (double dWeight, unsigned int i);
-    void setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), std::string name = "n/a");
+    void setWeight (double Weight, int i);
+    void setDWeight (double dWeight, int i);
+    void setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), 
+                                                    std::string name = "n/a");
     void setActivationFctName (std::string name);
 
     // operator
@@ -50,7 +53,7 @@ class neuron {
     void setWeightsOnes ();
     void setWeightsRandom (); // Unif([-1m, 1m]) distribution
     void setDWeightsZeros ();
-    void activate (const double *X, unsigned int size);
+    void activate (const double *X, int size);
     void printWeights (const double *arr) const;
     double evaluateFct (double x) const;
     double evaluateFctDerivative (double x) const;
@@ -61,7 +64,7 @@ class neuron {
     static int unitTest3 (); // tests operators and methods 
 
   private:
-    unsigned int size_X_;
+    int size_X_;
     double (*pf_activation_) (double);
     double (*pf_activation_d_) (double);
     double *Weight_;

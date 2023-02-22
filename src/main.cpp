@@ -16,8 +16,10 @@ int main() {
 
     neuron n;
 
+    layer l2;
+
     std::cout << n;
-    std::cout << l1;
+    std::cout << l2;
    
     return 0;
 }

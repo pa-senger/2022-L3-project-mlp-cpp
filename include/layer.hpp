@@ -5,7 +5,7 @@
 
 class layer {
   public:
-    layer () : nb_neurons_(0), nb_data_(0), arr_neurons_(nullptr) {} // empty layer
+    layer () : nb_neurons_(0), nb_data_(0), arr_neurons_(nullptr), Y_(nullptr) {} // empty layer
     layer (const layer & co);
     layer (int nb_data, int nb_ne);
     ~layer ();
@@ -17,6 +17,7 @@ class layer {
     double getPo (int i) const; // get post activation value of the i-th neuron
     double getBiais (int i) const;
     double getDb (int i) const;
+    double * getY () const { return Y_; }
 
     void setWeight (double val, int i, int j);
     void setDWeight (double val, int i, int j);
@@ -35,8 +36,9 @@ class layer {
     void setAllWeightsOnes ();
     void setAllWeightsRandoms ();
     void setAllDWeightsZeros ();
-    double evaluateFct(double x, int i) const; // evaluateFct(double) of the i-th neuron
-    double evaluateFctDerivative(double x, int i) const; 
+    double evaluateFct (double x, int i) const; // evaluateFct(double) of the i-th neuron
+    double evaluateFctDerivative (double x, int i) const; 
+    void evaluateLayer (const double *X, int size) const; // each neuron take X return po, Y=(po_1,...,po_n)
 
 
     static int unitTest1(); // tests constructors
@@ -48,6 +50,7 @@ class layer {
     int nb_neurons_;
     int nb_data_;
     neuron * arr_neurons_;
+    double *Y_; // array, contains the values of the layer after activation
 };
 
 

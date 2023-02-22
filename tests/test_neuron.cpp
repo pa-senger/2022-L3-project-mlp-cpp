@@ -5,6 +5,8 @@
 #include <iostream>
 #define TOL 1e-6
 
+double (*pf_s) (double) = &sigma;
+double (*pf_ds) (double) = &dSigma;
 
 int neuron:: unitTest1 () { // tests constuctors 
     int passed = 0;
@@ -20,12 +22,13 @@ int neuron:: unitTest1 () { // tests constuctors
         ++passed;    
     //passed = 1
     // constructor taking the size of X
-    if (n1.size_X_ == 5 && n1.post_activation_value_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
-        n1.pf_activation_ == &ReLU && n1.pf_activation_d_ == &dReLU && n1.Weight_ != nullptr && n1.dWeight_ != nullptr)
+    if (n1.size_X_ == 5 && n1.post_activation_value_ == 0. && n1.biais_ == 0. && n1.db_ == 0. 
+        && n1.pf_activation_ == &ReLU && n1.pf_activation_d_ == &dReLU && n1.Weight_ != nullptr 
+        && n1.dWeight_ != nullptr)
         ++passed;
     //passed = 2    
     int k = 0;
-    for (unsigned int i=0; i<n1.size_X_; ++i) {
+    for (int i=0; i<n1.size_X_; ++i) {
         if (n1.Weight_[i] == 1 && n1.dWeight_[i] == 0.)   
             ++k;
     }
@@ -33,20 +36,27 @@ int neuron:: unitTest1 () { // tests constuctors
         ++passed;    
     //passed = 3
     // copy constructor
-    if (n2.size_X_ == n1.size_X_ && n2.post_activation_value_ == n1.post_activation_value_ && n2.biais_ == n1.biais_ &&
-        n2.db_ == n1.db_ && n2.pf_activation_ == n1.pf_activation_ && n2.pf_activation_d_ == n1.pf_activation_d_ )
+    if (n2.size_X_ == n1.size_X_ && n2.post_activation_value_ == n1.post_activation_value_ 
+        && n2.biais_ == n1.biais_ && n2.db_ == n1.db_ && n2.pf_activation_ == n1.pf_activation_ 
+        && n2.pf_activation_d_ == n1.pf_activation_d_ )
         ++passed;
     //passed = 4
     k = 0;
-    for (unsigned int i=0; i<n1.size_X_; ++i) {
+    for (int i=0; i<n1.size_X_; ++i) {
         if (n2.Weight_[i] == n1.Weight_[i] && n2.dWeight_[i] == n1.dWeight_[i])   
             ++k;
     }
     if (k % n2.size_X_ == 0)
         ++passed;
     //passed = 5
+    neuron n3(2, pf_s, pf_ds, "sigma");
+    if (n3.size_X_ == 2 && n3.post_activation_value_ == 0. && n3.biais_ == 0. && n3.db_ == 0. 
+        && n3.pf_activation_ == &sigma && n3.pf_activation_d_ == &dSigma 
+        && n3.Weight_ != nullptr && n3.dWeight_ != nullptr)
+        ++passed;
+    //passed =6
 
-    return passed % 5; // return 0 if all successful
+    return passed % 6; // return 0 if all successful
 }
 
 int neuron:: unitTest2 () { // tests getters setters
@@ -57,12 +67,10 @@ int neuron:: unitTest2 () { // tests getters setters
     n.setDWeight(2.2, 0);
     n.setBiais(3.3);
     n.setDb(4.4);
-    double (*pf_s) (double) = &sigma;
-    double (*pf_ds) (double) = &dSigma;
     n.setActivationFcts(pf_s, pf_ds);
 
-    if (n.getWeight(9) == 1.1 && n.getDWeight(0) == 2.2 && n.getBiais() == 3.3 && n.getDb() == 4.4 && 
-        n.getPo() == 0. && n.getSizeX() == 10)
+    if (n.getWeight(9) == 1.1 && n.getDWeight(0) == 2.2 && n.getBiais() == 3.3 
+        && n.getDb() == 4.4 && n.getPo() == 0. && n.getSizeX() == 10)
         ++passed;
     //passed = 1;
     if (n.pf_activation_ == pf_s)
@@ -111,12 +119,14 @@ int neuron:: unitTest3 () {
     // test operator =
     ne1.setWeightsOnes();
     ne1 = ne2;
-    if (ne2.size_X_ == ne1.size_X_ && ne2.post_activation_value_ == ne1.post_activation_value_ && ne2.biais_ == ne1.biais_ &&
-        ne2.db_ == ne1.db_ && ne2.pf_activation_ == ne1.pf_activation_ && ne2.pf_activation_d_ == ne1.pf_activation_d_ )
+    if (ne2.size_X_ == ne1.size_X_ && ne2.post_activation_value_ == ne1.post_activation_value_ 
+        && ne2.biais_ == ne1.biais_ && ne2.db_ == ne1.db_ 
+        && ne2.pf_activation_ == ne1.pf_activation_ 
+        && ne2.pf_activation_d_ == ne1.pf_activation_d_ )
         ++passed;
     //passed = 3
     k = 0;
-    for (unsigned int i=0; i<ne1.size_X_; ++i) {
+    for (int i=0; i<ne1.size_X_; ++i) {
         if (ne2.Weight_[i] == ne1.Weight_[i] && ne2.dWeight_[i] == ne1.dWeight_[i])   
             ++k;
     }
@@ -152,8 +162,6 @@ int neuron:: unitTest3 () {
     double X[4] = {.1, .2, .3, .4};
     double biais = .2;
     ne3.setBiais(biais);
-    double (*pf_s) (double) = &sigma;
-    double (*pf_ds) (double) = &dSigma;
     ne3.setActivationFcts(pf_s, pf_ds);
     ne3.activate(X, 4);
     if (ne3.getPo() == sigma(3.2))  
