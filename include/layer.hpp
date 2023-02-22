@@ -21,7 +21,8 @@ class layer {
 
     void setWeight (double val, int i, int j);
     void setDWeight (double val, int i, int j);
-    void setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i); // set to i-th neuron in the layer
+    void setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i, 
+                            std::string name = "n/a"); // set to i-th neuron in the layer
     void setActivationFctName (std::string name, int i);
     void setBiais (double val, int i);
     void setDb (double val, int i);
@@ -30,6 +31,8 @@ class layer {
     bool operator== (const layer &l) const;
     bool operator!= (const layer &l) const;
     bool operator<= (const layer &l) const;
+    neuron& operator() (int i) const; // return the i-th neuron in the layer
+
     friend std::ostream& operator<< (std::ostream &os, const layer &l);
 
     void addDWeight (double val, int i, int j); // i-th neuron, j-th Weight
@@ -39,7 +42,6 @@ class layer {
     double evaluateFct (double x, int i) const; // evaluateFct(double) of the i-th neuron
     double evaluateFctDerivative (double x, int i) const; 
     void evaluateLayer (const double *X, int size) const; // each neuron take X return po, Y=(po_1,...,po_n)
-
 
     static int unitTest1(); // tests constructors
     static int unitTest2(); // tests getters setters

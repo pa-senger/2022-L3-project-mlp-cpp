@@ -86,7 +86,7 @@ double layer:: getPo (int i) const { // get po of the i-th neuron
 }
 void layer:: setWeight (double val, int i, int j) {
     if (i < 0 || j < 0) {
-        std::cout << "Error : you must use positive integer for this !\n";
+        std::cout << "Error : you must use positive integers for this !\n";
         exit(1);
     }
     if (nb_neurons_ == 0 || i >= nb_neurons_  || j > (arr_neurons_[i].getSizeX())
@@ -100,7 +100,7 @@ void layer:: setWeight (double val, int i, int j) {
 }
 void layer:: setDWeight (double val, int i, int j) {
     if (i < 0 || j < 0) {
-        std::cout << "Error : you must use positive integer for this !\n";
+        std::cout << "Error : you must use positive integers for this !\n";
         exit(1);
     }
     if (nb_neurons_ == 0 || i >= nb_neurons_  || j >= (arr_neurons_[i].getSizeX())
@@ -112,13 +112,14 @@ void layer:: setDWeight (double val, int i, int j) {
         arr_neurons_[i].setDWeight(val, j);
     } 
 }
-void layer:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i) {// set to i-th neuron in the layer
+void layer:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), int i, 
+                                std::string name) {// set to i-th neuron in the layer
     if (i < 0) {
-        std::cout << "Error : you must use positive integer for this !\n";
+        std::cout << "Error : you must use positive integers for this !\n";
         exit(1);
     }
     if (i < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
-        arr_neurons_[i].setActivationFcts(pf_a, pf_da);
+        arr_neurons_[i].setActivationFcts(pf_a, pf_da, name);
     }
     else {
         std::cout << "Error : there isn't as many neurons in the layer !" << std::endl;
@@ -126,7 +127,7 @@ void layer:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double),
 }
 void layer:: setActivationFctName (std::string name, int i) {
     if (i < 0) {
-        std::cout << "Error : you must use positive integer for this !\n";
+        std::cout << "Error : you must use positive integers for this !\n";
         exit(1);
     }
     if (i < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
@@ -293,4 +294,12 @@ void layer:: evaluateLayer (const double *X, int size) const { // each neuron ta
         arr_neurons_[i].activateNeuron(X, size);
         Y_[i] = getPo(i);
     }
+}
+neuron& layer:: operator() (int i) const { // return the i-th neuron in the layer
+    if ( arr_neurons_ == nullptr || nb_neurons_ == 0 || i >= nb_neurons_) {
+        std::cout << "Error : there isn't as many neurons in this layer \n";
+        exit(1);
+    }
+    return arr_neurons_[i];
+
 }

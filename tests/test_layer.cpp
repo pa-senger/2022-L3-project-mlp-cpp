@@ -158,14 +158,40 @@ int layer:: unitTest4() {
     l4.setAllDWeightsZeros();
     l4.setAllWeightsRandoms();
 
-    l4.evaluateFct(3.1, 0); // layer has no neuron to evaluate, return no errors
-    l1.evaluateFct(1.1, 2); // fct is still nullptr, return no errors
+    l4.evaluateFct(3.1, 0); // layer has no neuron to evaluate, returns no errors
     l1.setActivationFcts(pf_a, pf_da, 2);
     if (l1.evaluateFct(1.1, 2) == sigma(1.1) && l1.evaluateFctDerivative(2.5, 2) == dSigma(2.5))
         ++passed;
     //passed = 5
+    layer l(2, 5);
+    double X[2] {1,2};
+    l.evaluateLayer(X, 2); // X.(1,1) = 3, biais=0, heavyside(3 + biais) = 3
+    double *Y = l.getY(); 
+    k = 0;
+    for (int i=0; i<5; ++i) {
+        if (Y[i] == 3)
+            ++k;
+    }
+    if (k % 5 == 0)
+        ++passed;
+    //passed =6
+    l.setActivationFcts(pf_a, pf_da, 4);
+    l.setBiais(1.1, 0);
+    l.setWeight(2.2, 4, 1);
+    l.evaluateLayer(X, 2);
+    double *Y2 = l.getY(); 
+    if (Y2[0] == 4.1 && (Y2[5] - sigma(5.4) < TOL))
+        ++passed;
+    //passed = 7
+    if (&l(4) == &l.arr_neurons_[4])
+        ++passed;
+    neuron nn(l(4));
+    neuron nn2;
+    nn2 = l(3);
+    //passed = 8
+    
 
-    return passed % 5;
+    return passed % 8;
 }
 
 int main () {
