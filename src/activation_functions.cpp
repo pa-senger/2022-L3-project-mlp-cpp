@@ -17,3 +17,12 @@ int heavyside ( const double x) {
         return 0;
     return 1;
 }
+double ReLU (const double x) {
+    return std::max(0., x);
+}
+double dReLU (const double x) {
+    double res = 0;
+    if (x >= 0)
+        res = 1;
+    return res;
+}

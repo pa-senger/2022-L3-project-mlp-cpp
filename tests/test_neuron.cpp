@@ -14,30 +14,31 @@ int neuron:: unitTest1 () { // tests constuctors
     neuron n2(n1);
 
     // default constructor
-    if (n.size_X_ == 0 && n.po_ == 0. && n.biais_ == 0. && n.db_ == 0. 
-        && n.pf_activation_ == nullptr && n.pf_activation_d_ == nullptr && n.Weight_ == nullptr && n.dWeight_ == nullptr)
+    if (n.size_X_ == 1 && n.post_activation_value_ == 0. && n.biais_ == 0. && n.db_ == 0. 
+        && n.pf_activation_ == &ReLU && n.pf_activation_d_ == &dReLU && n.Weight_[0] == 1 
+        && n.dWeight_[0] == 0)
         ++passed;    
     //passed = 1
     // constructor taking the size of X
-    if (n1.size_X_ == 5 && n1.po_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
-        n1.pf_activation_ == nullptr && n1.pf_activation_d_ == nullptr && n1.Weight_ != nullptr && n1.dWeight_ != nullptr)
+    if (n1.size_X_ == 5 && n1.post_activation_value_ == 0. && n1.biais_ == 0. && n1.db_ == 0. &&
+        n1.pf_activation_ == &ReLU && n1.pf_activation_d_ == &dReLU && n1.Weight_ != nullptr && n1.dWeight_ != nullptr)
         ++passed;
     //passed = 2    
     int k = 0;
-    for (int i=0; i<n1.size_X_; ++i) {
-        if (n1.Weight_[i] == 0. && n1.dWeight_[i] == 0.)   
+    for (unsigned int i=0; i<n1.size_X_; ++i) {
+        if (n1.Weight_[i] == 1 && n1.dWeight_[i] == 0.)   
             ++k;
     }
     if (k % n1.size_X_ == 0)
         ++passed;    
     //passed = 3
     // copy constructor
-    if (n2.size_X_ == n1.size_X_ && n2.po_ == n1.po_ && n2.biais_ == n1.biais_ &&
+    if (n2.size_X_ == n1.size_X_ && n2.post_activation_value_ == n1.post_activation_value_ && n2.biais_ == n1.biais_ &&
         n2.db_ == n1.db_ && n2.pf_activation_ == n1.pf_activation_ && n2.pf_activation_d_ == n1.pf_activation_d_ )
         ++passed;
     //passed = 4
     k = 0;
-    for (int i=0; i<n1.size_X_; ++i) {
+    for (unsigned int i=0; i<n1.size_X_; ++i) {
         if (n2.Weight_[i] == n1.Weight_[i] && n2.dWeight_[i] == n1.dWeight_[i])   
             ++k;
     }
@@ -110,12 +111,12 @@ int neuron:: unitTest3 () {
     // test operator =
     ne1.setWeightsOnes();
     ne1 = ne2;
-    if (ne2.size_X_ == ne1.size_X_ && ne2.po_ == ne1.po_ && ne2.biais_ == ne1.biais_ &&
+    if (ne2.size_X_ == ne1.size_X_ && ne2.post_activation_value_ == ne1.post_activation_value_ && ne2.biais_ == ne1.biais_ &&
         ne2.db_ == ne1.db_ && ne2.pf_activation_ == ne1.pf_activation_ && ne2.pf_activation_d_ == ne1.pf_activation_d_ )
         ++passed;
     //passed = 3
     k = 0;
-    for (int i=0; i<ne1.size_X_; ++i) {
+    for (unsigned int i=0; i<ne1.size_X_; ++i) {
         if (ne2.Weight_[i] == ne1.Weight_[i] && ne2.dWeight_[i] == ne1.dWeight_[i])   
             ++k;
     }
@@ -154,7 +155,7 @@ int neuron:: unitTest3 () {
     double (*pf_s) (double) = &sigma;
     double (*pf_ds) (double) = &dSigma;
     ne3.setActivationFcts(pf_s, pf_ds);
-    ne3.activate(X);
+    ne3.activate(X, 4);
     if (ne3.getPo() == sigma(3.2))  
         ++passed;
     //passed = 8
@@ -174,7 +175,7 @@ int neuron:: unitTest3 () {
     neu1.setActivationFcts(pf_s, pf_ds); neu2.setActivationFcts(pf_s, pf_ds);
     neu1.setWeight(4.1, 2); neu2.setWeight(4.1, 2);
     neu1.setDWeight(3.1, 2); neu2.setDWeight(3.1, 2);
-    neu1.activate(X); neu2.activate(X);
+    neu1.activate(X, 4); neu2.activate(X, 4);
     if ( (neu1==neu2) == true)
         ++passed;
     //passed = 11

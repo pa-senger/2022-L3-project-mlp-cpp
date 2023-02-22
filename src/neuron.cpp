@@ -4,33 +4,35 @@
 #include <random>
 
 
-neuron:: neuron (int n) {
+neuron:: neuron (unsigned int n) {
     size_X_ = n;
-    po_ = 0.;
+    post_activation_value_ = 0.;
     biais_ = 0.;
     db_ = 0.;
-    pf_activation_ = nullptr;
-    pf_activation_d_ = nullptr;
-    if (n == 0) {
+    pf_activation_ = &ReLU;
+    pf_activation_d_ = &dReLU;
+    activation_fct_name_ = "ReLU";
+    if (n == 0 ) {
         Weight_ = nullptr;
         dWeight_ = nullptr;
     }
     else {
         Weight_ = new double [n];
         dWeight_ = new double [n];
-        for (int i=0; i<n; ++i) {
-            Weight_[i] = 0.;
+        for (unsigned int i=0; i<n; ++i) {
+            Weight_[i] = 1.;
             dWeight_[i] = 0.;
         }
     }
 }
 neuron:: neuron (const neuron &ne) {
     size_X_ = ne.size_X_;
-    po_ = ne.po_;
+    post_activation_value_ = ne.post_activation_value_;
     biais_ = ne.biais_;
     db_ = ne.db_;
     pf_activation_ = ne.pf_activation_; // pointer to the same "object"
     pf_activation_d_ = ne.pf_activation_d_; // functions arent object so they cant be deep copied
+    activation_fct_name_ = ne.activation_fct_name_;
     if (size_X_ == 0) {
         Weight_ = nullptr;
         dWeight_ = nullptr;
@@ -38,7 +40,7 @@ neuron:: neuron (const neuron &ne) {
     else {
         Weight_ = new double [size_X_];
         dWeight_ = new double [size_X_];
-        for (int i=0; i<size_X_; ++i) {
+        for (unsigned int i=0; i<size_X_; ++i) {
             Weight_[i] = ne.Weight_[i];
             dWeight_[i] = ne.dWeight_[i];
         }
@@ -53,37 +55,38 @@ neuron:: ~neuron () {
 int neuron:: getSizeX () const { return size_X_; }
 double neuron:: getBiais () const { return biais_; }
 double neuron:: getDb () const { return db_; }
-double neuron:: getWeight (int i) const {
+double neuron:: getWeight (unsigned int i) const {
     double weight = 0;
-    if (i < size_X_ && Weight_ != nullptr)
+    if (i < size_X_  && Weight_ != nullptr)
         weight = Weight_[i]; 
     return weight;
 }
-double neuron:: getDWeight (int i) const {
+double neuron:: getDWeight (unsigned int i) const {
     double dw = 0;
     if (i < size_X_ && Weight_ != nullptr)
         dw = dWeight_[i]; 
     return dw;
 }
-double neuron:: getPo () const { return po_; }
+double neuron:: getPo () const { return post_activation_value_; }
 void neuron:: setBiais (double b) { biais_ = b; }
 void neuron:: setDb (double db) { db_ = db; }
-void neuron:: setWeight (double Weight, int i) {
+void neuron:: setWeight (double Weight, unsigned int i) {
     if (i < size_X_ && Weight_ != nullptr)
         Weight_[i] = Weight; 
 }
-void neuron:: setDWeight (double dWeight, int i) {
+void neuron:: setDWeight (double dWeight, unsigned int i) {
     if (i < size_X_ && Weight_ != nullptr)
         dWeight_[i] = dWeight; 
 }
-void neuron:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double)) {
+void neuron:: setActivationFcts (double (*pf_a)(double), double (*pf_da)(double), std::string name) {
     pf_activation_ = pf_a;
     pf_activation_d_ = pf_da;
+    activation_fct_name_ = name;
 }
 neuron neuron:: operator= (const neuron &ne) {
     if ( this != &ne ) {
         size_X_ = ne.size_X_;
-        po_ = ne.po_;
+        post_activation_value_ = ne.post_activation_value_;
         biais_ = ne.biais_;
         db_ = ne.db_;
         pf_activation_ = ne.pf_activation_;
@@ -101,7 +104,7 @@ neuron neuron:: operator= (const neuron &ne) {
         else {
             Weight_ = new double [size_X_];
             dWeight_ = new double [size_X_];
-            for (int i=0; i<size_X_; ++i) {
+            for (unsigned int i=0; i<size_X_; ++i) {
                 Weight_[i] = ne.Weight_[i];
                 dWeight_[i] = ne.dWeight_[i];
             }
@@ -118,7 +121,7 @@ void neuron:: setWeightsOnes () {
     }
     else {
         Weight_ = new double [size_X_];   
-        for (int i=0; i<size_X_; ++i) {
+        for (unsigned int i=0; i<size_X_; ++i) {
             Weight_[i] = 1;
     }
     }
@@ -132,7 +135,7 @@ void neuron:: setDWeightsZeros () {
     }
     else {
         dWeight_ = new double [size_X_];   
-        for (int i=0; i<size_X_; ++i) {
+        for (unsigned int i=0; i<size_X_; ++i) {
             dWeight_[i] = 0;
         }
     }
@@ -148,23 +151,25 @@ void neuron:: setWeightsRandom () {
     }
     else {
         Weight_ = new double[size_X_];
-        for (int i=0; i<size_X_; ++i) 
+        for (unsigned int i=0; i<size_X_; ++i) 
             Weight_[i] = dis(gen);
     }
 }
-void neuron:: activate (const double *X) {
-    double dot = 0;
-    for (int i=0; i<size_X_; ++i) {
-        dot += (Weight_[i] * X[i]);
+void neuron:: activate (const double *X, unsigned int size) {
+    if (size == size_X_) {
+        double dot = 0;
+        for (unsigned int i=0; i<size_X_; ++i) {
+            dot += (Weight_[i] * X[i]);
     }
-    po_ = pf_activation_(dot + biais_);
+        post_activation_value_ = pf_activation_(dot + biais_);
+    }
 }
 bool neuron:: operator== (const neuron &ne) const {
     bool res = true;
     if(size_X_ != ne.size_X_ || pf_activation_ != ne.pf_activation_ || pf_activation_d_ != ne.pf_activation_d_ ||
-        po_ != ne.po_ || biais_ != ne.biais_ || db_ != ne.db_)
+        post_activation_value_ != ne.post_activation_value_ || biais_ != ne.biais_ || db_ != ne.db_)
         return false;
-    for (int i=0; i<size_X_; ++i) {
+    for (unsigned int i=0; i<size_X_; ++i) {
         if (Weight_[i] != ne.Weight_[i] || dWeight_[i] != ne.dWeight_[i])
         return false;
     }
@@ -176,7 +181,7 @@ bool neuron:: operator!= (const neuron &ne) const {
 void neuron:: printWeights (const double *arr) const {
     if ( arr != nullptr) {
         std::cout << "[";
-        for (int i=0; i<size_X_-1; ++i) {
+        for (unsigned int i=0; i<size_X_-1; ++i) {
             std::cout << arr[i] << ", ";
         }
         std::cout << arr[size_X_-1] << "] \n";
@@ -199,7 +204,7 @@ std::ostream& operator<< (std::ostream& os, const neuron& ne) {
     ne.printWeights(ne.dWeight_);
     os << "    A biais b : " << ne.biais_ << "\n"
         << "    An activation function named : " << ne.activation_fct_name_ << "\n"
-        << "    A post activation value po of : " << ne.po_ << "\n";
+        << "    A post activation value of : " << ne.post_activation_value_ << "\n";
 
     return os;
 }

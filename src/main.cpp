@@ -14,6 +14,9 @@ int main() {
     l1.setAllDWeightsZeros();
     l1.setAllWeightsRandoms();
 
+    neuron n;
+
+    std::cout << n;
     std::cout << l1;
    
     return 0;

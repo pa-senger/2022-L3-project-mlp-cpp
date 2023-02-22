@@ -5,7 +5,7 @@
 
 class layer {
   public:
-    layer () : nb_neurons_(0), nb_data_(0), arr_neurons_(nullptr) {}
+    layer () : nb_neurons_(0), nb_data_(0), arr_neurons_(nullptr) {} // empty layer
     layer (const layer & co);
     layer (int nb_data, int nb_ne);
     ~layer ();
