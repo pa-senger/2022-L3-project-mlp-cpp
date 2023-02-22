@@ -26,6 +26,7 @@ layer:: layer (int nb_data, int nb_ne) {
     nb_neurons_ = nb_ne;
     nb_data_ = nb_data;
     if (nb_ne == 0) {
+        Y_ = nullptr;
         arr_neurons_ = nullptr;
     }
     else {
@@ -39,9 +40,9 @@ layer:: layer (int nb_data, int nb_ne) {
 }
 layer:: ~layer() {
     if (arr_neurons_ != nullptr)
-        delete [] arr_neurons_;
+        delete[] arr_neurons_;
     if (Y_ != nullptr)
-        delete [] Y_;
+        delete[] Y_;
 }
 double layer:: getWeight (int i, int j) const { // i-th neuron, j-th Weighteight
     double res;
@@ -140,14 +141,18 @@ layer layer:: operator= (const layer &l) {
         nb_neurons_ = l.nb_neurons_;
         nb_data_ = l.nb_data_;
         if (arr_neurons_ != nullptr)
-            delete [] arr_neurons_;
+            delete[] arr_neurons_;
+        delete[] Y_;
         if (l.arr_neurons_ == nullptr) {
             arr_neurons_ = nullptr;
         }
         else {
             arr_neurons_ = new neuron[nb_neurons_];
-            for (int i=0; i<nb_neurons_; ++i)
-                arr_neurons_[i] = l.arr_neurons_[i]; 
+            Y_ = new double[nb_neurons_];
+            for (int i=0; i<nb_neurons_; ++i) {
+                arr_neurons_[i] = l.arr_neurons_[i];
+                Y_[i] = l.Y_[i]; 
+            }
         }
     }
     return *this;
@@ -285,7 +290,7 @@ void layer:: evaluateLayer (const double *X, int size) const { // each neuron ta
         exit(1);
     }
     for (int i=0; i<nb_neurons_; ++i) {
-        arr_neurons_[i].activate(X, size);
+        arr_neurons_[i].activateNeuron(X, size);
         Y_[i] = getPo(i);
     }
 }

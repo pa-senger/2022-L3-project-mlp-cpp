@@ -11,12 +11,12 @@ class neuron {
   public:
     // default constructor
     neuron () {
-        size_X_ = 1, post_activation_value_ = 0.; biais_ = 0.; db_ = 0.;
+        size_X_ = 1, post_activation_value_ = 0, pre_activation_value_ = 0;
         pf_activation_ = &ReLU;
         pf_activation_d_ = &dReLU;
         activation_fct_name_ = "ReLU";
-        Weight_ = new double[1] {1};
-        dWeight_ = new double[1] {0};
+        Weight_ = new double[2] {1, 0}; // biais at the end of the array
+        Weight_d_ = new double[2] {0, 0};
     }
     // construtor taking size of an entry vector 
     neuron (int n);
@@ -33,6 +33,7 @@ class neuron {
     double getDb () const;
     double getWeight (int i) const;
     double getDWeight (int i)const;
+    double getPe () const;
     double getPo () const;
 
     void setBiais (double b);
@@ -53,7 +54,7 @@ class neuron {
     void setWeightsOnes ();
     void setWeightsRandom (); // Unif([-1m, 1m]) distribution
     void setDWeightsZeros ();
-    void activate (const double *X, int size);
+    void activateNeuron (const double *X, int size);
     void printWeights (const double *arr) const;
     double evaluateFct (double x) const;
     double evaluateFctDerivative (double x) const;
@@ -68,7 +69,8 @@ class neuron {
     double (*pf_activation_) (double);
     double (*pf_activation_d_) (double);
     double *Weight_;
-    double *dWeight_;
+    double *Weight_d_;
+    double pre_activation_value_;
     double post_activation_value_;
     double biais_;
     double db_;

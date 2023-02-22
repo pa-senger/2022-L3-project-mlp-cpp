@@ -66,7 +66,7 @@ int layer:: unitTest2() { // tests getters setters
     l3.setBiais(0.3, 1); // value, neuron index in the layer
     l3.setActivationFcts(pf_a, pf_da, 1);
     double X[2] = {1, 2};
-    l3.arr_neurons_[1].activate(X, 2);
+    l3.arr_neurons_[1].activateNeuron(X, 2);
     if ( l3.arr_neurons_[1].getPo() == pf_a(0.8))
         ++passed;
     // passed = 2
@@ -83,7 +83,7 @@ int layer:: unitTest3() { // tests operators
     l2.setWeight(2.2, 2, 1);
     double X[3] = {1,3,5};
     l2.setActivationFcts(pf_a, pf_da, 2);
-    l2.arr_neurons_[2].activate(X, 3);
+    l2.arr_neurons_[2].activateNeuron(X, 3);
 
     l1 = l2;
     if (l1.getNbData() == l2.getNbData() && l1.getNbNeurons() == l2.getNbNeurons())

@@ -8,18 +8,10 @@
 
 
 int main() {
+    double (*pf_s) (double) = &sigma;
+    double (*pf_ds) (double) = &dSigma;
 
-    layer l1(2, 3);
-    l1.setAllWeightsOnes();
-    l1.setAllDWeightsZeros();
-    l1.setAllWeightsRandoms();
-
-    neuron n;
-
-    layer l2;
-
-    std::cout << n;
-    std::cout << l2;
+    neuron n(2, pf_s, pf_ds, "sigma");
    
     return 0;
 }
