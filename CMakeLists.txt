@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1..3.25)
 
 # project name
 project(machine_learning_S6)
-
+ 
 # where do get the headers files
 include_directories(include)
 
