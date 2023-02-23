@@ -9,15 +9,18 @@
 class neuron {
 public:
   // this default constructor defines a neuron with :
-  // sizeX_ = 1
+  // size_X_ = 1
   // pre_activation_value = post_activation_value = 0
   // the activation fcts ReLU and its derivative
-  // Weights_ an arrays of size 2 with weight=1 and the biais=0 stored at the
-  // end Weights_d_ an arrays of size 2 with dw=0 and  db=0 stored at the end
+  // Weights_ an array of size 2 with weight=1 and the biais=0 at the end
+  // Weights_d_ an array of size 2 with dw=0 and db=0 stored at the end
   neuron();
   // this constructor takes the size n of the entry vector of a neuron
+  // the weigths are sets to 1, their derivatives to 0
+  // the biais and its derivative db are set to 0
+  // the activation fct is set as ReLU
   neuron(int n);
-  // this constructor takes the activation fct and its derivative
+  // this constructor takes the activation fct and its derivative as parameters
   neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
          std::string fct_name = "n/a");
   // this is a copy constructor, arrays are deep copied not shared
@@ -25,25 +28,25 @@ public:
   // destructor
   ~neuron();
 
-  // getter setter
+  // getters setters
   int getSizeX() const;
   double getBiais() const;
   double getDb() const;
   double getWeight(int i) const;
   double getWeightDerivative(int i) const;
-  double getPe() const;
-  double getPo() const;
+  double getPe() const; // pre_activation_value
+  double getPo() const; // post_activation_value
 
   void setBiais(double b);
-  void setDb(double db);
-  void setWeight(double Weight, int i);
-  void setWeightDerivative(double dWeight, int i);
+  void setDb(double db); // derivative of biais
+  void setWeight(double weight, int i);
+  void setWeightDerivative(double dw, int i);
   void setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
                          std::string name = "n/a");
   void setActivationFctName(std::string name);
 
   // operator
-  neuron operator=(const neuron &ne);
+  neuron &operator=(const neuron &ne);
   bool operator==(const neuron &ne) const;
   bool operator!=(const neuron &ne) const;
   friend std::ostream &operator<<(std::ostream &os, const neuron &ne);
@@ -53,7 +56,7 @@ public:
   // the distribution used for the random weights is Unif([-1m, 1m])
   void setWeightsRandom();
   void setWeightsDerivativesZeros();
-  // the activation of neuron is the compositon :
+  // the activation of neuron is the composition :
   // activation_fct( pre_activation_value )
   // with pre_activation_value = ((X.W) + biais)
   // where X is the entry vector, W the vector of weights Weights_

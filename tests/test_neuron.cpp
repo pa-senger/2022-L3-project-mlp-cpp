@@ -23,12 +23,14 @@ int neuron::unitTest1() { // tests constuctors
       n.Weight_d_[1] == 0 && n1.pre_activation_value_ == 0.)
     ++passed;
   // passed = 1
+
   //  constructor taking the size of X
   if (n1.size_X_ == 5 && n1.post_activation_value_ == 0. &&
       n1.pf_activation_ == &ReLU && n1.pf_activation_d_ == &dReLU &&
       n1.pre_activation_value_ == 0.)
     ++passed;
   // passed = 2
+
   int k = 0;
   for (int i = 0; i < n1.size_X_; ++i) {
     if (n1.Weight_[i] == 1 && n1.Weight_d_[i] == 0)
@@ -53,6 +55,8 @@ int neuron::unitTest1() { // tests constuctors
   if (k % (n2.size_X_ + 1) == 0)
     ++passed;
   // passed = 5
+
+  // contructor taking activation fct
   neuron n3(2, pf_s, pf_ds, "sigma");
   if (n3.size_X_ == 2 && n3.post_activation_value_ == 0 &&
       n3.pf_activation_ == &sigma && n3.pf_activation_d_ == &dSigma)
@@ -110,6 +114,7 @@ int neuron::unitTest3() {
   if (k % 5 == 0)
     ++passed;
   // passed = 1
+
   //  test setWeightZeros
   ne.setWeightsDerivativesZeros();
   k = 0;
@@ -120,6 +125,7 @@ int neuron::unitTest3() {
   if (k % 5 == 0)
     ++passed;
   // passed = 2
+
   //  test operator =
   ne1.setWeightsOnes();
   ne1 = ne2;
@@ -139,11 +145,13 @@ int neuron::unitTest3() {
   if (k % (ne2.size_X_ + 1) == 0)
     ++passed;
   // passed = 4
+
   //  test proper memory allocation
   ne2.setWeight(4, 0);
   if (ne1.getWeight(0) != ne2.getWeight(0))
     ++passed;
   // passed = 5
+
   //  test setWeightrandom
   ne2.setWeightsRandom();
   ne = ne2;
@@ -155,11 +163,13 @@ int neuron::unitTest3() {
   if (k % 9 == 0)
     ++passed;
   // passed = 6
+
   //  test proper memory allocation
   ne2.setWeight(3, 0);
   if (ne.getWeight(0) != ne2.getWeight(0))
     ++passed;
   // passed = 7
+
   //  test activate
   neuron ne3(4);
   for (int i = 0; i < 4; ++i) {
@@ -173,6 +183,7 @@ int neuron::unitTest3() {
   if (ne3.getPo() == sigma(3.2))
     ++passed;
   // passed = 8
+
   //  test operator ==
   neuron neu1(4);
   neuron neu2(4);

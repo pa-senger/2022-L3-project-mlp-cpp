@@ -9,7 +9,7 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_CXX_FLAGS_INIT": "-std=c++17 -g -Wall -Wextra -Wpedantic -Werror -O0"
+                "CMAKE_CXX_FLAGS_INIT": "-std=c++17 -g -Wall -Wextra -Wpedantic -Werror -Weffc++  -Wshadow -O0"
             }
         },
         {
