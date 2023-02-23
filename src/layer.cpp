@@ -5,20 +5,17 @@
 
 // todo : handle errors instead of exiting the program
 
-layer::layer(const layer &co)
-    : nb_neurons_(co.nb_neurons_), nb_data_(co.nb_data_), arr_neurons_(nullptr),
-      Y_(new double[nb_neurons_]) {
-
-  if (co.arr_neurons_ != nullptr && co.nb_neurons_ != 0) {
-    arr_neurons_ = new neuron[nb_neurons_];
-
-    for (int i = 0; i < nb_neurons_; ++i) {
-      arr_neurons_[i] = co.arr_neurons_[i];
-      Y_[i] = co.Y_[i];
-    }
-  }
-}
-
+// this construtor makes a an array of neurons
+// each neurons are constructed with :
+// -an entry data vector of size nb_data,
+// -an array of weights filled with ones
+// -a biais of 0
+// -an array of weights derivatives filled wirh zeros
+// -a derivative of biais set to 0
+// -an activation fct and its derivative set as ReLU
+// -a pre_activation_value and post_activation_value of 0
+// if the arguments are <= 0, the layer of neurons will be empty,
+// arrays will still be initialised with nullptr
 layer::layer(int nb_data, int nb_neurons)
     : nb_neurons_(nb_neurons), nb_data_(nb_data), arr_neurons_(nullptr),
       Y_(nullptr) {
@@ -36,6 +33,20 @@ layer::layer(int nb_data, int nb_neurons)
     for (int i = 0; i < nb_neurons; ++i) {
       arr_neurons_[i] = neuron(nb_data);
       Y_[i] = 0;
+    }
+  }
+}
+
+layer::layer(const layer &co)
+    : nb_neurons_(co.nb_neurons_), nb_data_(co.nb_data_), arr_neurons_(nullptr),
+      Y_(new double[nb_neurons_]) {
+
+  if (co.arr_neurons_ != nullptr && co.nb_neurons_ != 0) {
+    arr_neurons_ = new neuron[nb_neurons_];
+
+    for (int i = 0; i < nb_neurons_; ++i) {
+      arr_neurons_[i] = co.arr_neurons_[i];
+      Y_[i] = co.Y_[i];
     }
   }
 }
@@ -61,6 +72,7 @@ double layer::getWeight(int i_neuron, int j_weight) const {
 
   return res;
 }
+
 double layer::getWeightDerivative(int i_neuron, int j_weight) const {
   double res;
 
@@ -131,6 +143,7 @@ void layer::setWeightDerivative(double val, int i_neuron, int j_weight) {
     arr_neurons_[i_neuron].setWeightDerivative(val, j_weight);
   }
 }
+
 void layer::setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
                               int i_neuron, std::string name) {
   if (i_neuron < 0) {
@@ -145,6 +158,7 @@ void layer::setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
               << std::endl;
   }
 }
+
 void layer::setActivationFctName(std::string name, int i_neuron) {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setActivationFctName(name);
@@ -153,13 +167,12 @@ void layer::setActivationFctName(std::string name, int i_neuron) {
               << std::endl;
   }
 }
+
 layer &layer::operator=(const layer &l) {
   if (this != &l) {
     nb_neurons_ = l.nb_neurons_;
     nb_data_ = l.nb_data_;
-
-    if (arr_neurons_ != nullptr)
-      delete[] arr_neurons_;
+    delete[] arr_neurons_;
     delete[] Y_;
 
     if (l.arr_neurons_ == nullptr) {
@@ -210,6 +223,7 @@ void layer::setDb(double val, int i_neuron) {
     std::cout << "Error : there isn't as many neurons in the layer ! \n";
   }
 }
+
 double layer::getBiais(int i_neuron) const {
   if (i_neuron < 0) {
     std::cout << "Error : you must use positive integer for this !\n";
@@ -327,6 +341,7 @@ double layer::evaluateFctDerivative(double x, int i_neuron) const {
 
   if (i_neuron < nb_neurons_ && arr_neurons_ != nullptr && nb_neurons_ != 0)
     res = arr_neurons_[i_neuron].evaluateFctDerivative(x);
+
   return res;
 }
 
@@ -347,7 +362,7 @@ double *layer::evaluateLayer(const double *X, int size_X) const {
 }
 
 // this methods return the i-th neuron in the layer,
-// the neuron is a ref not a copy
+// the neuron is a reference not a copy
 neuron &layer::operator()(int i_neuron) const {
   if (arr_neurons_ == nullptr || nb_neurons_ == 0 || i_neuron >= nb_neurons_) {
     std::cout << "Error : there isn't as many neurons in this layer \n";

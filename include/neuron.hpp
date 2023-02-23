@@ -15,20 +15,23 @@ public:
   // Weights_ an array of size 2 with weight=1 and the biais=0 at the end
   // Weights_d_ an array of size 2 with dw=0 and db=0 stored at the end
   neuron();
+
   // this constructor takes the size n of the entry vector of a neuron
   // the weigths are sets to 1, their derivatives to 0
   // the biais and its derivative db are set to 0
   // the activation fct is set as ReLU
   neuron(int n);
+
   // this constructor takes the activation fct and its derivative as parameters
   neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
          std::string fct_name = "n/a");
+
   // this is a copy constructor, arrays are deep copied not shared
   neuron(const neuron &ne);
+
   // destructor
   ~neuron();
 
-  // getters setters
   int getSizeX() const;
   double getBiais() const;
   double getDb() const;
@@ -45,17 +48,21 @@ public:
                          std::string name = "n/a");
   void setActivationFctName(std::string name);
 
-  // operator
   neuron &operator=(const neuron &ne);
+  // 2 neurons are said to be equal if they have
+  // the same weights and weights derivatives
+  // the same weights derivatives
+  // the same biais and biais derivatives
+  // the same activation function
   bool operator==(const neuron &ne) const;
   bool operator!=(const neuron &ne) const;
   friend std::ostream &operator<<(std::ostream &os, const neuron &ne);
 
-  // methods
   void setWeightsOnes();
   // the distribution used for the random weights is Unif([-1m, 1m])
   void setWeightsRandom();
   void setWeightsDerivativesZeros();
+
   // the activation of neuron is the composition :
   // activation_fct( pre_activation_value )
   // with pre_activation_value = ((X.W) + biais)
