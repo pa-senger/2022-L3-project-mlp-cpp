@@ -8,6 +8,8 @@ public:
   layer() : nb_neurons_{0}, nb_data_{0}, arr_neurons_{nullptr}, Y_{nullptr} {}
   layer(int nb_data, int nb_neurons);
   layer(const layer &co);
+  layer &operator=(const layer &l);
+
   ~layer();
 
   double getWeight(int i_neuron, int j_weight) const;
@@ -28,8 +30,6 @@ public:
   void setActivationFctName(std::string name, int i_neuron);
   void setBiais(double val, int i_neuron);
   void setDb(double val, int i_neuron);
-
-  layer &operator=(const layer &l);
 
   // 2 layers are equal if they have the same number of neurons
   bool operator==(const layer &l) const;
@@ -57,10 +57,8 @@ public:
   // the method returns an array Y = (po_1,...,po_n)
   double *evaluateLayer(const double *X, int size_X) const;
 
-  static int unitTest1(); // tests constructors
-  static int unitTest2(); // tests getters setters
-  static int unitTest3(); // tests operators
-  static int unitTest4(); // tests the rest of the methods
+  static int unitTest0(); // tests getters setters
+  static void unitTest();
 
 private:
   int nb_neurons_;

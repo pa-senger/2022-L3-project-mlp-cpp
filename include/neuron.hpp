@@ -75,7 +75,7 @@ public:
 
   // tests
   static int unitTest0(); // tests getters setters
-  static int unitTest();
+  static void unitTest();
 
 private:
   int size_X_; // the size of the entry vector of the neuron
