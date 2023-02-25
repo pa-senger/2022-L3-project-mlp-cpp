@@ -57,7 +57,6 @@ public:
   // the method returns an array Y = (po_1,...,po_n)
   double *evaluateLayer(const double *X, int size_X) const;
 
-  static int unitTest0(); // tests getters setters
   static void unitTest();
 
 private:

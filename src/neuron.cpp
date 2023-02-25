@@ -3,6 +3,9 @@
 #include <iostream>
 #include <random>
 
+// the member list initializer of all constructors in the project are
+// initialized in the order declarred in the class as suggested by -Weffc++
+// in case some variable depend on each other
 neuron::neuron()
     : size_X_{1}, pre_activation_value_{0}, post_activation_value_{0},
       pf_activation_{&ReLU}, pf_activation_d_{&dReLU},
@@ -50,7 +53,7 @@ neuron::neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
     Weight_d_[i] = 0;
   }
 
-  Weight_[n] = 0;   // bias
+  Weight_[n] = 0;   // biais
   Weight_d_[n] = 0; // db
 }
 
@@ -73,6 +76,28 @@ neuron::neuron(const neuron &ne)
 neuron::~neuron() {
   delete[] Weight_;
   delete[] Weight_d_;
+}
+
+neuron &neuron::operator=(const neuron &ne) {
+  if (this != &ne) {
+    size_X_ = ne.size_X_;
+    pre_activation_value_ = ne.pre_activation_value_;
+    post_activation_value_ = ne.post_activation_value_;
+    pf_activation_ = ne.pf_activation_;
+    pf_activation_d_ = ne.pf_activation_d_;
+
+    delete[] Weight_;   // we need to delete those to create new ones
+    delete[] Weight_d_; // with the new size
+
+    Weight_ = new double[size_X_ + 1];   // +1 to stored the biais at the end
+    Weight_d_ = new double[size_X_ + 1]; // idem for db
+
+    for (int i = 0; i < size_X_ + 1; ++i) {
+      Weight_[i] = ne.Weight_[i];
+      Weight_d_[i] = ne.Weight_d_[i];
+    }
+  }
+  return *this;
 }
 
 int neuron::getSizeX() const { return size_X_; }
@@ -130,28 +155,6 @@ void neuron::setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
   pf_activation_ = pf_a;
   pf_activation_d_ = pf_da;
   activation_fct_name_ = name;
-}
-
-neuron &neuron::operator=(const neuron &ne) {
-  if (this != &ne) {
-    size_X_ = ne.size_X_;
-    pre_activation_value_ = ne.pre_activation_value_;
-    post_activation_value_ = ne.post_activation_value_;
-    pf_activation_ = ne.pf_activation_;
-    pf_activation_d_ = ne.pf_activation_d_;
-
-    delete[] Weight_;   // we need to delete those to create new ones
-    delete[] Weight_d_; // with the new size
-
-    Weight_ = new double[size_X_ + 1];   // +1 to stored the biais at the end
-    Weight_d_ = new double[size_X_ + 1]; // idem for db
-
-    for (int i = 0; i < size_X_ + 1; ++i) {
-      Weight_[i] = ne.Weight_[i];
-      Weight_d_[i] = ne.Weight_d_[i];
-    }
-  }
-  return *this;
 }
 
 void neuron::setWeightsOnes() {

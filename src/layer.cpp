@@ -56,6 +56,28 @@ layer::~layer() {
   delete[] Y_;
 }
 
+layer &layer::operator=(const layer &l) {
+  if (this != &l) {
+    nb_neurons_ = l.nb_neurons_;
+    nb_data_ = l.nb_data_;
+    delete[] arr_neurons_;
+    delete[] Y_;
+
+    if (l.arr_neurons_ == nullptr) {
+      arr_neurons_ = nullptr;
+    } else {
+      arr_neurons_ = new neuron[nb_neurons_];
+      Y_ = new double[nb_neurons_];
+
+      for (int i = 0; i < nb_neurons_; ++i) {
+        arr_neurons_[i] = l.arr_neurons_[i];
+        Y_[i] = l.Y_[i];
+      }
+    }
+  }
+  return *this;
+}
+
 double layer::getWeight(int i_neuron, int j_weight) const {
   double res;
 
@@ -168,28 +190,6 @@ void layer::setActivationFctName(std::string name, int i_neuron) {
   }
 }
 
-layer &layer::operator=(const layer &l) {
-  if (this != &l) {
-    nb_neurons_ = l.nb_neurons_;
-    nb_data_ = l.nb_data_;
-    delete[] arr_neurons_;
-    delete[] Y_;
-
-    if (l.arr_neurons_ == nullptr) {
-      arr_neurons_ = nullptr;
-    } else {
-      arr_neurons_ = new neuron[nb_neurons_];
-      Y_ = new double[nb_neurons_];
-
-      for (int i = 0; i < nb_neurons_; ++i) {
-        arr_neurons_[i] = l.arr_neurons_[i];
-        Y_[i] = l.Y_[i];
-      }
-    }
-  }
-  return *this;
-}
-
 std::ostream &operator<<(std::ostream &os, const layer &l) {
   os << "This layer is define with : \n"
      << "    An entry data vector of size : " << l.nb_data_ << "\n"
@@ -250,7 +250,7 @@ double layer::getDb(int i_neuron) const {
   double res = 0;
 
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
-    res = arr_neurons_[i_neuron].getBiais();
+    res = arr_neurons_[i_neuron].getDb();
   } else {
     std::cout << "Error : there isn't as many neurons in the layer ! \n";
   }

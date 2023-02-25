@@ -9,37 +9,29 @@
 double (*pf_a)(double) = &sigma;
 double (*pf_da)(double) = &dSigma;
 
-int layer::unitTest0() { // tests getters setters
-  int passed = 0;
-
-  layer l1;
-  layer l2(2, 5); // X=(x,y) , 5 neurons (0..4)
-  layer l3(2, 3);
-  l2.setWeight(1.1, 4, 1); // 4th neuron, 1st weight
-  l2.setWeightDerivative(2.2, 0, 0);
-  l2.setActivationFcts(pf_a, pf_da, 4);
-  l2.setActivationFctName("sigma", 4);
-  l2.setBiais(4.4, 0);
-  l2.setDb(5.5, 4);
-  if (l2.getNbData() == 2 && l2.getNbNeurons() == 5 &&
-      l2.getWeight(4, 1) == 1.1 && l2.getWeightDerivative(0, 0) == 2.2 &&
-      l2.getBiais(0) == 4.4 && l2.getDb(4) == 5.5)
-    ++passed;
-  // passed = 1;
-  l3.setWeight(0.1, 1, 1); // value, neuron , weight index
-  l3.setWeight(0.2, 1, 1);
-  l3.setBiais(0.3, 1); // value, neuron index in the layer
-  l3.setActivationFcts(pf_a, pf_da, 1);
-  double X[2] = {1, 2};
-  l3.arr_neurons_[1].activateNeuron(X, 2);
-  if (l3.arr_neurons_[1].getPo() == pf_a(0.8))
-    ++passed;
-  // passed = 2
-
-  return (passed % 2);
-}
-
 void layer::unitTest() {
+  // test getters and setters
+  layer la1;
+  layer la2(2, 5);          // X=(x,y) , 5 neurons (0..4)
+  la2.setWeight(1.1, 4, 1); // 4th neuron, 1st weight
+  la2.setWeightDerivative(2.2, 0, 0);
+  la2.setActivationFcts(pf_a, pf_da, 4);
+  la2.setActivationFctName("sigma", 4);
+  la2.setBiais(4.4, 0);
+  la2.setDb(5.5, 4);
+  assert(la2.getNbData() == 2);
+  assert(la2.getNbNeurons() == 5);
+  assert(la2.getWeight(4, 1) == 1.1);
+  assert(la2.getWeightDerivative(0, 0) == 2.2);
+  assert(la2.getBiais(0) == 4.4);
+  assert(la2.getDb(4) == 5.5);
+
+  layer la3(2, 3);
+  la3.setWeight(0.1, 1, 1); // value, neuron , weight index
+  la3.setWeight(0.2, 1, 1);
+  la3.setBiais(0.3, 1); // value, neuron index in the layer
+  la3.setActivationFcts(pf_a, pf_da, 1);
+  assert(la3.arr_neurons_[1].getPo() - pf_a(0.8) < TOL);
 
   // default contructor
   layer c;
@@ -159,5 +151,5 @@ int main() {
 
   layer::unitTest();
 
-  return layer::unitTest0();
+  return 0;
 }

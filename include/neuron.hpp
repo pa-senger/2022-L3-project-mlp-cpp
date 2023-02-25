@@ -28,6 +28,7 @@ public:
 
   // this is a copy constructor, arrays are deep copied not shared
   neuron(const neuron &ne);
+  neuron &operator=(const neuron &ne);
 
   // destructor
   ~neuron();
@@ -48,10 +49,8 @@ public:
                          std::string name = "n/a");
   void setActivationFctName(std::string name);
 
-  neuron &operator=(const neuron &ne);
   // 2 neurons are said to be equal if they have
   // the same weights and weights derivatives
-  // the same weights derivatives
   // the same biais and biais derivatives
   // the same activation function
   bool operator==(const neuron &ne) const;
@@ -74,7 +73,6 @@ public:
   double evaluateFctDerivative(double x) const; // activation_fct_derivative(x)
 
   // tests
-  static int unitTest0(); // tests getters setters
   static void unitTest();
 
 private:

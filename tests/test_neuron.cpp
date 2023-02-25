@@ -9,10 +9,9 @@
 double (*pf_s)(double) = &sigma;
 double (*pf_ds)(double) = &dSigma;
 
-// testing setters and getters so we can use them in asserts
-int neuron::unitTest0() {
-  int passed = 0;
-
+void neuron::unitTest() {
+  // first we test the getters and setters so we can use them in the rest of the
+  // tests, making it more reable
   neuron n(3);
   n.setWeight(1.1, 0);
   n.setWeightDerivative(2.2, 0);
@@ -20,29 +19,17 @@ int neuron::unitTest0() {
   n.setDb(4.4);
   n.setActivationFcts(pf_s, pf_ds);
 
-  if (n.getWeight(0) == 1.1 && n.getWeightDerivative(0) == 2.2 &&
-      n.getBiais() == 3.3 && n.getDb() == 4.4 && n.getPo() == 0. &&
-      n.getSizeX() == 3)
-    ++passed;
-  // passed = 1;
-  if (n.pf_activation_ == pf_s)
-    ++passed;
-  // passed = 2
-  if (n.pf_activation_(2.2) - pf_s(2.2) <= TOL) // sigma(2.2) ~= 0.90024
-    ++passed;
-  // passed = 3
-  if (n.pf_activation_d_ == pf_ds)
-    ++passed;
-  // passed = 4
-  if (n.pf_activation_d_(2.2) - pf_ds(2.2) <= TOL) // dSigma(2.2) ~= 0.109459
-    ++passed;
-  // passed = 5
-
-  return passed % 5;
-}
-
-// this tests usings assert are much more reable
-void neuron::unitTest() {
+  assert(n.getWeight(0) == 1.1);
+  assert(n.getWeightDerivative(0) == 2.2);
+  assert(n.getBiais() == 3.3);
+  assert(n.getDb() == 4.4);
+  assert(n.getPo() == 0);
+  assert(n.getSizeX() == 3);
+  assert(n.pf_activation_ == pf_s);
+  assert(n.pf_activation_(2.2) - pf_s(2.2) <= TOL); // sigma(2.2) ~= 0.90024
+  assert(n.pf_activation_d_ == pf_ds);
+  assert(n.pf_activation_d_(2.2) - pf_ds(2.2) <=
+         TOL); // dSigma(2.2) ~= 0.109459
 
   // test default constructor
   neuron n1;
@@ -78,22 +65,13 @@ void neuron::unitTest() {
   assert(n3.getPe() == 0);
   assert(n3.pf_activation_ == &sigma && n3.pf_activation_d_ == &dSigma);
 
-  // tests setters
+  // test copy constructor
   n2.setBiais(1);
   n2.setDb(2);
   n2.setWeight(3, 0);
   n2.setWeightDerivative(4, 1);
-  assert(n2.getBiais() == 1);
-  assert(n2.getDb() == 2);
-  assert(n2.getWeight(0) == 3);
-  assert(n2.getWeight(1) == 1);
-  assert(n2.getWeight(2) == 1);
-  assert(n2.getWeightDerivative(0) == 0);
-  assert(n2.getWeightDerivative(1) == 4);
-  assert(n2.getWeightDerivative(2) == 0);
-
-  // test copy constructor
   neuron n4(n2);
+
   assert(n4.getSizeX() == 3);
   assert(n4.getBiais() == 1);
   assert(n4.getDb() == 2);
@@ -165,5 +143,5 @@ int main() {
 
   neuron::unitTest();
 
-  return neuron::unitTest0();
+  return 0;
 }
