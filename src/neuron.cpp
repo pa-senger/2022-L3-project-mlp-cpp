@@ -45,13 +45,13 @@ neuron::neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
     exit(1);
   }
 
-  Weight_[n] = 0;   // bias
-  Weight_d_[n] = 0; // db
-
   for (int i = 0; i < n; ++i) {
     Weight_[i] = 1;
     Weight_d_[i] = 0;
   }
+
+  Weight_[n] = 0;   // bias
+  Weight_d_[n] = 0; // db
 }
 
 neuron::neuron(const neuron &ne)
@@ -62,12 +62,14 @@ neuron::neuron(const neuron &ne)
       Weight_{new double[ne.size_X_ + 1]}, Weight_d_{
                                                new double[ne.size_X_ + 1]} {
 
-  for (int i = 0; i < size_X_ + 1; ++i) {
+  // we need to copy to size_X + 1 to copy the biais and db as well
+  for (int i = 0; i < (size_X_ + 1); ++i) {
     Weight_[i] = ne.Weight_[i];
     Weight_d_[i] = ne.Weight_d_[i];
   }
 }
 
+// Weight_ and Weight_d_ are at least initialized will nullptr -> no errors
 neuron::~neuron() {
   delete[] Weight_;
   delete[] Weight_d_;
@@ -94,8 +96,10 @@ double neuron::getWeightDerivative(int i) const {
     exit(1);
   }
   double dw = 0;
+
   if (i < size_X_ && i >= 0)
     dw = Weight_d_[i];
+
   return dw;
 }
 
@@ -117,7 +121,6 @@ void neuron::setWeightDerivative(double dw, int i) {
     std::cout << "Error : you must use positive integer for this !\n";
     exit(1);
   }
-
   if (i < size_X_ && i >= 0)
     Weight_d_[i] = dw;
 }
@@ -222,7 +225,8 @@ std::ostream &operator<<(std::ostream &os, const neuron &ne) {
   ne.printWeights(ne.Weight_);
   os << "    A vector of weight's derivatives : ";
   ne.printWeights(ne.Weight_d_);
-  os << "    A biais b : " << ne.getBiais() << "\n"
+  os << "    A biais b : " << ne.getBiais()
+     << ", its derivative db : " << ne.getDb() << "\n"
      << "    An activation function named : " << ne.activation_fct_name_ << "\n"
      << "    A pre activation value of : " << ne.pre_activation_value_ << "\n"
      << "    A post activation value of : " << ne.post_activation_value_

@@ -74,9 +74,8 @@ public:
   double evaluateFctDerivative(double x) const; // activation_fct_derivative(x)
 
   // tests
-  static int unitTest1(); // tests constuctors
-  static int unitTest2(); // tests getters setters
-  static int unitTest3(); // tests operators and methods
+  static int unitTest0(); // tests getters setters
+  static int unitTest();
 
 private:
   int size_X_; // the size of the entry vector of the neuron
