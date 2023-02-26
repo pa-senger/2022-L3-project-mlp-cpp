@@ -58,8 +58,8 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const neuron &ne);
 
   void setWeightsOnes();
-  // the distribution used for the random weights is Unif([-1m, 1m])
-  void setWeightsRandom();
+  // the distribution used for the random weights is Unif([a, b])
+  void setWeightsRandom(int a, int b);
   void setWeightsDerivativesZeros();
 
   // the activation of neuron is the composition :

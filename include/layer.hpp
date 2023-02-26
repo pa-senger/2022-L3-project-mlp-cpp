@@ -45,7 +45,8 @@ public:
 
   // those 3 methods sets weights to all of the neurons in the layer
   void setAllWeightsOnes();
-  void setAllWeightsRandoms();
+  // random weights are taken in the interval [a, b], ditribion Unif([a, b])
+  void setAllWeightsRandoms(int a, int b);
   void setAllWeightsDerivativesZeros();
 
   // this method returns the value of the activation fct given an entry x

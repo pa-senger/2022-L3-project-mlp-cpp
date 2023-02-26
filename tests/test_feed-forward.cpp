@@ -3,9 +3,12 @@
 
 int main() {
 
-  FeedForward<2, 3, 4> fw;
+  FeedForward<0, 0, 0> fw;
+  FeedForward<2, 3, 4> fw1;
+  FeedForward<2, 3, 4> fw2(fw1);
 
   fw.unitTest();
+  fw1.unitTest();
 
   return 0;
 }

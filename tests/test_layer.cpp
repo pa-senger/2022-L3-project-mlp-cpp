@@ -100,7 +100,7 @@ void layer::unitTest() {
 
   // test set all weights to random
   layer la(5, 10);
-  la.setAllWeightsRandoms();
+  la.setAllWeightsRandoms(-1'000'000, 1'000'000);
   for (int i = 0; i < 9; ++i)
     for (int j = 0; j < 4; ++j)
       assert(la.getWeight(i, j) != la.getWeight(i, j + 1));
@@ -108,11 +108,11 @@ void layer::unitTest() {
   layer l6;
   l6.setAllWeightsOnes();
   l6.setAllWeightsDerivativesZeros();
-  l6.setAllWeightsRandoms();
+  l6.setAllWeightsRandoms(-1'000'000, 1'000'000);
   layer l7(0, 0);
   l7.setAllWeightsOnes();
   l7.setAllWeightsDerivativesZeros();
-  l7.setAllWeightsRandoms();
+  l7.setAllWeightsRandoms(-1'000'000, 1'000'000);
 
   // test  evaluate function
   l4.evaluateFct(3.1, 0); // layer has no neuron to evaluate, returns no errors

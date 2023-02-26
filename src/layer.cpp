@@ -300,10 +300,10 @@ void layer::setAllWeightsOnes() {
   }
 }
 
-void layer::setAllWeightsRandoms() {
+void layer::setAllWeightsRandoms(int a, int b) {
   if (nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     for (int i = 0; i < nb_neurons_; ++i) {
-      arr_neurons_[i].setWeightsRandom();
+      arr_neurons_[i].setWeightsRandom(a, b);
     }
   }
 }

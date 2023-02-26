@@ -117,7 +117,7 @@ void neuron::unitTest() {
   assert(n1.getWeightDerivative(1) == 0);
   assert(n1.getWeightDerivative(2) == 0);
 
-  n1.setWeightsRandom();
+  n1.setWeightsRandom(-1'000'000, 1'000'000);
   assert(n1.getWeight(0) != n1.getWeight(1));
   assert(n1.getWeight(0) != n1.getWeight(2));
   assert(n1.getWeight(1) != n1.getWeight(2));

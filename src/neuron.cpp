@@ -169,10 +169,10 @@ void neuron::setWeightsDerivativesZeros() {
   }
 }
 
-void neuron::setWeightsRandom() {
+void neuron::setWeightsRandom(int a, int b) {
   std::random_device rd;
   std::mt19937 gen(rd()); // standard mersenne_twister_engine seeded with rd()
-  std::uniform_real_distribution<double> dis(-1'000'000, 1'000'000);
+  std::uniform_real_distribution<double> dis(a, b);
 
   for (int i = 0; i < size_X_; ++i)
     Weight_[i] = dis(gen);

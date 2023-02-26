@@ -47,4 +47,5 @@ build_release
 build_debug
 log.txt
 build
-.cache/clangd/index/*
+.cache
+
