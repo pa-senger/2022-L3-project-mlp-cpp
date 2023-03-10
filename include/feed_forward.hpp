@@ -10,14 +10,19 @@ public:
   // FeedForward(double (*pf_loss)(double));
   FeedForward &operator=(const FeedForward &fw);
   ~FeedForward();
-  // todo : test constructors,
 
   int getTotalWeights() const;
+  void setAllWeightsRandoms(double a, double b);
+  void setAllWeightsDerivativesZeros();
+  void setAllWeights(double *arr, int size);
+  double *W() const;
+
+  layer &operator()(int i_layer) const;
 
   void unitTest();
 
 private:
-  double *X_; //  array containing the vector for each neuron ?
+  double *X_; //
   layer *L_;  // array of layers
   int nb_total_weights_;
 };
@@ -83,6 +88,53 @@ int FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
   return res;
 }
 
+template <int n_in, int n_out, int n_layer>
+void FeedForward<n_in, n_out, n_layer>::setAllWeightsRandoms(double a,
+                                                             double b) {
+  for (int i = 0; i < n_layer + 1; ++i)
+    L_[i].setAllWeightsRandoms(a, b);
+}
+
+template <int n_in, int n_out, int n_layer>
+void FeedForward<n_in, n_out, n_layer>::setAllWeightsDerivativesZeros() {
+  for (int i = 0; i < n_layer + 1; ++i)
+    L_[i].setAllWeightsDerivativesZeros();
+}
+
+template <int n_in, int n_out, int n_layer>
+layer &FeedForward<n_in, n_out, n_layer>::operator()(int i_layer) const {
+  if (i_layer > n_layer + 1) {
+    std::cout << "Error : there isn't as many layers in the system! \n";
+    exit(1);
+  }
+
+  return L_[i_layer];
+}
+
+template <int n_in, int n_out, int n_layer>
+void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
+  if (size == getTotalWeights()) {
+    for (int i = 0; i < n_layer + 1; ++i) {
+      for (int j = 0; j < L_[i].getNbNeurons(); j++)
+        for (int k = 0; k < L_[i](j).getSizeX(); ++k) {
+          L_[i].setWeight(arr[k], j, k);
+        }
+    }
+  }
+}
+
+template <int n_in, int n_out, int n_layer>
+double *FeedForward<n_in, n_out, n_layer>::W() const {
+  double *W[getTotalWeights()];
+  for (int i = 0; i < n_layer + 1; ++i) {
+    for (int j = 0; j < L_[i].getNbNeurons(); j++)
+      for (int k = 0; k < L_[i](j).getSizeX(); ++k) {
+        W[i] = L_[i].getWeight(j, k);
+      }
+  }
+  return W;
+}
+
 // * Tests
 
 template <int n_in, int n_out, int n_layer>
@@ -109,6 +161,10 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
       assert(fw1.L_[i](j).getSizeX() == fw2.L_[i](j).getSizeX());
     }
   }
+  fw1.getTotalWeights();
+  fw1.setAllWeightsDerivativesZeros();
+  fw1.setAllWeightsRandoms(0, 1);
+  fw1(n_layer + 1);
 }
 
 #endif
