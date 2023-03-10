@@ -11,7 +11,11 @@ int main() {
   // double (*pf_a)(double) = &sigma;
   // double (*pf_da)(double) = &dSigma;
 
-  FeedForward<1, 1, 3> fw;
+  FeedForward<1, 1, 3> fw1;
+  FeedForward<1, 1, 3> fw2(fw1);
+  FeedForward<1, 1, 3> fw3;
+
+  fw3 = fw1;
 
   return 0;
 }

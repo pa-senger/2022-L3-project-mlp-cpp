@@ -13,10 +13,10 @@ file(GLOB_RECURSE SOURCE_FILES src/*)
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
 
 # creating the executable from src/main.cpp
-add_executable(ml.out src/main.cpp)
+add_executable(run src/main.cpp)
 
 # linking the executable with the library
-target_link_libraries(ml.out ${PROJECT_NAME})
+target_link_libraries(run ${PROJECT_NAME})
 
 # Unitary testing
 enable_testing()
