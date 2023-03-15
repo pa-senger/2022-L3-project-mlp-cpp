@@ -15,37 +15,42 @@ public:
   void setAllWeightsRandoms(double a, double b);
   void setAllWeightsDerivativesZeros();
   void setAllWeights(double *arr, int size);
-  double *W() const;
+  double *getAllWeights() const; // array containing all the weights values
 
   layer &operator()(int i_layer) const;
 
   void unitTest();
 
 private:
-  double *X_; //
-  layer *L_;  // array of layers
+  double *X_; // array of entry data
+  layer *L_;  // array of layers of size n_layer+1
   int nb_total_weights_;
 };
 
 // * Definitions
 
+// this default constructor sets n_layer+1 layers
+// each layer contains n_out neurons of size n_in
 template <int n_in, int n_out, int n_layer>
 FeedForward<n_in, n_out, n_layer>::FeedForward()
-    : X_(new double[n_in]), L_(new layer[n_layer + 1]),
-      nb_total_weights_(getTotalWeights()) {}
+    : X_(new double[n_in]), L_(new layer[n_layer + 1]), nb_total_weights_(0) {
+
+  for (int i = 0; i < n_layer + 1; ++i) {
+    L_[i] = layer(n_in, n_out);
+  }
+  nb_total_weights_ = getTotalWeights();
+}
 
 template <int n_in, int n_out, int n_layer>
 FeedForward<n_in, n_out, n_layer>::FeedForward(const FeedForward &fw)
     : X_(new double[n_in]), L_(new layer[n_layer + 1]),
       nb_total_weights_(fw.nb_total_weights_) {
 
-  for (int i = 0; i < n_in; ++i) {
+  for (int i = 0; i < n_in; ++i)
     X_[i] = fw.X_[i];
-  }
 
-  for (int i = 0; i < n_layer + 1; ++i) {
+  for (int i = 0; i < n_layer + 1; ++i)
     L_[i] = fw.L_[i]; // layer operator = is properly overloaded
-  }
 }
 
 template <int n_in, int n_out, int n_layer>
@@ -74,6 +79,7 @@ FeedForward<n_in, n_out, n_layer>::~FeedForward() {
   delete[] L_; // the destructor from layer will be called
 }
 
+// this is the number of weights in the network not the sum of the weights
 template <int n_in, int n_out, int n_layer>
 int FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
   int res = 0;
@@ -88,6 +94,7 @@ int FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
   return res;
 }
 
+// this methods uses the Unif([a,b]) distribution to set random weights
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeightsRandoms(double a,
                                                              double b) {
@@ -111,6 +118,7 @@ layer &FeedForward<n_in, n_out, n_layer>::operator()(int i_layer) const {
   return L_[i_layer];
 }
 
+// this method sets the weights for the whole network
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
   if (size == getTotalWeights()) {
@@ -120,11 +128,15 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
           L_[i].setWeight(arr[k], j, k);
         }
     }
+  } else {
+    std::cout << "Error : the array containing the weights should be of size : "
+              << getTotalWeights() << std::endl;
   }
 }
 
+// this method puts all the weights values in a array and returns it
 template <int n_in, int n_out, int n_layer>
-double *FeedForward<n_in, n_out, n_layer>::W() const {
+double *FeedForward<n_in, n_out, n_layer>::getAllWeights() const {
   double *W[getTotalWeights()];
   for (int i = 0; i < n_layer + 1; ++i) {
     for (int j = 0; j < L_[i].getNbNeurons(); j++)
@@ -139,13 +151,20 @@ double *FeedForward<n_in, n_out, n_layer>::W() const {
 
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::unitTest() {
+  // todo : explicitly test getTotalWeights in test.cpp
 
   // test default constructor
   FeedForward<n_in, n_out, n_layer> fw1;
 
   assert(fw1.nb_total_weights_ == fw1.getTotalWeights());
-  assert(fw1.L_[0].getNbData() == 0);
-  assert(fw1.L_[0].getNbNeurons() == 0);
+  for (int i = 0; i < n_layer + 1; ++i) {
+    assert(fw1.L_[i].getNbData() == n_in);
+    assert(fw1.L_[0].getNbNeurons() == n_out);
+
+    for (int j = 0; j < fw1.L_[i].getNbNeurons(); ++j) {
+      assert(fw1.L_[i](j).getSizeX() == n_in);
+    }
+  }
 
   // test copy construtor
   FeedForward<n_in, n_out, n_layer> fw2(fw1);
@@ -161,10 +180,16 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
       assert(fw1.L_[i](j).getSizeX() == fw2.L_[i](j).getSizeX());
     }
   }
+
+  // those methods are well defined and tested for layer but should still be
+  // tested for FeedForward
   fw1.getTotalWeights();
   fw1.setAllWeightsDerivativesZeros();
   fw1.setAllWeightsRandoms(0, 1);
-  fw1(n_layer + 1);
+
+  // test () operator
+  for (int i = 0; i < n_layer + 1; ++i)
+    assert(fw1(i) == L_[i]);
 }
 
 #endif

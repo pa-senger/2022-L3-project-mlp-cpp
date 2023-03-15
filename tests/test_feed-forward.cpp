@@ -9,6 +9,7 @@ int main() {
 
   fw.unitTest();
   fw1.unitTest();
+  fw2.unitTest();
 
   return 0;
 }

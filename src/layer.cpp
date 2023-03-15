@@ -10,7 +10,7 @@
 // -an entry data vector of size nb_data,
 // -an array of weights filled with ones
 // -a biais of 0
-// -an array of weights derivatives filled wirh zeros
+// -an array of weights derivatives filled with zeros
 // -a derivative of biais set to 0
 // -an activation fct and its derivative set as ReLU
 // -a pre_activation_value and post_activation_value of 0

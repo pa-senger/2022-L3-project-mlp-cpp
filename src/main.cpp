@@ -6,6 +6,8 @@
 #include <iostream>
 #include <random>
 
+// to compile use : cmake --preset debug (or release) /path_to_CMakeLists.txt
+
 int main() {
 
   // double (*pf_a)(double) = &sigma;
