@@ -15,7 +15,8 @@ public:
   void setAllWeightsRandoms(double a, double b);
   void setAllWeightsDerivativesZeros();
   void setAllWeights(double *arr, int size);
-  double *getAllWeights() const; // array containing all the weights values
+  void getAllWeights(double *arr,
+                     int size) const; // array containing all the weights values
 
   layer &operator()(int i_layer) const;
 
@@ -122,10 +123,12 @@ layer &FeedForward<n_in, n_out, n_layer>::operator()(int i_layer) const {
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
   if (size == getTotalWeights()) {
+    int index = 0;
     for (int i = 0; i < n_layer + 1; ++i) {
-      for (int j = 0; j < L_[i].getNbNeurons(); j++)
+      for (int j = 0; j < L_[i].getNbNeurons(); ++j)
         for (int k = 0; k < L_[i](j).getSizeX(); ++k) {
-          L_[i].setWeight(arr[k], j, k);
+          L_[i].setWeight(arr[index++], j, k);
+          // std::cout << L_[i](j).getWeight(k) << std::endl;
         }
     }
   } else {
@@ -134,24 +137,27 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
   }
 }
 
-// this method puts all the weights values in a array and returns it
+// to avoid the ISO C++ forbids variable length array error we chose to give the
+// array to the function and the function fills it
 template <int n_in, int n_out, int n_layer>
-double *FeedForward<n_in, n_out, n_layer>::getAllWeights() const {
-  double *W[getTotalWeights()];
-  for (int i = 0; i < n_layer + 1; ++i) {
-    for (int j = 0; j < L_[i].getNbNeurons(); j++)
-      for (int k = 0; k < L_[i](j).getSizeX(); ++k) {
-        W[i] = L_[i].getWeight(j, k);
-      }
+void FeedForward<n_in, n_out, n_layer>::getAllWeights(double *arr,
+                                                      int size) const {
+  if (size == getTotalWeights()) {
+    int index = 0;
+    for (int i = 0; i < n_layer + 1; ++i) {
+      for (int j = 0; j < L_[i].getNbNeurons(); j++)
+        for (int k = 0; k < L_[i](j).getSizeX(); ++k) {
+          arr[index++] = L_[i].getWeight(j, k);
+          // std::cout << L_[i].getWeight(j, k) << std::endl;
+        }
+    }
   }
-  return W;
 }
 
 // * Tests
 
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::unitTest() {
-  // todo : explicitly test getTotalWeights in test.cpp
 
   // test default constructor
   FeedForward<n_in, n_out, n_layer> fw1;
@@ -181,15 +187,44 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
     }
   }
 
-  // those methods are well defined and tested for layer but should still be
-  // tested for FeedForward
-  fw1.getTotalWeights();
   fw1.setAllWeightsDerivativesZeros();
+  for (int i = 0; i < n_layer + 1; ++i) {
+    for (int j = 0; j < fw1.L_[i].getNbNeurons(); ++i) {
+      for (int k = 0; k < fw1(i)(j).getSizeX(); ++k)
+        assert(fw1(i)(j).getWeightDerivative(k) == 0);
+    }
+  }
+
   fw1.setAllWeightsRandoms(0, 1);
+  for (int i = 0; i < n_layer + 1; ++i) {
+    for (int j = 0; j < fw1.L_[i].getNbNeurons(); ++i) {
+      for (int k = 0; k < fw1(i)(j).getSizeX() - 1; ++k) {
+        // unless we're very unlucky all weights should be differents
+        assert(fw1(i)(j).getWeight(k) != fw1(i)(j).getWeight(k + 1));
+        // std::cout << fw1(i)(j).getWeight(k) << std::endl;
+      }
+    }
+  }
 
   // test () operator
   for (int i = 0; i < n_layer + 1; ++i)
     assert(fw1(i) == L_[i]);
+
+  // test setAllWeights( arr, size arr)
+  int size_arr = fw1.getTotalWeights();
+  double *W = new double[size_arr];
+  for (int i = 0; i < size_arr; ++i)
+    W[i] = i;
+
+  fw1.setAllWeights(W, size_arr);
+  double *W2 = new double[size_arr];
+  fw1.getAllWeights(W2, size_arr);
+
+  for (int i = 0; i < size_arr; ++i)
+    assert(W[i] == W2[i]);
+
+  delete[] W;
+  delete[] W2;
 }
 
 #endif
