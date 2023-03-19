@@ -134,7 +134,8 @@ void layer::unitTest() {
   l.setActivationFcts(pf_a, pf_da, 4);
   l.setBiais(1.1, 0);
   l.setWeight(2.2, 4, 1);
-  double *Y2 = l.evaluateLayer(X2, 2);
+  l.evaluateLayer(X2, 2);
+  double *Y2 = l.getY();
 
   std::cout << Y2[0] << std::endl;
   assert(Y2[0] == 4.1);

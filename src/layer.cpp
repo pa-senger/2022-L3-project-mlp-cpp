@@ -348,12 +348,12 @@ double layer::evaluateFctDerivative(double x, int i_neuron) const {
 double *layer::evaluateLayer(const double *X, int size_X) const {
   if (size_X != nb_data_) {
     std::cout << "Error : this size of data isn't compatible with the layer !\n"
-              << "    size required : " << getNbData()
+              << "    size required : " << nb_data_
               << ", size given : " << size_X << std::endl;
     exit(1);
   }
-
   for (int i = 0; i < nb_neurons_; ++i) {
+
     arr_neurons_[i].activateNeuron(X, size_X);
     Y_[i] = getPo(i);
   }
