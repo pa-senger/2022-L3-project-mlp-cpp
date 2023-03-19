@@ -21,7 +21,8 @@ layer::layer(int nb_data, int nb_neurons)
       Y_(nullptr) {
 
   if (nb_data < 0 || nb_neurons < 0) {
-    std::cout << "Error : a layer can't take a negative number of data nor "
+    std::cout << "Error constructor: a layer can't take a negative number of "
+                 "data nor "
                  "have a negative number of neurons\n";
     exit(1);
   }
@@ -82,7 +83,7 @@ double layer::getWeight(int i_neuron, int j_weight) const {
   double res;
 
   if (i_neuron < 0 || j_weight < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error getWeight: you must use positive integer for this !\n";
     exit(1);
   }
 
@@ -99,7 +100,8 @@ double layer::getWeightDerivative(int i_neuron, int j_weight) const {
   double res;
 
   if (i_neuron < 0 || j_weight < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error getWeightDerivative: you must use positive integer for "
+                 "this !\n";
     exit(1);
   }
 
@@ -120,14 +122,14 @@ double layer::getPo(int i_neuron) const {
   double res = 0;
 
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error getPo: you must use positive integer for this !\n";
     exit(1);
   }
 
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     res = arr_neurons_[i_neuron].getPo();
   } else {
-    std::cout << "Error : there isn't as many neurons in the layer !"
+    std::cout << "Error getPo: there isn't as many neurons in the layer !"
               << std::endl;
   }
 
@@ -136,14 +138,14 @@ double layer::getPo(int i_neuron) const {
 
 void layer::setWeight(double val, int i_neuron, int j_weight) {
   if (i_neuron < 0 || j_weight < 0) {
-    std::cout << "Error : you must use positive integers for this !\n";
+    std::cout << "Error setWeight: you must use positive integers for this !\n";
     exit(1);
   }
 
   if (nb_neurons_ == 0 || i_neuron >= nb_neurons_ ||
       j_weight > (arr_neurons_[i_neuron].getSizeX()) ||
       arr_neurons_ == nullptr) {
-    std::cout << "Error : there isn't as many neurons or weights ! \n";
+    std::cout << "Error setWeight: there isn't as many neurons or weights ! \n";
     exit(1);
   } else {
     arr_neurons_[i_neuron].setWeight(val, j_weight);
@@ -152,14 +154,16 @@ void layer::setWeight(double val, int i_neuron, int j_weight) {
 
 void layer::setWeightDerivative(double val, int i_neuron, int j_weight) {
   if (i_neuron < 0 || j_weight < 0) {
-    std::cout << "Error : you must use positive integers for this !\n";
+    std::cout << "Error setWeightDerivative: you must use positive integers "
+                 "for this !\n";
     exit(1);
   }
 
   if (nb_neurons_ == 0 || i_neuron >= nb_neurons_ ||
       j_weight >= (arr_neurons_[i_neuron].getSizeX()) ||
       arr_neurons_ == nullptr) {
-    std::cout << "Error : there isn't as many neurons or weights ! \n";
+    std::cout << "Error setWeightDerivative: there isn't as many neurons or "
+                 "weights ! \n";
     exit(1);
   } else {
     arr_neurons_[i_neuron].setWeightDerivative(val, j_weight);
@@ -169,15 +173,17 @@ void layer::setWeightDerivative(double val, int i_neuron, int j_weight) {
 void layer::setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
                               int i_neuron, std::string name) {
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integers for this !\n";
+    std::cout << "Error setActivationFcts: you must use positive integers for "
+                 "this !\n";
     exit(1);
   }
 
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setActivationFcts(pf_a, pf_da, name);
   } else {
-    std::cout << "Error : there isn't as many neurons in the layer !"
-              << std::endl;
+    std::cout
+        << "Error setActivationFcts: there isn't as many neurons in the layer !"
+        << std::endl;
   }
 }
 
@@ -185,7 +191,8 @@ void layer::setActivationFctName(std::string name, int i_neuron) {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setActivationFctName(name);
   } else {
-    std::cout << "Error : there isn't as many neurons in the layer !"
+    std::cout << "Error setActivationFctName: there isn't as many neurons in "
+                 "the layer !"
               << std::endl;
   }
 }
@@ -200,33 +207,34 @@ std::ostream &operator<<(std::ostream &os, const layer &l) {
 
 void layer::setBiais(double val, int i_neuron) {
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error setBiais: you must use positive integer for this !\n";
     exit(1);
   }
 
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setBiais(val);
   } else {
-    std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    std::cout
+        << "Error setBiais: there isn't as many neurons in the layer ! \n";
   }
 }
 
 void layer::setDb(double val, int i_neuron) {
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error setDb: you must use positive integer for this !\n";
     exit(1);
   }
 
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setDb(val);
   } else {
-    std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    std::cout << "Error setDb: there isn't as many neurons in the layer ! \n";
   }
 }
 
 double layer::getBiais(int i_neuron) const {
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error getBiais: you must use positive integer for this !\n";
     exit(1);
   }
 
@@ -235,7 +243,8 @@ double layer::getBiais(int i_neuron) const {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     res = arr_neurons_[i_neuron].getBiais();
   } else {
-    std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    std::cout
+        << "Error getBiais: there isn't as many neurons in the layer ! \n";
   }
 
   return res;
@@ -243,7 +252,7 @@ double layer::getBiais(int i_neuron) const {
 
 double layer::getDb(int i_neuron) const {
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error getDb: you must use positive integer for this !\n";
     exit(1);
   }
 
@@ -252,7 +261,7 @@ double layer::getDb(int i_neuron) const {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     res = arr_neurons_[i_neuron].getDb();
   } else {
-    std::cout << "Error : there isn't as many neurons in the layer ! \n";
+    std::cout << "Error getDb: there isn't as many neurons in the layer ! \n";
   }
 
   return res;
@@ -280,7 +289,8 @@ bool layer::operator<=(const layer &l) const {
 
 void layer::addWeightDerivative(double val, int i_neuron, int j_weight) {
   if (i_neuron < 0 || j_weight < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error addWeightDerivative: you must use positive integer for "
+                 "this !\n";
     exit(1);
   }
 
@@ -321,7 +331,8 @@ double layer::evaluateFct(double x, int i_neuron) const {
   double res = 0;
 
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout
+        << "Error evaluateFct: you must use positive integer for this !\n";
     exit(1);
   }
 
@@ -335,7 +346,8 @@ double layer::evaluateFctDerivative(double x, int i_neuron) const {
   double res = 0;
 
   if (i_neuron < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error evaluateFctDerivative: you must use positive integer "
+                 "for this !\n";
     exit(1);
   }
 
@@ -347,7 +359,8 @@ double layer::evaluateFctDerivative(double x, int i_neuron) const {
 
 double *layer::evaluateLayer(const double *X, int size_X) const {
   if (size_X != nb_data_) {
-    std::cout << "Error : this size of data isn't compatible with the layer !\n"
+    std::cout << "Error evaluateLayer: this size of data isn't compatible with "
+                 "the layer !\n"
               << "    size required : " << nb_data_
               << ", size given : " << size_X << std::endl;
     exit(1);
@@ -365,7 +378,8 @@ double *layer::evaluateLayer(const double *X, int size_X) const {
 // the neuron is a reference not a copy
 neuron &layer::operator()(int i_neuron) const {
   if (arr_neurons_ == nullptr || nb_neurons_ == 0 || i_neuron >= nb_neurons_) {
-    std::cout << "Error : there isn't as many neurons in this layer \n";
+    std::cout
+        << "Error operator(): there isn't as many neurons in this layer \n";
     exit(1);
   }
 

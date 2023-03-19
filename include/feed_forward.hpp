@@ -127,7 +127,8 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeightsDerivativesZeros() {
 template <int n_in, int n_out, int n_layer>
 layer &FeedForward<n_in, n_out, n_layer>::operator()(int i_layer) const {
   if (i_layer > n_layer + 1) {
-    std::cout << "Error : there isn't as many layers in the system! \n";
+    std::cout
+        << "Error operator(): there isn't as many layers in the system! \n";
     exit(1);
   }
 
@@ -147,15 +148,16 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
         }
     }
   } else {
-    std::cout << "Error : the array containing the weights should be of size : "
+    std::cout << "Error setAllWeights : the array containing the weights "
+                 "should be of size : "
               << getTotalWeights() << std::endl;
   }
 }
 
-// to avoid the "ISO C++ forbids variable length array" error we chose to give
-// the array to the method as parameter and the method fills it instead of
+// to avoid the "ISO C++ forbids variable length array" error pass an array
+// to the method as parameter and the method fills it instead of
 // making a new array in the method and returning it
-// this problem could be avoided using std::vectors
+// this problem could be avoided using std::vectors (i think?)
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::getAllWeights(double *arr,
                                                       int size) const {
@@ -174,8 +176,8 @@ void FeedForward<n_in, n_out, n_layer>::getAllWeights(double *arr,
 template <int n_in, int n_out, int n_layer>
 double *FeedForward<n_in, n_out, n_layer>::evaluate(double *X, int size) {
   if (size != n_in) {
-    std::cout << "Error: size required : " << n_in
-              << "\n     size given : " << size << std::endl;
+    std::cout << "Error evaluate: size required : " << n_in
+              << " ,size given : " << size << std::endl;
     exit(1);
   }
   double *Y0 = L_[0].evaluateLayer(X, size);

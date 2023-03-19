@@ -21,8 +21,8 @@ neuron::neuron(int n)
       Weight_d_{new double[n + 1]} {
 
   if (n <= 0) {
-    std::cout
-        << "Error: a neuron must take an entry vector of at least size 1.\n";
+    std::cout << "Error constructor: a neuron must take an entry vector of at "
+                 "least size 1.\n";
     exit(1);
   }
 
@@ -43,8 +43,8 @@ neuron::neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
       Weight_d_{new double[n + 1]} {
 
   if (n <= 0) {
-    std::cout
-        << "Error: a neuron must take an entry vector of at least size 1.\n";
+    std::cout << "Error construtor: a neuron must take an entry vector of at "
+                 "least size 1.\n";
     exit(1);
   }
 
@@ -117,7 +117,8 @@ double neuron::getWeight(int i) const {
 
 double neuron::getWeightDerivative(int i) const {
   if (i < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error getWeightDerivative: you must use positive integer for "
+                 "this !\n";
     exit(1);
   }
   double dw = 0;
@@ -143,7 +144,8 @@ void neuron::setWeight(double w, int i) {
 
 void neuron::setWeightDerivative(double dw, int i) {
   if (i < 0) {
-    std::cout << "Error : you must use positive integer for this !\n";
+    std::cout << "Error setWeightDerivative: you must use positive integer for "
+                 "this !\n";
     exit(1);
   }
   if (i < size_X_ && i >= 0)
