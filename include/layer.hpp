@@ -4,14 +4,15 @@
 
 class layer {
 public:
+  // * Constructors && Destructor && Affectation
   // this default constructor creates an empty layer
   layer() : nb_neurons_{0}, nb_data_{0}, arr_neurons_{nullptr}, Y_{nullptr} {}
   layer(int nb_data, int nb_neurons);
   layer(const layer &co);
   layer &operator=(const layer &l);
-
   ~layer();
 
+  // * Getters && Setters
   double getWeight(int i_neuron, int j_weight) const;
   double getWeightDerivative(int i_neuron, int j_weight) const;
   int getNbData() const;
@@ -19,8 +20,7 @@ public:
   double getPo(int i_neuron) const;
   double getBiais(int i_neuron) const;
   double getDb(int i_neuron) const;
-
-  // Y is the vector created by evaluating the layer
+  // Y is the array created by evaluating the layer
   double *getY() const { return Y_; }
 
   void setWeight(double val, int i_neuron, int j_weight);
@@ -31,6 +31,7 @@ public:
   void setBiais(double val, int i_neuron);
   void setDb(double val, int i_neuron);
 
+  // * Operators
   // 2 layers are equal if they have the same number of neurons
   bool operator==(const layer &l) const;
   bool operator!=(const layer &l) const;
@@ -41,9 +42,9 @@ public:
 
   friend std::ostream &operator<<(std::ostream &os, const layer &l);
 
+  // * Other methods
   void addWeightDerivative(double val, int i_neuron, int j_weight);
-
-  // those 3 methods sets weights to all of the neurons in the layer
+  // those 3 next methods set weights to all of the neurons in the layer
   void setAllWeightsOnes();
   // random weights are taken in the interval [a, b], ditribion Unif([a, b])
   void setAllWeightsRandoms(int a, int b);
@@ -55,9 +56,10 @@ public:
 
   // this method evaluate the layer, ie activate each neuron
   // each neuron takes X and return po the post_activation_value
-  // the method returns an array Y = (po_1,...,po_n)
+  // the method returns Y_ = (po_1,...,po_n)
   double *evaluateLayer(const double *X, int size_X) const;
 
+  // * Tests
   static void unitTest();
 
 private:

@@ -18,6 +18,7 @@ public:
   void getAllWeights(double *arr, int size) const;
 
   layer &operator()(int i_layer) const;
+
   double *evaluate(double *X, int size);
 
   void unitTest();
@@ -26,10 +27,10 @@ private:
   double *X_; // array of entry data
   layer *L_;  // array of layers of size n_layer+1
   int nb_total_weights_;
-  double *Y_;
+  double *Y_; // array, output of the network after evaluation
 };
 
-// * Definitions
+// ! Definitions
 
 // this default constructor sets n_layer+1 layers
 // each layer contains n_out neurons of size n_in
@@ -186,7 +187,7 @@ double *FeedForward<n_in, n_out, n_layer>::evaluate(double *X, int size) {
   return Y_;
 }
 
-// * Tests
+// ! Tests
 
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::unitTest() {
@@ -195,13 +196,11 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
   FeedForward<n_in, n_out, n_layer> fw1;
 
   assert(fw1.nb_total_weights_ == fw1.getTotalWeights());
-  for (int i = 0; i < n_layer + 1; ++i) {
-    assert(fw1.L_[i].getNbData() == n_in);
-    assert(fw1.L_[0].getNbNeurons() == n_out);
+  assert(fw1.L_[0].getNbData() == n_in);
+  assert(fw1.L_[n_layer].getNbNeurons() == n_out);
 
-    for (int j = 0; j < fw1.L_[i].getNbNeurons(); ++j) {
-      assert(fw1.L_[i](j).getSizeX() == n_in);
-    }
+  for (int i = 1; i < n_layer + 1; ++i) {
+    assert(fw1.L_[i].getNbData() == fw1.L_[i - 1].getNbNeurons());
   }
 
   // test copy construtor
@@ -257,6 +256,8 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
 
   delete[] W;
   delete[] W2;
+
+  // todo : test evaluate
 }
 
 #endif

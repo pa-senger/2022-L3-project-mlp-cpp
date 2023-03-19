@@ -8,6 +8,7 @@
 
 class neuron {
 public:
+  // * Construtors && Destructors && Affectation
   // this default constructor defines a neuron with :
   // size_X_ = 1
   // pre_activation_value = post_activation_value = 0
@@ -29,10 +30,9 @@ public:
   // this is a copy constructor, arrays are deep copied not shared
   neuron(const neuron &ne);
   neuron &operator=(const neuron &ne);
-
-  // destructor
   ~neuron();
 
+  // * Getters && Setters
   int getSizeX() const;
   double getBiais() const;
   double getDb() const;
@@ -49,6 +49,7 @@ public:
                          std::string name = "n/a");
   void setActivationFctName(std::string name);
 
+  // * Operators
   // 2 neurons are said to be equal if they have
   // the same weights and weights derivatives
   // the same biais and biais derivatives
@@ -57,6 +58,7 @@ public:
   bool operator!=(const neuron &ne) const;
   friend std::ostream &operator<<(std::ostream &os, const neuron &ne);
 
+  // * Other methods
   void setWeightsOnes();
   // the distribution used for the random weights is Unif([a, b])
   void setWeightsRandom(int a, int b);
@@ -64,15 +66,16 @@ public:
 
   // the activation of neuron is the composition :
   // activation_fct( pre_activation_value )
-  // with pre_activation_value = ((X.W) + biais)
+  // with pre_activation_value = (<X,W> + biais)
   // where X is the entry vector, W the vector of weights Weights_
+  // <.,.> the euclidian dot product
   // the result is a double stored in post_activation_value
   void activateNeuron(const double *X, int size);
   void printWeights(const double *arr) const;
   double evaluateFct(double x) const;           // activation_fct(x)
   double evaluateFctDerivative(double x) const; // activation_fct_derivative(x)
 
-  // tests
+  // * Tests
   static void unitTest();
 
 private:
