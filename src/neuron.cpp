@@ -87,7 +87,7 @@ neuron &neuron::operator=(const neuron &ne) {
     pf_activation_d_ = ne.pf_activation_d_;
 
     delete[] Weight_;   // we need to delete those to create new ones
-    delete[] Weight_d_; // with the new size
+    delete[] Weight_d_; // with the right size
 
     Weight_ = new double[size_X_ + 1];   // +1 to stored the biais at the end
     Weight_d_ = new double[size_X_ + 1]; // idem for db
@@ -225,16 +225,16 @@ void neuron::setActivationFctName(std::string name) {
 
 std::ostream &operator<<(std::ostream &os, const neuron &ne) {
   os << "This neuron is define with : \n"
-     << "    An entry vector X of size : " << ne.getSizeX() << "\n"
-     << "    A vector of weights : ";
+     << "    An entry vector X of size : " << ne.getSizeX()
+     << "\n    A vector of weights : ";
   ne.printWeights(ne.Weight_);
   os << "    A vector of weight's derivatives : ";
   ne.printWeights(ne.Weight_d_);
   os << "    A biais b : " << ne.getBiais()
-     << ", its derivative db : " << ne.getDb() << "\n"
-     << "    An activation function named : " << ne.activation_fct_name_ << "\n"
-     << "    A pre activation value of : " << ne.pre_activation_value_ << "\n"
-     << "    A post activation value of : " << ne.post_activation_value_
+     << ", its derivative db : " << ne.getDb()
+     << "\n    An activation function named : " << ne.activation_fct_name_
+     << "\n    A pre activation value of : " << ne.pre_activation_value_
+     << "\n    A post activation value of : " << ne.post_activation_value_
      << "\n";
 
   return os;

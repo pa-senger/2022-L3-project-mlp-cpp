@@ -44,7 +44,7 @@ public:
   void addWeightDerivative(double val, int i_neuron, int j_weight);
   // those 3 next methods set weights to all of the neurons in the layer
   void setAllWeightsOnes();
-  // random weights are taken in the interval [a, b], ditribion Unif([a, b])
+  // random weights are taken in the interval [a, b], ditribion : Unif([a, b])
   void setAllWeightsRandoms(int a, int b);
   void setAllWeightsDerivativesZeros();
   // this method returns the value of the activation fct given an entry x

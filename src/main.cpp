@@ -14,6 +14,12 @@ int main() {
   // double (*pf_a)(double) = &sigma;
   // double (*pf_da)(double) = &dSigma;
 
+  neuron n1(4);
+  std::cout << n1 << std::endl;
+
+  layer l1(2, 5);
+  std::cout << l1 << std::endl;
+
   FeedForward<3, 2, 4> fw3;
 
   int X[4]{1, 2, 3, 4};

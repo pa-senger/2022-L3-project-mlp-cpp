@@ -6,7 +6,7 @@
 
 template <int n_in, int n_out, int n_layer> class FeedForward {
 public:
-  // * Constructors && Destrutor && Affectation
+  // * Constructors && Destructor && Affectation
   FeedForward();
   FeedForward(const FeedForward &fw);
   // FeedForward(double (*pf_loss)(double));
