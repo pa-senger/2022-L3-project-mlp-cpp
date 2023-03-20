@@ -36,10 +36,8 @@ public:
   bool operator==(const layer &l) const;
   bool operator!=(const layer &l) const;
   bool operator<=(const layer &l) const;
-
   // this () operator returns the object "neuron" as a reference not a copy
   neuron &operator()(int i_neuron) const;
-
   friend std::ostream &operator<<(std::ostream &os, const layer &l);
 
   // * Other methods
@@ -49,11 +47,9 @@ public:
   // random weights are taken in the interval [a, b], ditribion Unif([a, b])
   void setAllWeightsRandoms(int a, int b);
   void setAllWeightsDerivativesZeros();
-
   // this method returns the value of the activation fct given an entry x
   double evaluateFct(double x, int i_neuron) const;
   double evaluateFctDerivative(double x, int i_neuron) const;
-
   // this method evaluate the layer, ie activate each neuron
   // each neuron takes X and return po the post_activation_value
   // the method returns Y_ = (po_1,...,po_n)
