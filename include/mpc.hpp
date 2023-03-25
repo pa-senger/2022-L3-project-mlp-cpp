@@ -8,7 +8,8 @@ template <int n_in, int n_out, int n_layer>
 class mpc : public FeedForward<n_in, n_out, n_layer> {
 public:
   // * Constructors && Destructors using parent's one
-  mpc() : FeedForward<n_in, n_out, n_layer>(){};
+  // parent default contructor will be used by default if not specified
+  mpc(){};
   mpc(const mpc &m) : FeedForward<n_in, n_out, n_layer>(m){};
   ~mpc(){}; // nothing new to be deleted
 
@@ -19,6 +20,7 @@ public:
               std::string name = "n/a");
   // the build  method is already properly defined in FeedForward, no need to
   // overload it, non pure virtual methods must be first define in parent class
+  // anyway
 
   // * Tests
   static void unitTest();
