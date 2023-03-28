@@ -60,9 +60,13 @@ public:
 
 private:
   int nb_neurons_;
-  int nb_data_;         // the size of the entry vector of data
-  neuron *arr_neurons_; // an array of neurons
-  double *Y_; // array containing the values of the layer after activation
+  int nb_data_; // The size of the entry vector of data
+  neuron *arr_neurons_;
+  double *Y_; // Array containing the values of the layer after activation.
+  // We use Y_ because compiler isn't happy with us using dynamic array with
+  // parameter size inside methods, which is kind of a problem to evaluate the
+  // whole network.
+  // This means there's a getter for Y_ that return the pointer, so be careful.
 };
 
 #endif

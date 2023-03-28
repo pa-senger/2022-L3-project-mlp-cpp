@@ -15,17 +15,38 @@ int main() {
   // double (*pf_da)(double) = &dSigma;
 
   neuron n1(4);
+
+  n1.setWeightsRandom(0, 1);
+  double X0[4]{1, 2, 1.1, 5};
+  n1.activateNeuron(X0, 4);
+  std::cout << n1 << std::endl;
+  n1.setActivationFcts(sigma, dSigma, "sigmoid");
+  n1.activateNeuron(X0, 4);
   std::cout << n1 << std::endl;
 
   layer l1(2, 5);
+
   std::cout << l1 << std::endl;
 
   FeedForward<3, 2, 4> fw3;
 
-  int X[4]{1, 2, 3, 4};
-  fw3.build(X, 4);
+  int N[4]{1, 2, 3, 4};
+  fw3.build(N, 4);
+  double X[3]{1, 2, 3};
+  fw3.evaluate(X, 3);
+  double *Y = fw3.getY();
+  for (int i = 0; i < 2; ++i)
+    std::cout << Y[i] << std::endl;
 
-  mpc<1, 2, 3> m;
+  mpc<3, 4, 4> m;
+
+  m.build(N, 4);
+  m.setAllWeightsRandoms(0, 1);
+  m.setAllFct(sigma, dSigma, "sigmoid");
+  m.evaluate(X, 3);
+  double *Y2 = m.getY();
+  for (int i = 0; i < 2; ++i)
+    std::cout << Y2[i] << std::endl;
 
   return 0;
 }

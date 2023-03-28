@@ -291,9 +291,8 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
   }
 
   // test () operator
-  // todo , this was tested but now freaks out with the build method
-  // for (int i = 0; i < n_layer + 1; ++i)
-  //   assert(fw1(i) == L_[i]);
+  for (int i = 0; i < n_layer + 1; ++i)
+    assert(fw1(i) == fw1.L_[i]);
 
   // test setAllWeights(arr, size arr) && getAllWeights(arr, size arr)
   int size_arr = fw1.getTotalWeights();
