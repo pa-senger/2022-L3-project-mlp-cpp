@@ -5,8 +5,8 @@
 
 // todo : handle errors instead of exiting the program
 
-// this construtor makes a an array of neurons
-// each neurons are constructed with :
+// This construtor makes a an array of neurons.
+// Each neurons are constructed with :
 // -an entry data vector of size nb_data,
 // -an array of weights filled with ones
 // -a biais of 0
@@ -15,7 +15,7 @@
 // -an activation fct and its derivative set as ReLU
 // -a pre_activation_value and post_activation_value of 0
 // if the arguments are <= 0, the layer of neurons will be empty,
-// arrays will still be initialised with nullptr
+// arrays will still be initialised with nullptr.
 layer::layer(int nb_data, int nb_neurons)
     : nb_neurons_(nb_neurons), nb_data_(nb_data), arr_neurons_(nullptr),
       Y_(nullptr) {
@@ -33,7 +33,7 @@ layer::layer(int nb_data, int nb_neurons)
 
     for (int i = 0; i < nb_neurons; ++i) {
       arr_neurons_[i] = neuron(nb_data);
-      Y_[i] = 0;
+      Y_[i] = 0.0;
     }
   }
 }
@@ -196,11 +196,22 @@ void layer::setActivationFctName(std::string name, int i_neuron) {
               << std::endl;
   }
 }
-
+void layer::printY() const {
+  if (Y_ != nullptr) {
+    std::cout << "Y = [";
+    for (int i = 0; i < nb_neurons_ - 1; ++i) {
+      std::cout << Y_[i] << ", ";
+    }
+    std::cout << Y_[nb_neurons_ - 1] << "] \n";
+  } else {
+    std::cout << "Y = [] \n";
+  }
+}
 std::ostream &operator<<(std::ostream &os, const layer &l) {
-  os << "This layer is define with : \n"
-     << "    An entry data vector of size : " << l.nb_data_ << "\n"
-     << "    A number of neurons : " << l.nb_neurons_ << "\n";
+  os << "This layer is define with:"
+     << "\n    An entry data vector of size : " << l.nb_data_
+     << "\n    A number of neurons: " << l.nb_neurons_ << "\n    ";
+  l.printY();
 
   return os;
 }
@@ -374,8 +385,8 @@ double *layer::evaluateLayer(const double *X, int size_X) const {
   return getY();
 }
 
-// this methods return the i-th neuron in the layer,
-// the neuron is a reference not a copy
+// This methods return the i-th neuron in the layer,
+// the neuron is a reference not a copy.
 neuron &layer::operator()(int i_neuron) const {
   if (arr_neurons_ == nullptr || nb_neurons_ == 0 || i_neuron >= nb_neurons_) {
     std::cout

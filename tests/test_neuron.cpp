@@ -10,8 +10,8 @@ double (*pf_s)(double) = &sigma;
 double (*pf_ds)(double) = &dSigma;
 
 void neuron::unitTest() {
-  // first we test the getters and setters so we can use them in the rest of the
-  // tests, making it more reable
+  // First we test the getters and setters so we can use them in the rest of the
+  // tests, making it more reable.
   neuron n(3);
   n.setWeight(1.1, 0);
   n.setWeightDerivative(2.2, 0);
@@ -31,7 +31,7 @@ void neuron::unitTest() {
   assert(n.pf_activation_d_(2.2) - pf_ds(2.2) <=
          TOL); // dSigma(2.2) ~= 0.109459
 
-  // test default constructor
+  // Test default constructor
   neuron n1;
   assert(n1.getSizeX() == 1);
   assert(n1.getWeight(0) == 1);
@@ -42,7 +42,7 @@ void neuron::unitTest() {
   assert(n1.pf_activation_ == &ReLU);
   assert(n1.pf_activation_d_ == &dReLU);
 
-  // test construtor taking the size of the entry vector
+  // Test construtor taking the size of the entry vector
   neuron n2(3);
   assert(n2.getSizeX() == 3);
   assert(n2.getWeight(0) == 1);
@@ -54,7 +54,7 @@ void neuron::unitTest() {
   assert(n2.getPe() == 0);
   assert(n2.pf_activation_ == &ReLU && n2.pf_activation_d_ == &dReLU);
 
-  // test constructor with activation functions
+  // Test constructor with activation functions
   neuron n3(2, &sigma, &dSigma, "sigmoid");
   assert(n3.getSizeX() == 2);
   assert(n3.getWeight(0) == 1);
@@ -65,7 +65,7 @@ void neuron::unitTest() {
   assert(n3.getPe() == 0);
   assert(n3.pf_activation_ == &sigma && n3.pf_activation_d_ == &dSigma);
 
-  // test copy constructor
+  // Test copy constructor
   n2.setBiais(1);
   n2.setDb(2);
   n2.setWeight(3, 0);
@@ -78,7 +78,7 @@ void neuron::unitTest() {
   assert(n4.getWeight(0) == 3);
   assert(n4.getWeight(1) == 1);
   assert(n4.getWeight(2) == 1);
-  assert(n4.Weight_ != n2.Weight_); // test memory allocation of the arrays
+  assert(n4.Weight_ != n2.Weight_); // Test memory allocation of the arrays
   assert(n4.Weight_d_ != n2.Weight_d_);
   assert(n4.getWeightDerivative(0) == 0);
   assert(n4.getWeightDerivative(1) == 4);
@@ -88,7 +88,7 @@ void neuron::unitTest() {
   assert(n4.pf_activation_ == n2.pf_activation_);
   assert(n4.pf_activation_d_ == n2.pf_activation_d_);
 
-  // test assigment operator
+  // Test assigment operator
   n1 = n4; // n1 was the default neuron
   assert(n1.getSizeX() == 3);
   assert(n2.getBiais() == 1);
@@ -106,7 +106,7 @@ void neuron::unitTest() {
   assert(n4.pf_activation_ == n1.pf_activation_);
   assert(n4.pf_activation_d_ == n1.pf_activation_d_);
 
-  // test weight setters
+  // Test weight setters
   n1.setWeightsOnes();
   assert(n1.getWeight(0) == 1);
   assert(n1.getWeight(1) == 1);
@@ -122,7 +122,7 @@ void neuron::unitTest() {
   assert(n1.getWeight(0) != n1.getWeight(2));
   assert(n1.getWeight(1) != n1.getWeight(2));
 
-  // test activate
+  // Test activate
   neuron n5(4);
   for (int i = 0; i < 4; ++i) {
     n5.setWeight(i + 1, i);
@@ -134,7 +134,7 @@ void neuron::unitTest() {
   assert(n5.getPe() == 3.2);
   assert(n5.getPo() == sigma(3.2));
 
-  // test evaluate functions
+  // Test evaluate functions
   assert(n5.evaluateFct(1.1) == sigma(1.1));
   assert(n5.evaluateFctDerivative(1.1) == dSigma(1.1));
 }

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <random>
 
-// to compile use : cmake --preset debug (or release) /path_to_CMakeLists.txt
+// To compile use : cmake --preset debug (or release) /path_to_CMakeLists.txt
 
 int main() {
 
@@ -34,9 +34,8 @@ int main() {
   fw3.build(N, 4);
   double X[3]{1, 2, 3};
   fw3.evaluate(X, 3);
-  double *Y = fw3.getY();
-  for (int i = 0; i < 2; ++i)
-    std::cout << Y[i] << std::endl;
+  // double *Y = fw3.getY();
+  std::cout << fw3 << std::endl;
 
   mpc<3, 4, 4> m;
 
@@ -44,9 +43,8 @@ int main() {
   m.setAllWeightsRandoms(0, 1);
   m.setAllFct(sigma, dSigma, "sigmoid");
   m.evaluate(X, 3);
-  double *Y2 = m.getY();
-  for (int i = 0; i < 2; ++i)
-    std::cout << Y2[i] << std::endl;
+  // double *Y2 = m.getY();
+  std::cout << m << std::endl;
 
   return 0;
 }

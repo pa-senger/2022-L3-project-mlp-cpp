@@ -8,14 +8,14 @@ int main() {
   FeedForward<2, 3, 4> fw1;
   FeedForward<2, 3, 4> fw2(fw1);
 
-  // (2 weights) * (3 neurons on the 1st layer)
+  // (2 weights) * (3 neurons on the 1st layer),
   // then the remaning 4 layers still have 3 neurons but they take the output
-  // of the first layer which is of size 3
+  // of the first layer which is of size 3,
   // 2*3 + 3*3 * 4 = 42
   assert(fw1.getTotalWeights() == 42);
 
-  // Test evaluate :
-  // default weight = 1, activation fct = ReLU
+  // Test evaluate:
+  // Default weight = 1, activation fct = ReLU.
   // L0 :  <(1,2),(1,1)> = 3, 3 neurons -> Y = (3,3,3)
   // L1 : <(3,3,3),(1,1,1)> = 9, 3 neurons -> Y = (9,9,9)
   // L2 :  Y = (27,27,27)

@@ -3,6 +3,7 @@
 #include "activation_functions.hpp"
 #include "layer.hpp"
 #include <cassert>
+#include <ostream>
 
 template <int n_in, int n_out, int n_layer> class FeedForward {
 public:
@@ -20,9 +21,14 @@ public:
   void setAllWeights(double *arr, int size);
   void getAllWeights(double *arr, int size) const;
   double *getY() const { return Y_; }
+  void printY() const;
 
   // * Operators
   layer &operator()(int i_layer) const;
+
+  template <int I, int O, int L>
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const FeedForward<I, O, L> &ff);
 
   // * Other methods
   double *evaluate(double *X, int size);
@@ -32,16 +38,16 @@ public:
   static void unitTest();
 
 protected:
-  double *X_; // array of entry data
-  layer *L_;  // array of layers of size n_layer+1
+  double *X_; // Array of entry data
+  layer *L_;  // Array of layers of size n_layer+1
   int nb_total_weights_;
-  double *Y_; // array, output of the network after evaluation
+  double *Y_; // Array, output of the network after evaluation
 };
 
 // ! Definitions
 
-// this default constructor sets n_layer+1 layers
-// each layer contains n_out neurons
+// This default constructor sets n_layer+1 layers,
+// Each layer contains n_out neurons.
 template <int n_in, int n_out, int n_layer>
 FeedForward<n_in, n_out, n_layer>::FeedForward()
     : X_(nullptr), L_(new layer[n_layer + 1]), nb_total_weights_(0),
@@ -51,10 +57,10 @@ FeedForward<n_in, n_out, n_layer>::FeedForward()
     X_ = new double[n_in];
     Y_ = new double[n_out];
   }
-  // neurons of first layer have a size of n_in
+  // Neurons of first layer have a size of n_in
   L_[0] = layer(n_in, n_out);
-  // the neurons of the other layers have a size of the output of the previous
-  // layer, ie the nb of neurons of the previous layer
+  // The neurons of the other layers have a size of the output of the previous
+  // layer, ie the nb of neurons of the previous layer.
   for (int i = 1; i < n_layer + 1; ++i) {
     L_[i] = layer(L_[i - 1].getNbNeurons(), n_out);
   }
@@ -78,7 +84,7 @@ FeedForward<n_in, n_out, n_layer>::FeedForward(const FeedForward &fw)
       Y_[i] = fw.Y_[i];
 
     for (int i = 0; i < n_layer + 1; ++i)
-      L_[i] = fw.L_[i]; // layer operator = is properly overloaded
+      L_[i] = fw.L_[i]; // Layer operator = is properly overloaded
   }
 }
 
@@ -114,17 +120,17 @@ FeedForward<n_in, n_out, n_layer>::operator=(const FeedForward &fw) {
 template <int n_in, int n_out, int n_layer>
 FeedForward<n_in, n_out, n_layer>::~FeedForward() {
   delete[] X_;
-  delete[] L_; // the destructor from layer will be called
+  delete[] L_; // The destructor from layer will be called
   delete[] Y_;
 }
 
-// this is the number of weights in the network not the sum of the weights
+// This is the number of weights in the network not the sum of the weights
 template <int n_in, int n_out, int n_layer>
 int FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
   int res = 0;
   for (int i = 0; i < n_layer + 1; ++i) {
     for (int j = 0; j < L_[i].getNbNeurons(); ++j) {
-      // for each layer we look at the number of neurons in the layer,
+      // For each layer we look at the number of neurons in the layer,
       // for each neurons we look at its size, neuron size = dim X = dim W,
       // we use the layer overloaded () operator which return a &neuron by ref
       res += L_[i](j).getSizeX();
@@ -133,7 +139,7 @@ int FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
   return res;
 }
 
-// this methods uses the Unif([a,b]) distribution to set random weights
+// This methods uses the Unif([a,b]) distribution to set random weights
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeightsRandoms(double a,
                                                              double b) {
@@ -158,7 +164,7 @@ layer &FeedForward<n_in, n_out, n_layer>::operator()(int i_layer) const {
   return L_[i_layer];
 }
 
-// this method sets the weights for the whole network
+// This method sets the weights for the whole network
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
   if (size == getTotalWeights()) {
@@ -177,7 +183,7 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
   }
 }
 
-// to avoid the "ISO C++ forbids variable length array" error we pass an array
+// To avoid the "ISO C++ forbids variable length array" error we pass an array
 // to the method as parameter and the method fills it instead of
 // making a new array in the method and returning it
 // this problem could be avoided using std::vectors (i think?)
@@ -215,7 +221,7 @@ double *FeedForward<n_in, n_out, n_layer>::evaluate(double *X, int size) {
   return getY();
 }
 
-// unlike virtual pure methods, virtual methods must be define in the parent
+// Unlike virtual pure methods, virtual methods must be define in the parent
 // class
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::build(int *Nb_Neurons, int size) {
@@ -226,26 +232,47 @@ void FeedForward<n_in, n_out, n_layer>::build(int *Nb_Neurons, int size) {
     exit(1);
   }
   if (size == n_layer) {
-    // neurons of first layer have a size of n_in
+    // Neurons of first layer have a size of n_in
     L_[0] = layer(n_in, Nb_Neurons[0]);
-    // the neurons of the other layers have a size of the output of the previous
+    // The neurons of the other layers have a size of the output of the previous
     // layer, ie the nb of neurons of the previous layer
     for (int i = 1; i < n_layer; ++i) {
       L_[i] = layer(L_[i - 1].getNbNeurons(), Nb_Neurons[i]);
     }
-    // construction of the last layer, ie the external layer
+    // Construction of the last layer, ie the external layer
     L_[n_layer] = layer(L_[n_layer - 1].getNbNeurons(), n_out);
 
     nb_total_weights_ = getTotalWeights();
   }
 }
+template <int n_in, int n_out, int n_layer>
+void FeedForward<n_in, n_out, n_layer>::printY() const {
+  if (Y_ != nullptr) {
+    std::cout << "Y = [";
+    for (int i = 0; i < n_out - 1; ++i) {
+      std::cout << Y_[i] << ", ";
+    }
+    std::cout << Y_[n_out - 1] << "] \n";
+  } else {
+    std::cout << "Y = [] \n";
+  }
+}
+template <int n_in, int n_out, int n_layer>
+std::ostream &operator<<(std::ostream &os,
+                         const FeedForward<n_in, n_out, n_layer> &ff) {
+  os << "This network is define with: "
+     << "\n    A number of weights: " << ff.nb_total_weights_ << "\n    ";
+  ff.printY();
+
+  return os;
+};
 
 // ! Tests
 
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::unitTest() {
 
-  // test default constructor
+  // Test default constructor
   FeedForward<n_in, n_out, n_layer> fw1;
 
   assert(fw1.nb_total_weights_ == fw1.getTotalWeights());
@@ -256,7 +283,7 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
     assert(fw1.L_[i].getNbData() == fw1.L_[i - 1].getNbNeurons());
   }
 
-  // test copy construtor
+  // Test copy construtor
   FeedForward<n_in, n_out, n_layer> fw2(fw1);
 
   assert(fw1.nb_total_weights_ == fw2.getTotalWeights());
@@ -290,11 +317,11 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
     }
   }
 
-  // test () operator
+  // Test () operator
   for (int i = 0; i < n_layer + 1; ++i)
     assert(fw1(i) == fw1.L_[i]);
 
-  // test setAllWeights(arr, size arr) && getAllWeights(arr, size arr)
+  // Test setAllWeights(arr, size arr) && getAllWeights(arr, size arr)
   int size_arr = fw1.getTotalWeights();
   double *W = new double[size_arr];
   for (int i = 0; i < size_arr; ++i)

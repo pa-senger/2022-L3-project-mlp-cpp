@@ -8,7 +8,7 @@ template <int n_in, int n_out, int n_layer>
 class mpc : public FeedForward<n_in, n_out, n_layer> {
 public:
   // * Constructors && Destructors using parent's one
-  // parent default contructor will be used by default if not specified
+  // Parent default contructor will be used by default if not specified
   mpc(){};
   mpc(const mpc &m) : FeedForward<n_in, n_out, n_layer>(m){};
   ~mpc(){}; // nothing new to be deleted
@@ -18,9 +18,9 @@ public:
                  std::string name = "n/a");
   void setFct(double (*pf_a)(double), double (*pf_da)(double), int i_layer,
               std::string name = "n/a");
-  // the build  method is already properly defined in FeedForward, no need to
+  // The build  method is already properly defined in FeedForward, no need to
   // overload it, non pure virtual methods must be first define in parent class
-  // anyway
+  // anyway.
 
   // * Tests
   static void unitTest();
@@ -66,7 +66,7 @@ void mpc<n_in, n_out, n_layer>::unitTest() {
     assert(m.L_[i].getNbData() == m.L_[i - 1].getNbNeurons());
   }
 
-  // test copy construtor
+  // Test copy construtor
   mpc<n_in, n_out, n_layer> m2(m);
 
   assert(m.nb_total_weights_ == m2.getTotalWeights());

@@ -8,7 +8,7 @@
 
 class neuron {
 public:
-  // * Construtors && Destructors && Affectation
+  // * Construtors && Destructor && Affectation
   // This default constructor defines a neuron with :
   // size_X_ = 1
   // pre_activation_value = post_activation_value = 0
@@ -67,7 +67,7 @@ public:
   // <.,.> is the euclidian dot product.
   // The result is a double stored in post_activation_value.
   void activateNeuron(const double *X, int size);
-  void printWeights(const double *arr) const;
+  void printArr(const double *arr) const;
   double evaluateFct(double x) const;           // activation_fct(x)
   double evaluateFctDerivative(double x) const; // activation_fct_derivative(x)
 

@@ -3,15 +3,16 @@
 #include <iostream>
 #include <random>
 
-// the member list initializer of all constructors in the project are
+// The member list initializer of all constructors in the project are
 // initialized in the order declarred in the class as suggested by -Weffc++
-// in case some variable depend on each other
+// in case some variable depend on each other.
 neuron::neuron()
     : size_X_{1}, pre_activation_value_{0}, post_activation_value_{0},
       pf_activation_{&ReLU}, pf_activation_d_{&dReLU},
       activation_fct_name_{"ReLU"}, Weight_{new double[2]{
-                                        1, 0}}, // biais at the end of the array
-      Weight_d_{new double[2]{0, 0}}            // db at the end of the array
+                                        1,
+                                        0}}, // Biais at the end of the array.
+      Weight_d_{new double[2]{0, 0}}         // db at the end of the array.
 {}
 
 neuron::neuron(int n)
@@ -27,12 +28,12 @@ neuron::neuron(int n)
   }
 
   for (int i = 0; i < n; ++i) {
-    Weight_[i] = 1;   // the weights are set to 1 by default
-    Weight_d_[i] = 0; // the weights derivatives are set to 0 by default
+    Weight_[i] = 1;   // The weights are set to 1 by default.
+    Weight_d_[i] = 0; // The weights derivatives are set to 0 by default.
   }
 
-  Weight_[n] = 0;   // the biais is stored at the end of the array
-  Weight_d_[n] = 0; // same for db the derivative of biais
+  Weight_[n] = 0;   // The biais is stored at the end of the array.
+  Weight_d_[n] = 0; // Same for db the derivative of biais.
 }
 
 neuron::neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
@@ -53,8 +54,8 @@ neuron::neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
     Weight_d_[i] = 0;
   }
 
-  Weight_[n] = 0;   // biais
-  Weight_d_[n] = 0; // db
+  Weight_[n] = 0;   // Biais.
+  Weight_d_[n] = 0; // Biais derivative db.
 }
 
 neuron::neuron(const neuron &ne)
@@ -65,14 +66,14 @@ neuron::neuron(const neuron &ne)
       Weight_{new double[ne.size_X_ + 1]}, Weight_d_{
                                                new double[ne.size_X_ + 1]} {
 
-  // we need to copy to size_X + 1 to copy the biais and db as well
+  // We need to copy to size_X + 1 to copy the biais and db as well.
   for (int i = 0; i < (size_X_ + 1); ++i) {
     Weight_[i] = ne.Weight_[i];
     Weight_d_[i] = ne.Weight_d_[i];
   }
 }
 
-// Weight_ and Weight_d_ are at least initialized will nullptr -> no errors
+// Weight_ and Weight_d_ are at least initialized will nullptr -> no errors.
 neuron::~neuron() {
   delete[] Weight_;
   delete[] Weight_d_;
@@ -86,11 +87,11 @@ neuron &neuron::operator=(const neuron &ne) {
     pf_activation_ = ne.pf_activation_;
     pf_activation_d_ = ne.pf_activation_d_;
 
-    delete[] Weight_;   // we need to delete those to create new ones
-    delete[] Weight_d_; // with the right size
+    delete[] Weight_;   // We need to delete those to create new ones with
+    delete[] Weight_d_; // the right size.
 
-    Weight_ = new double[size_X_ + 1];   // +1 to stored the biais at the end
-    Weight_d_ = new double[size_X_ + 1]; // idem for db
+    Weight_ = new double[size_X_ + 1];   // +1 to stored the biais at the endi
+    Weight_d_ = new double[size_X_ + 1]; // Idem for db.
 
     for (int i = 0; i < size_X_ + 1; ++i) {
       Weight_[i] = ne.Weight_[i];
@@ -173,7 +174,7 @@ void neuron::setWeightsDerivativesZeros() {
 
 void neuron::setWeightsRandom(int a, int b) {
   std::random_device rd;
-  std::mt19937 gen(rd()); // standard mersenne_twister_engine seeded with rd()
+  std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
   std::uniform_real_distribution<double> dis(a, b);
 
   for (int i = 0; i < size_X_; ++i)
@@ -207,7 +208,7 @@ bool neuron::operator==(const neuron &ne) const {
 
 bool neuron::operator!=(const neuron &ne) const { return !(*this == ne); }
 
-void neuron::printWeights(const double *arr) const {
+void neuron::printArr(const double *arr) const {
   if (arr != nullptr) {
     std::cout << "[";
     for (int i = 0; i < size_X_ - 1; ++i) {
@@ -215,7 +216,7 @@ void neuron::printWeights(const double *arr) const {
     }
     std::cout << arr[size_X_ - 1] << "] \n";
   } else {
-    std::cout << "the array is empty \n";
+    std::cout << "[] \n";
   }
 }
 
@@ -227,9 +228,9 @@ std::ostream &operator<<(std::ostream &os, const neuron &ne) {
   os << "This neuron is define with : \n"
      << "    An entry vector X of size : " << ne.getSizeX()
      << "\n    A vector of weights : ";
-  ne.printWeights(ne.Weight_);
+  ne.printArr(ne.Weight_);
   os << "    A vector of weight's derivatives : ";
-  ne.printWeights(ne.Weight_d_);
+  ne.printArr(ne.Weight_d_);
   os << "    A biais b : " << ne.getBiais()
      << ", its derivative db : " << ne.getDb()
      << "\n    An activation function named : " << ne.activation_fct_name_
