@@ -1,6 +1,5 @@
 #include "../include/activation_functions.hpp"
 #include "../include/neuron.hpp"
-
 #include <cassert>
 #include <cmath>
 
@@ -11,7 +10,7 @@ double (*pf_ds)(double) = &dSigma;
 
 void neuron::unitTest() {
   // First we test the getters and setters so we can use them in the rest of the
-  // tests, making it more reable.
+  // tests, making it more readable.
   neuron n(3);
   n.setWeight(1.1, 0);
   n.setWeightDerivative(2.2, 0);
@@ -28,8 +27,8 @@ void neuron::unitTest() {
   assert(n.pf_activation_ == pf_s);
   assert(n.pf_activation_(2.2) - pf_s(2.2) <= TOL); // sigma(2.2) ~= 0.90024
   assert(n.pf_activation_d_ == pf_ds);
-  assert(n.pf_activation_d_(2.2) - pf_ds(2.2) <=
-         TOL); // dSigma(2.2) ~= 0.109459
+  assert(n.pf_activation_d_(2.2) - pf_ds(2.2) <= TOL);
+  // dSigma(2.2) ~= 0.109459
 
   // Test default constructor
   neuron n1;

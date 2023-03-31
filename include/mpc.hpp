@@ -7,7 +7,7 @@
 template <int n_in, int n_out, int n_layer>
 class mpc : public FeedForward<n_in, n_out, n_layer> {
 public:
-  // * Constructors && Destructors using parent's one
+  // * Constructors && Destructor using parent's one
   // Parent default contructor will be used by default if not specified
   mpc(){};
   mpc(const mpc &m) : FeedForward<n_in, n_out, n_layer>(m){};

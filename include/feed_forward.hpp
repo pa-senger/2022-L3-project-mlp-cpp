@@ -226,7 +226,7 @@ double *FeedForward<n_in, n_out, n_layer>::evaluate(double *X, int size) {
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::build(int *Nb_Neurons, int size) {
   if (size != n_layer) {
-    std::cout << "Error build: the number of layer and the size of the array"
+    std::cout << "Error build: the number of layer and the size of the array "
                  "must be the same.\n             size req: "
               << n_layer << " , given : " << size << std::endl;
     exit(1);
@@ -260,7 +260,7 @@ void FeedForward<n_in, n_out, n_layer>::printY() const {
 template <int n_in, int n_out, int n_layer>
 std::ostream &operator<<(std::ostream &os,
                          const FeedForward<n_in, n_out, n_layer> &ff) {
-  os << "This network is define with: "
+  os << "This neural network is define with: "
      << "\n    A number of weights: " << ff.nb_total_weights_ << "\n    ";
   ff.printY();
 
@@ -275,6 +275,7 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
   // Test default constructor
   FeedForward<n_in, n_out, n_layer> fw1;
 
+  // getTotalWeights is also tested with real values en the test.cpp
   assert(fw1.nb_total_weights_ == fw1.getTotalWeights());
   assert(fw1.L_[0].getNbData() == n_in);
   assert(fw1.L_[n_layer].getNbNeurons() == n_out);
@@ -336,6 +337,8 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
 
   delete[] W;
   delete[] W2;
+
+  // evaluate && build are tested with real values in test.cpp
 }
 
 #endif
