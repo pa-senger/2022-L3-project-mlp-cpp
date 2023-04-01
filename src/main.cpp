@@ -36,13 +36,13 @@ int main() {
   fw3.evaluate(X, 3);
   std::cout << fw3 << std::endl;
 
-  mpc<3, 4, 500> m;
+  mpc<3, 4, 200> m;
 
-  int N2[500];
-  for (int i = 0; i < 500; ++i)
+  int N2[200];
+  for (int i = 0; i < 200; ++i)
     N2[i] = i + 1;
 
-  m.build(N2, 500);
+  m.build(N2, 200);
   m.setAllWeightsRandoms(-1, 1);
   m.setAllFct(sigma, dSigma, "sigmoid");
   m.evaluate(X, 3);

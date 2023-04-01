@@ -32,16 +32,17 @@ public:
 
   // * Other methods
   double *evaluate(double *X, int size);
-  virtual void build(int *Nb_Neurons, int size);
+  virtual void build(__attribute__((unused)) int *Nb_Neurons,
+                     __attribute__((unused)) int size) {}
 
   // * Tests
   static void unitTest();
 
 protected:
-  double *X_; // Array of entry data
-  layer *L_;  // Array of layers of size n_layer+1
+  double *X_; // Array of entry data.
+  layer *L_;  // Array of layers of size n_layer+1 (n_layer hidden layer).
   int nb_total_weights_;
-  double *Y_; // Array, output of the network after evaluation
+  double *Y_; // Array, output of the network after evaluation.
 };
 
 // ! Definitions
@@ -57,7 +58,7 @@ FeedForward<n_in, n_out, n_layer>::FeedForward()
     X_ = new double[n_in];
     Y_ = new double[n_out];
   }
-  // Neurons of first layer have a size of n_in
+  // Neurons of first layer have a size of n_in.
   L_[0] = layer(n_in, n_out);
   // The neurons of the other layers have a size of the output of the previous
   // layer, ie the nb of neurons of the previous layer.
@@ -84,7 +85,7 @@ FeedForward<n_in, n_out, n_layer>::FeedForward(const FeedForward &fw)
       Y_[i] = fw.Y_[i];
 
     for (int i = 0; i < n_layer + 1; ++i)
-      L_[i] = fw.L_[i]; // Layer operator = is properly overloaded
+      L_[i] = fw.L_[i]; // Layer operator = is properly overloaded.
   }
 }
 
@@ -120,11 +121,11 @@ FeedForward<n_in, n_out, n_layer>::operator=(const FeedForward &fw) {
 template <int n_in, int n_out, int n_layer>
 FeedForward<n_in, n_out, n_layer>::~FeedForward() {
   delete[] X_;
-  delete[] L_; // The destructor from layer will be called
+  delete[] L_; // The destructor from layer will be called.
   delete[] Y_;
 }
 
-// This is the number of weights in the network not the sum of the weights
+// This is the number of weights in the network not the sum of the weights.
 template <int n_in, int n_out, int n_layer>
 int FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
   int res = 0;
@@ -132,14 +133,14 @@ int FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
     for (int j = 0; j < L_[i].getNbNeurons(); ++j) {
       // For each layer we look at the number of neurons in the layer,
       // for each neurons we look at its size, neuron size = dim X = dim W,
-      // we use the layer overloaded () operator which return a &neuron by ref
+      // we use the layer overloaded () operator which return a &neuron by ref.
       res += L_[i](j).getSizeX();
     }
   }
   return res;
 }
 
-// This methods uses the Unif([a,b]) distribution to set random weights
+// This methods uses the Unif([a,b]) distribution to set random weights.
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeightsRandoms(double a,
                                                              double b) {
@@ -164,11 +165,11 @@ layer &FeedForward<n_in, n_out, n_layer>::operator()(int i_layer) const {
   return L_[i_layer];
 }
 
-// This method sets the weights for the whole network
+// This method sets the weights for the whole network.
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr, int size) {
   if (size == getTotalWeights()) {
-    int index = 0; // to keep track of where we are in arr
+    int index = 0; // to keep track of where we are in arr.
     for (int i = 0; i < n_layer + 1; ++i) {
       for (int j = 0; j < L_[i].getNbNeurons(); ++j)
         for (int k = 0; k < L_[i](j).getSizeX(); ++k) {
@@ -191,7 +192,7 @@ template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::getAllWeights(double *arr,
                                                       int size) const {
   if (size == getTotalWeights()) {
-    int index = 0; // to keep track of where we are in arr
+    int index = 0; // to keep track of where we are in arr.
     for (int i = 0; i < n_layer + 1; ++i) {
       for (int j = 0; j < L_[i].getNbNeurons(); j++)
         for (int k = 0; k < L_[i](j).getSizeX(); ++k) {
@@ -221,30 +222,6 @@ double *FeedForward<n_in, n_out, n_layer>::evaluate(double *X, int size) {
   return getY();
 }
 
-// Unlike virtual pure methods, virtual methods must be define in the parent
-// class
-template <int n_in, int n_out, int n_layer>
-void FeedForward<n_in, n_out, n_layer>::build(int *Nb_Neurons, int size) {
-  if (size != n_layer) {
-    std::cout << "Error build: the number of layer and the size of the array "
-                 "must be the same.\n             size req: "
-              << n_layer << " , given : " << size << std::endl;
-    exit(1);
-  }
-  if (size == n_layer) {
-    // Neurons of first layer have a size of n_in
-    L_[0] = layer(n_in, Nb_Neurons[0]);
-    // The neurons of the other layers have a size of the output of the previous
-    // layer, ie the nb of neurons of the previous layer
-    for (int i = 1; i < n_layer; ++i) {
-      L_[i] = layer(L_[i - 1].getNbNeurons(), Nb_Neurons[i]);
-    }
-    // Construction of the last layer, ie the external layer
-    L_[n_layer] = layer(L_[n_layer - 1].getNbNeurons(), n_out);
-
-    nb_total_weights_ = getTotalWeights();
-  }
-}
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::printY() const {
   if (Y_ != nullptr) {
@@ -275,7 +252,7 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
   // Test default constructor
   FeedForward<n_in, n_out, n_layer> fw1;
 
-  // getTotalWeights is also tested with real values en the test.cpp
+  // getTotalWeights is also tested with real values in test_feed-forward.cpp
   assert(fw1.nb_total_weights_ == fw1.getTotalWeights());
   assert(fw1.L_[0].getNbData() == n_in);
   assert(fw1.L_[n_layer].getNbNeurons() == n_out);
@@ -311,7 +288,7 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
   for (int i = 0; i < n_layer + 1; ++i) {
     for (int j = 0; j < fw1.L_[i].getNbNeurons(); ++i) {
       for (int k = 0; k < fw1(i)(j).getSizeX() - 1; ++k) {
-        // unless we're very unlucky all weights should be differents
+        // Unless we're very unlucky all weights should be differents.
         assert(fw1(i)(j).getWeight(k) != fw1(i)(j).getWeight(k + 1));
         // std::cout << fw1(i)(j).getWeight(k) << std::endl;
       }
@@ -338,7 +315,7 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
   delete[] W;
   delete[] W2;
 
-  // evaluate && build are tested with real values in test.cpp
+  // evaluate is tested with real values in test_feed-forward.cpp
 }
 
 #endif
