@@ -9,15 +9,19 @@ class mpc : public FeedForward<n_in, n_out, n_layer> {
 public:
   // * Constructors && Destructor using parent's one
   // Parent default contructor will be used by default if not specified.
-  mpc(){};
-  mpc(const mpc &m) : FeedForward<n_in, n_out, n_layer>(m){};
-  ~mpc(){};
+  mpc() {}
+  mpc(const mpc &m) : FeedForward<n_in, n_out, n_layer>(m) {}
+  ~mpc() {}
 
   // * Methods
+  // This method sets the activation fct for all the layer in the network.
   void setAllFct(double (*pf_a)(double), double (*pf_da)(double),
                  std::string name = "n/a");
+  // This method sets the activation for a single layer.
   void setFct(double (*pf_a)(double), double (*pf_da)(double), int i_layer,
               std::string name = "n/a");
+  // This method build the neural network using an array containing the
+  // number of neurons on each hidden layer as a param
   void build(int *Nb_Neurons, int size);
 
   // * Tests
@@ -122,7 +126,7 @@ void mpc<n_in, n_out, n_layer>::unitTest() {
     assert(m(0)(j).evaluateFctDerivative(-3) == 3);
   }
 
-  // build is tested in test_mpc.cpp with real values.
+  // The build method is tested in test_mpc.cpp with real values.
 }
 
 #endif

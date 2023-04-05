@@ -315,7 +315,7 @@ void FeedForward<n_in, n_out, n_layer>::unitTest() {
   delete[] W;
   delete[] W2;
 
-  // evaluate is tested with real values in test_feed-forward.cpp
+  // The evaluate method is tested with real values in test_feed-forward.cpp
 }
 
 #endif

@@ -69,7 +69,7 @@ void layer::unitTest() {
   assert(l1.getNbData() == l2.getNbData());
   assert(l1.getNbNeurons() == l2.getNbNeurons());
 
-  // operator == is overloaded for neurons
+  // Operator == is overloaded for neurons
   for (int i = 0; i < 2; ++i)
     assert(l1.arr_neurons_[i] == l2.arr_neurons_[i]);
 

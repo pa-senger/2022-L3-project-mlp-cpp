@@ -3,6 +3,8 @@
 
 int main() {
 
+  // As mpc is a class template, most tests are written in the hpp.
+
   mpc<0, 0, 0> m0;
   mpc<1, 1, 1> m1;
   mpc<2, 3, 4> m2;

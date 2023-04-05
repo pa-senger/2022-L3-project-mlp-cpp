@@ -4,6 +4,8 @@
 
 int main() {
 
+  // As FeedForward is a class template, most tests are written in the hpp.
+
   FeedForward<0, 0, 0> fw;
   FeedForward<2, 3, 4> fw1;
   FeedForward<2, 3, 4> fw2(fw1);
