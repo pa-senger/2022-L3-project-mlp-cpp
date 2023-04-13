@@ -51,7 +51,7 @@ void layer::unitTest() {
   assert(c1.nb_neurons_ == c2.nb_neurons_);
   assert(c1.nb_data_ == c2.nb_data_);
   assert(c1.arr_neurons_ != c2.arr_neurons_);
-  for (int i = 0; i < c1.nb_neurons_; ++i)
+  for (std::size_t i = 0; i < c1.nb_neurons_; ++i)
     assert(c1.arr_neurons_[i] == c2.arr_neurons_[i]);
 
   // Test affectation operator

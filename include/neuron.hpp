@@ -3,6 +3,7 @@
 
 #include "../include/activation_functions.hpp"
 
+#include <cstddef>
 #include <iostream>
 #include <string>
 
@@ -20,9 +21,9 @@ public:
   // The weigths are sets to 1, their derivatives to 0.
   // The biais and its derivative db are set to 0.
   // The activation fct is set as ReLU.
-  neuron(int n);
+  neuron(const std::size_t n);
   // This constructor takes the activation fct and its derivative as parameters.
-  neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
+  neuron(const std::size_t n, double (*pf_a)(double), double (*pf_da)(double),
          std::string fct_name = "n/a");
   // This is a copy constructor, arrays are deep copied not shared.
   neuron(const neuron &ne);
@@ -30,18 +31,22 @@ public:
   ~neuron();
 
   // * Getters && Setters
-  int getSizeX() const;
-  double getBiais() const;
-  double getDb() const;
-  double getWeight(int i) const;
-  double getWeightDerivative(int i) const;
-  double getPe() const; // pre_activation_value
-  double getPo() const; // post_activation_value
 
-  void setBiais(double b);
-  void setDb(double db); // Derivative of biais
-  void setWeight(double weight, int i);
-  void setWeightDerivative(double dw, int i);
+  std::size_t getSizeX() const { return size_X_; }
+  double getBiais() const { return Weight_[size_X_]; }
+  double getDb() const { return Weight_d_[size_X_]; }
+  double getWeight(const std::size_t i) const { return Weight_[i]; }
+  double getWeightDerivative(const std::size_t i) const { return Weight_d_[i]; }
+  // pre activation value
+  inline double getPe() const { return pre_activation_value_; }
+  // post activation value
+  inline double getPo() const { return post_activation_value_; }
+  inline void setBiais(double b) { Weight_[size_X_] = b; }
+  inline void setDb(double db) { Weight_d_[size_X_] = db; }
+  inline void setWeight(double w, const std::size_t i) { Weight_[i] = w; }
+  inline void setWeightDerivative(double dw, const std::size_t i) {
+    Weight_d_[i] = dw;
+  }
   void setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
                          std::string name = "n/a");
   void setActivationFctName(std::string name);
@@ -66,7 +71,7 @@ public:
   // where X is the entry vector, W the vector of weights Weights_ and
   // <.,.> is the euclidian dot product.
   // The result is a double stored in post_activation_value.
-  void activateNeuron(const double *X, int size);
+  void activateNeuron(const double *X, const std::size_t size);
   void printArr(const double *arr) const;
   double evaluateFct(double x) const;           // activation_fct(x)
   double evaluateFctDerivative(double x) const; // activation_fct_derivative(x)
@@ -75,7 +80,7 @@ public:
   static void unitTest();
 
 private:
-  int size_X_; // The size of the entry vector of the neuron.
+  std::size_t size_X_; // The size of the entry vector of the neuron.
   double pre_activation_value_;
   double post_activation_value_;
   double (*pf_activation_)(double);

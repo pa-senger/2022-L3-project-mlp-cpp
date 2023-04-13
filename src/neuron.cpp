@@ -1,5 +1,6 @@
 #include "../include/neuron.hpp"
 #include <cmath>
+#include <cstddef>
 #include <iostream>
 #include <random>
 
@@ -15,7 +16,7 @@ neuron::neuron()
       Weight_d_{new double[2]{0, 0}}         // db at the end of the array.
 {}
 
-neuron::neuron(int n)
+neuron::neuron(const std::size_t n)
     : size_X_{n}, pre_activation_value_{0}, post_activation_value_{0},
       pf_activation_{&ReLU}, pf_activation_d_{&dReLU},
       activation_fct_name_{"ReLU"}, Weight_{new double[n + 1]},
@@ -27,7 +28,7 @@ neuron::neuron(int n)
     exit(1);
   }
 
-  for (int i = 0; i < n; ++i) {
+  for (std::size_t i = 0; i < n; ++i) {
     Weight_[i] = 1;   // The weights are set to 1 by default.
     Weight_d_[i] = 0; // The weights derivatives are set to 0 by default.
   }
@@ -36,8 +37,8 @@ neuron::neuron(int n)
   Weight_d_[n] = 0; // Same for db the derivative of biais.
 }
 
-neuron::neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
-               std::string fct_name)
+neuron::neuron(const std::size_t n, double (*pf_a)(double),
+               double (*pf_da)(double), std::string fct_name)
     : size_X_{n}, pre_activation_value_{0}, post_activation_value_{0},
       pf_activation_{pf_a}, pf_activation_d_{pf_da},
       activation_fct_name_{fct_name}, Weight_{new double[n + 1]},
@@ -49,7 +50,7 @@ neuron::neuron(int n, double (*pf_a)(double), double (*pf_da)(double),
     exit(1);
   }
 
-  for (int i = 0; i < n; ++i) {
+  for (std::size_t i = 0; i < n; ++i) {
     Weight_[i] = 1;
     Weight_d_[i] = 0;
   }
@@ -67,7 +68,7 @@ neuron::neuron(const neuron &ne)
                                                new double[ne.size_X_ + 1]} {
 
   // We need to copy to size_X + 1 to copy the biais and db as well.
-  for (int i = 0; i < (size_X_ + 1); ++i) {
+  for (std::size_t i = 0; i < (size_X_ + 1); ++i) {
     Weight_[i] = ne.Weight_[i];
     Weight_d_[i] = ne.Weight_d_[i];
   }
@@ -93,64 +94,12 @@ neuron &neuron::operator=(const neuron &ne) {
     Weight_ = new double[size_X_ + 1];   // +1 to stored the biais at the endi
     Weight_d_ = new double[size_X_ + 1]; // Idem for db.
 
-    for (int i = 0; i < size_X_ + 1; ++i) {
+    for (std::size_t i = 0; i < size_X_ + 1; ++i) {
       Weight_[i] = ne.Weight_[i];
       Weight_d_[i] = ne.Weight_d_[i];
     }
   }
   return *this;
-}
-
-int neuron::getSizeX() const { return size_X_; }
-
-double neuron::getBiais() const { return Weight_[size_X_]; }
-
-double neuron::getDb() const { return Weight_d_[size_X_]; }
-
-double neuron::getWeight(int i) const {
-  double weight = 0;
-
-  if (i < size_X_ && i >= 0)
-    weight = Weight_[i];
-
-  return weight;
-}
-
-double neuron::getWeightDerivative(int i) const {
-  if (i < 0) {
-    std::cout << "Error getWeightDerivative: you must use positive integer for "
-                 "this !\n";
-    exit(1);
-  }
-  double dw = 0;
-
-  if (i < size_X_ && i >= 0)
-    dw = Weight_d_[i];
-
-  return dw;
-}
-
-double neuron::getPe() const { return pre_activation_value_; }
-
-double neuron::getPo() const { return post_activation_value_; }
-
-void neuron::setBiais(double b) { Weight_[size_X_] = b; }
-
-void neuron::setDb(double db) { Weight_d_[size_X_] = db; }
-
-void neuron::setWeight(double w, int i) {
-  if (i < size_X_ && i >= 0)
-    Weight_[i] = w;
-}
-
-void neuron::setWeightDerivative(double dw, int i) {
-  if (i < 0) {
-    std::cout << "Error setWeightDerivative: you must use positive integer for "
-                 "this !\n";
-    exit(1);
-  }
-  if (i < size_X_ && i >= 0)
-    Weight_d_[i] = dw;
 }
 
 void neuron::setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
@@ -161,13 +110,13 @@ void neuron::setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
 }
 
 void neuron::setWeightsOnes() {
-  for (int i = 0; i < size_X_; ++i) {
+  for (std::size_t i = 0; i < size_X_; ++i) {
     Weight_[i] = 1;
   }
 }
 
 void neuron::setWeightsDerivativesZeros() {
-  for (int i = 0; i < size_X_; ++i) {
+  for (std::size_t i = 0; i < size_X_; ++i) {
     Weight_d_[i] = 0;
   }
 }
@@ -177,15 +126,15 @@ void neuron::setWeightsRandom(int a, int b) {
   std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
   std::uniform_real_distribution<double> dis(a, b);
 
-  for (int i = 0; i < size_X_; ++i)
+  for (std::size_t i = 0; i < size_X_; ++i)
     Weight_[i] = dis(gen);
 }
 
-void neuron::activateNeuron(const double *X, int size) {
+void neuron::activateNeuron(const double *X, const std::size_t size) {
   if (size == size_X_) {
     double dot = 0;
 
-    for (int i = 0; i < size_X_; ++i) {
+    for (std::size_t i = 0; i < size_X_; ++i) {
       dot += (Weight_[i] * X[i]);
     }
     pre_activation_value_ = dot + getBiais();
@@ -198,7 +147,7 @@ bool neuron::operator==(const neuron &ne) const {
       pf_activation_d_ != ne.pf_activation_d_)
     return false;
 
-  for (int i = 0; i < size_X_ + 1; ++i) {
+  for (std::size_t i = 0; i < size_X_ + 1; ++i) {
     if (Weight_[i] != ne.Weight_[i] || Weight_d_[i] != ne.Weight_d_[i])
       return false;
   }
@@ -211,7 +160,7 @@ bool neuron::operator!=(const neuron &ne) const { return !(*this == ne); }
 void neuron::printArr(const double *arr) const {
   if (arr != nullptr) {
     std::cout << "[";
-    for (int i = 0; i < size_X_ - 1; ++i) {
+    for (std::size_t i = 0; i < size_X_ - 1; ++i) {
       std::cout << arr[i] << ", ";
     }
     std::cout << arr[size_X_ - 1] << "] \n";

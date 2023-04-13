@@ -3,6 +3,7 @@
 #include "../include/activation_functions.hpp"
 #include "feed_forward.hpp"
 #include <cassert>
+#include <cstddef>
 
 template <int n_in, int n_out, int n_layer>
 class mpc : public FeedForward<n_in, n_out, n_layer> {
@@ -37,7 +38,7 @@ void mpc<n_in, n_out, n_layer>::setAllFct(double (*pf_a)(double),
                                           double (*pf_da)(double),
                                           std::string name) {
   for (int i = 0; i < n_layer + 1; ++i) {
-    for (int j = 0; j < this->L_[i].getNbNeurons(); ++j) {
+    for (std::size_t j = 0; j < this->L_[i].getNbNeurons(); ++j) {
       this->L_[i].setActivationFcts(pf_a, pf_da, j, name);
     }
   }
@@ -47,7 +48,7 @@ template <int n_in, int n_out, int n_layer>
 void mpc<n_in, n_out, n_layer>::setFct(double (*pf_a)(double),
                                        double (*pf_da)(double), int i_layer,
                                        std::string name) {
-  for (int j = 0; j < this->L_[i_layer].getNbNeurons(); ++j) {
+  for (std::size_t j = 0; j < this->L_[i_layer].getNbNeurons(); ++j) {
     this->L_[i_layer].setActivationFcts(pf_a, pf_da, j, name);
   }
 }
@@ -101,7 +102,7 @@ void mpc<n_in, n_out, n_layer>::unitTest() {
     assert(m.L_[i].getNbData() == m2.L_[i].getNbData());
     assert(m.L_[i].getNbNeurons() == m2.L_[i].getNbNeurons());
 
-    for (int j = 0; j < m.L_[i].getNbNeurons(); ++j) {
+    for (std::size_t j = 0; j < m.L_[i].getNbNeurons(); ++j) {
       assert(m.L_[i](j).getSizeX() == m2.L_[i](j).getSizeX());
     }
   }
@@ -112,7 +113,7 @@ void mpc<n_in, n_out, n_layer>::unitTest() {
 
   m.setAllFct(pf_a, pf_da, "sigmoid");
   for (int i = 0; i < n_layer + 1; ++i) {
-    for (int j = 0; j < m.L_[i].getNbNeurons(); j++) {
+    for (std::size_t j = 0; j < m.L_[i].getNbNeurons(); j++) {
       assert(m(i)(j).evaluateFct(2.2) == pf_a(2.2));
       assert(m(i)(j).evaluateFctDerivative(2.2) == pf_da(2.2));
     }
@@ -121,7 +122,7 @@ void mpc<n_in, n_out, n_layer>::unitTest() {
   double (*pf_h)(double) = &inv;
 
   m.setFct(pf_h, pf_h, 0);
-  for (int j = 0; j < m.L_[0].getNbNeurons(); j++) {
+  for (std::size_t j = 0; j < m.L_[0].getNbNeurons(); j++) {
     assert(m(0)(j).evaluateFct(2.2) == -2.2);
     assert(m(0)(j).evaluateFctDerivative(-3) == 3);
   }
