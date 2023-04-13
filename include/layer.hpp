@@ -26,15 +26,15 @@ public:
   // Y is the array created by evaluating the layer
   inline double *getY() const { return Y_; }
 
-  void setWeight(double val, const std::size_t i_neuron,
+  void setWeight(const double val, const std::size_t i_neuron,
                  const std::size_t j_weight);
-  void setWeightDerivative(double val, const std::size_t i_neuron,
+  void setWeightDerivative(const double val, const std::size_t i_neuron,
                            const std::size_t j_weight);
   void setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
                          const std::size_t i_neuron, std::string name = "n/a");
   void setActivationFctName(std::string name, const std::size_t i_neuron);
-  void setBiais(double val, const std::size_t i_neuron);
-  void setDb(double val, const std::size_t i_neuron);
+  void setBiais(const double val, const std::size_t i_neuron);
+  void setDb(const double val, const std::size_t i_neuron);
 
   // * Operators
   // 2 layers are equal if they have the same number of neurons
@@ -46,16 +46,17 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const layer &l);
 
   // * Other methods
-  void addWeightDerivative(double val, const std::size_t i_neuron,
+  void addWeightDerivative(const double val, const std::size_t i_neuron,
                            const std::size_t j_weight);
   // Those 3 next methods set weights to all of the neurons in the layer
   void setAllWeightsOnes();
   // Random weights are taken in the interval [a, b], ditribion : Unif([a, b])
-  void setAllWeightsRandoms(int a, int b);
+  void setAllWeightsRandoms(const int a, const int b);
   void setAllWeightsDerivativesZeros();
   // This method returns the value of the activation fct given an entry x
-  double evaluateFct(double x, const std::size_t i_neuron) const;
-  double evaluateFctDerivative(double x, const std::size_t i_neuron) const;
+  double evaluateFct(const double x, const std::size_t i_neuron) const;
+  double evaluateFctDerivative(const double x,
+                               const std::size_t i_neuron) const;
   // This method evaluate the layer, ie activate each neuron,
   // each neuron takes X and return po the post_activation_value,
   // the method returns Y_ = (po_1,...,po_n)

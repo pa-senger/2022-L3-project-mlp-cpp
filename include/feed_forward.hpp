@@ -17,7 +17,7 @@ public:
 
   // * Getters && Setters
   std::size_t getTotalWeights() const;
-  void setAllWeightsRandoms(double a, double b);
+  void setAllWeightsRandoms(const double a, const double b);
   void setAllWeightsDerivativesZeros();
   void setAllWeights(double *arr, std::size_t size);
   void getAllWeights(double *arr, std::size_t size) const;
@@ -25,14 +25,14 @@ public:
   void printY() const;
 
   // * Operators
-  layer &operator()(int i_layer) const;
+  layer &operator()(std::size_t i_layer) const;
 
   template <int I, int O, int L>
   friend std::ostream &operator<<(std::ostream &os,
                                   const FeedForward<I, O, L> &ff);
 
   // * Other methods
-  double *evaluate(double *X, const std::size_t size);
+  double *evaluate(const double *X, const std::size_t size);
   virtual void build(__attribute__((unused)) int *Nb_Neurons,
                      __attribute__((unused)) int size) {}
 
@@ -143,8 +143,8 @@ std::size_t FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
 
 // This methods uses the Unif([a,b]) distribution to set random weights.
 template <int n_in, int n_out, int n_layer>
-void FeedForward<n_in, n_out, n_layer>::setAllWeightsRandoms(double a,
-                                                             double b) {
+void FeedForward<n_in, n_out, n_layer>::setAllWeightsRandoms(const double a,
+                                                             const double b) {
   for (int i = 0; i < n_layer + 1; ++i)
     L_[i].setAllWeightsRandoms(a, b);
 }
@@ -156,7 +156,8 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeightsDerivativesZeros() {
 }
 
 template <int n_in, int n_out, int n_layer>
-layer &FeedForward<n_in, n_out, n_layer>::operator()(int i_layer) const {
+layer &
+FeedForward<n_in, n_out, n_layer>::operator()(std::size_t i_layer) const {
   if (i_layer > n_layer + 1) {
     std::cout
         << "Error operator(): there isn't as many layers in the system! \n";
@@ -206,7 +207,7 @@ void FeedForward<n_in, n_out, n_layer>::getAllWeights(double *arr,
 }
 
 template <int n_in, int n_out, int n_layer>
-double *FeedForward<n_in, n_out, n_layer>::evaluate(double *X,
+double *FeedForward<n_in, n_out, n_layer>::evaluate(const double *X,
                                                     const std::size_t size) {
   if (size != n_in || n_in <= 0 || n_out <= 0) {
     std::cout << "Error evaluate: size required : " << n_in

@@ -121,7 +121,7 @@ void neuron::setWeightsDerivativesZeros() {
   }
 }
 
-void neuron::setWeightsRandom(int a, int b) {
+void neuron::setWeightsRandom(const int a, const int b) {
   std::random_device rd;
   std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
   std::uniform_real_distribution<double> dis(a, b);
@@ -190,7 +190,7 @@ std::ostream &operator<<(std::ostream &os, const neuron &ne) {
   return os;
 }
 
-double neuron::evaluateFct(double x) const {
+double neuron::evaluateFct(const double x) const {
   double res = 0;
 
   if (pf_activation_ != nullptr)
@@ -199,7 +199,7 @@ double neuron::evaluateFct(double x) const {
   return res;
 }
 
-double neuron::evaluateFctDerivative(double x) const {
+double neuron::evaluateFctDerivative(const double x) const {
   double res = 0;
 
   if (pf_activation_d_ != nullptr)

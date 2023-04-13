@@ -104,7 +104,7 @@ double layer::getPo(const std::size_t i_neuron) const {
   return res;
 }
 
-void layer::setWeight(double val, const std::size_t i_neuron,
+void layer::setWeight(const double val, const std::size_t i_neuron,
                       const std::size_t j_weight) {
   if (nb_neurons_ == 0 || i_neuron >= nb_neurons_ ||
       j_weight > (arr_neurons_[i_neuron].getSizeX()) ||
@@ -116,7 +116,7 @@ void layer::setWeight(double val, const std::size_t i_neuron,
   }
 }
 
-void layer::setWeightDerivative(double val, const std::size_t i_neuron,
+void layer::setWeightDerivative(const double val, const std::size_t i_neuron,
                                 const std::size_t j_weight) {
   if (nb_neurons_ == 0 || i_neuron >= nb_neurons_ ||
       j_weight >= (arr_neurons_[i_neuron].getSizeX()) ||
@@ -169,7 +169,7 @@ std::ostream &operator<<(std::ostream &os, const layer &l) {
   return os;
 }
 
-void layer::setBiais(double val, const std::size_t i_neuron) {
+void layer::setBiais(const double val, const std::size_t i_neuron) {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setBiais(val);
   } else {
@@ -178,7 +178,7 @@ void layer::setBiais(double val, const std::size_t i_neuron) {
   }
 }
 
-void layer::setDb(double val, const std::size_t i_neuron) {
+void layer::setDb(const double val, const std::size_t i_neuron) {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setDb(val);
   } else {
@@ -231,7 +231,7 @@ bool layer::operator<=(const layer &l) const {
   return res;
 }
 
-void layer::addWeightDerivative(double val, const std::size_t i_neuron,
+void layer::addWeightDerivative(const double val, const std::size_t i_neuron,
                                 const std::size_t j_weight) {
   if (i_neuron < nb_neurons_ && j_weight < arr_neurons_[i_neuron].getSizeX() &&
       arr_neurons_ != nullptr && nb_neurons_ != 0) {
@@ -249,7 +249,7 @@ void layer::setAllWeightsOnes() {
   }
 }
 
-void layer::setAllWeightsRandoms(int a, int b) {
+void layer::setAllWeightsRandoms(const int a, const int b) {
   if (nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     for (std::size_t i = 0; i < nb_neurons_; ++i) {
       arr_neurons_[i].setWeightsRandom(a, b);
@@ -266,7 +266,7 @@ void layer::setAllWeightsDerivativesZeros() {
   }
 }
 
-double layer::evaluateFct(double x, const std::size_t i_neuron) const {
+double layer::evaluateFct(const double x, const std::size_t i_neuron) const {
   double res = 0;
 
   if (i_neuron < nb_neurons_ && arr_neurons_ != nullptr && nb_neurons_ != 0)
@@ -275,7 +275,7 @@ double layer::evaluateFct(double x, const std::size_t i_neuron) const {
   return res;
 }
 
-double layer::evaluateFctDerivative(double x,
+double layer::evaluateFctDerivative(const double x,
                                     const std::size_t i_neuron) const {
   double res = 0;
   if (i_neuron < nb_neurons_ && arr_neurons_ != nullptr && nb_neurons_ != 0)

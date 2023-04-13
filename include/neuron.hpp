@@ -31,20 +31,21 @@ public:
   ~neuron();
 
   // * Getters && Setters
-
   std::size_t getSizeX() const { return size_X_; }
-  double getBiais() const { return Weight_[size_X_]; }
-  double getDb() const { return Weight_d_[size_X_]; }
-  double getWeight(const std::size_t i) const { return Weight_[i]; }
-  double getWeightDerivative(const std::size_t i) const { return Weight_d_[i]; }
+  inline double getBiais() const { return Weight_[size_X_]; }
+  inline double getDb() const { return Weight_d_[size_X_]; }
+  inline double getWeight(const std::size_t i) const { return Weight_[i]; }
+  inline double getWeightDerivative(const std::size_t i) const {
+    return Weight_d_[i];
+  }
   // pre activation value
   inline double getPe() const { return pre_activation_value_; }
   // post activation value
   inline double getPo() const { return post_activation_value_; }
-  inline void setBiais(double b) { Weight_[size_X_] = b; }
-  inline void setDb(double db) { Weight_d_[size_X_] = db; }
-  inline void setWeight(double w, const std::size_t i) { Weight_[i] = w; }
-  inline void setWeightDerivative(double dw, const std::size_t i) {
+  inline void setBiais(const double b) { Weight_[size_X_] = b; }
+  inline void setDb(const double db) { Weight_d_[size_X_] = db; }
+  inline void setWeight(const double w, const std::size_t i) { Weight_[i] = w; }
+  inline void setWeightDerivative(const double dw, const std::size_t i) {
     Weight_d_[i] = dw;
   }
   void setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
@@ -63,7 +64,7 @@ public:
   // * Other methods
   void setWeightsOnes();
   // The distribution used for the random weights is Unif([a, b])
-  void setWeightsRandom(int a, int b);
+  void setWeightsRandom(const int a, const int b);
   void setWeightsDerivativesZeros();
   // The activation of neuron is the composition :
   // activation_fct( pre_activation_value ),
@@ -73,8 +74,8 @@ public:
   // The result is a double stored in post_activation_value.
   void activateNeuron(const double *X, const std::size_t size);
   void printArr(const double *arr) const;
-  double evaluateFct(double x) const;           // activation_fct(x)
-  double evaluateFctDerivative(double x) const; // activation_fct_derivative(x)
+  double evaluateFct(const double x) const; // activation_fct(x)
+  double evaluateFctDerivative(const double x) const;
 
   // * Tests
   static void unitTest();
