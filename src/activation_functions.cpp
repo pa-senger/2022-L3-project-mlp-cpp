@@ -1,4 +1,4 @@
-#include "../include/activation_functions.hpp"
+#include "activation_functions.hpp"
 #include <cmath>
 
 double sigma(const double x) {

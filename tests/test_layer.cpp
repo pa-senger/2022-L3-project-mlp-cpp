@@ -1,5 +1,5 @@
-#include "../include/activation_functions.hpp"
-#include "../include/layer.hpp"
+#include "activation_functions.hpp"
+#include "layer.hpp"
 
 #include <cassert>
 #include <iostream>

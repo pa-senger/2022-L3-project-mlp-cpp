@@ -1,6 +1,6 @@
 #ifndef MPC_HPP
 #define MPC_HPP
-#include "../include/activation_functions.hpp"
+#include "activation_functions.hpp"
 #include "feed_forward.hpp"
 #include <cassert>
 #include <cstddef>

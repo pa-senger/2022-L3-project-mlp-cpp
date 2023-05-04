@@ -1,8 +1,8 @@
-#include "../include/activation_functions.hpp"
-#include "../include/feed_forward.hpp"
-#include "../include/layer.hpp"
-#include "../include/mpc.hpp"
-#include "../include/neuron.hpp"
+#include "activation_functions.hpp"
+#include "feed_forward.hpp"
+#include "layer.hpp"
+#include "mpc.hpp"
+#include "neuron.hpp"
 #include <cmath>
 #include <iostream>
 #include <random>

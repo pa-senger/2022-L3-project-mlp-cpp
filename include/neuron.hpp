@@ -1,7 +1,7 @@
 #ifndef NEURON_HPP
 #define NEURON_HPP
 
-#include "../include/activation_functions.hpp"
+#include "activation_functions.hpp"
 
 #include <cstddef>
 #include <iostream>

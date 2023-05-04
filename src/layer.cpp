@@ -1,5 +1,5 @@
-#include "../include/layer.hpp"
-#include "../include/neuron.hpp"
+#include "layer.hpp"
+#include "neuron.hpp"
 
 #include <cstddef>
 #include <iostream>

@@ -1,4 +1,4 @@
-#include "../include/mpc.hpp"
+#include "mpc.hpp"
 #include <cassert>
 
 int main() {

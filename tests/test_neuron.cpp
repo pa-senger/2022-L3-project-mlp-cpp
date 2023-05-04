@@ -1,5 +1,5 @@
-#include "../include/activation_functions.hpp"
-#include "../include/neuron.hpp"
+#include "activation_functions.hpp"
+#include "neuron.hpp"
 #include <cassert>
 #include <cmath>
 

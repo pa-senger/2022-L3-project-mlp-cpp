@@ -1,5 +1,5 @@
-#include "../include/activation_functions.hpp"
-#include "../include/feed_forward.hpp"
+#include "activation_functions.hpp"
+#include "feed_forward.hpp"
 #include <cassert>
 
 int main() {

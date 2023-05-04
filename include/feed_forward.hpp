@@ -3,7 +3,6 @@
 #include "activation_functions.hpp"
 #include "layer.hpp"
 #include <cassert>
-#include <cstddef>
 #include <ostream>
 
 template <int n_in, int n_out, int n_layer> class FeedForward {
@@ -33,8 +32,9 @@ public:
 
   // * Other methods
   double *evaluate(const double *X, const std::size_t size);
-  virtual void build(__attribute__((unused)) int *Nb_Neurons,
-                     __attribute__((unused)) int size) {}
+  virtual void build(int *Nb_Neurons, int size) {
+    (void)*Nb_Neurons, (void)size;
+  }
 
   // * Tests
   static void unitTest();
