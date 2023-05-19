@@ -14,7 +14,7 @@ int main() {
   // double (*pf_a)(double) = &sigma;
   // double (*pf_da)(double) = &dSigma;
 
-  neuron n1(0);
+  neuron n1(4);
 
   n1.setWeightsRandom(0, 1);
   double X0[4]{1, 2, 1.1, 5};
