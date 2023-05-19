@@ -3,6 +3,7 @@
 #include "activation_functions.hpp"
 #include "layer.hpp"
 #include <cassert>
+#include <cstddef>
 #include <ostream>
 
 template <int n_in, int n_out, int n_layer> class FeedForward {
@@ -20,6 +21,9 @@ public:
   void setAllWeightsDerivativesZeros();
   void setAllWeights(double *arr, std::size_t size);
   void getAllWeights(double *arr, std::size_t size) const;
+  std::size_t getNbBiais() const;
+  void getAllBiais(double *arr, std::size_t size) const;
+  void setAllBiais(double *arr, std::size_t size);
   double *getY() const { return Y_; }
   void printY() const;
 
@@ -141,6 +145,15 @@ std::size_t FeedForward<n_in, n_out, n_layer>::getTotalWeights() const {
   return res;
 }
 
+template <int n_in, int n_out, int n_layer>
+std::size_t FeedForward<n_in, n_out, n_layer>::getNbBiais() const {
+  std::size_t res = 0;
+  for (int i = 0; i < n_layer + 1; ++i) {
+    res = res + L_[i].getNbNeurons();
+  }
+  return res;
+}
+
 // This methods uses the Unif([a,b]) distribution to set random weights.
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::setAllWeightsRandoms(const double a,
@@ -159,7 +172,7 @@ template <int n_in, int n_out, int n_layer>
 layer &
 FeedForward<n_in, n_out, n_layer>::operator()(std::size_t i_layer) const {
   if (i_layer > n_layer + 1) {
-    std::cout
+    std::cerr
         << "Error operator(): there isn't as many layers in the system! \n";
     exit(1);
   }
@@ -181,7 +194,7 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr,
         }
     }
   } else {
-    std::cout << "Error setAllWeights: the array containing the weights "
+    std::cerr << "Error setAllWeights: the array containing the weights "
                  "should be of size : "
               << getTotalWeights() << std::endl;
   }
@@ -190,7 +203,7 @@ void FeedForward<n_in, n_out, n_layer>::setAllWeights(double *arr,
 // To avoid the "ISO C++ forbids variable length array" error we pass an array
 // to the method as parameter and the method fills it instead of
 // making a new array in the method and returning it
-// this problem could be avoided using std::vectors (i think?)
+// this problem could be avoided using a container from the STL
 template <int n_in, int n_out, int n_layer>
 void FeedForward<n_in, n_out, n_layer>::getAllWeights(double *arr,
                                                       std::size_t size) const {
@@ -207,10 +220,36 @@ void FeedForward<n_in, n_out, n_layer>::getAllWeights(double *arr,
 }
 
 template <int n_in, int n_out, int n_layer>
+void FeedForward<n_in, n_out, n_layer>::getAllBiais(double *arr,
+                                                    std::size_t size) const {
+  if (size == this->getNbBiais()) {
+    int index = 0;
+    for (int i = 0; i < n_layer + 1; ++i) {
+      for (std::size_t j = 0; j < L_[i].getNbNeurons(); j++) {
+        arr[index++] = L_[i].getBiais(j);
+      }
+    }
+  }
+}
+
+template <int n_in, int n_out, int n_layer>
+void FeedForward<n_in, n_out, n_layer>::setAllBiais(double *arr,
+                                                    std::size_t size) {
+  if (size == getNbBiais()) {
+    int index = 0; // to keep track of where we are in arr.
+    for (int i = 0; i < n_layer + 1; ++i) {
+      for (std::size_t j = 0; j < L_[i].getNbNeurons(); ++j) {
+        L_[i].setBiais(arr[index++], j);
+      }
+    }
+  }
+}
+
+template <int n_in, int n_out, int n_layer>
 double *FeedForward<n_in, n_out, n_layer>::evaluate(const double *X,
                                                     const std::size_t size) {
   if (size != n_in || n_in <= 0 || n_out <= 0) {
-    std::cout << "Error evaluate: size required : " << n_in
+    std::cerr << "Error evaluate: size required : " << n_in
               << " ,size given : " << size << std::endl;
     exit(1);
   }

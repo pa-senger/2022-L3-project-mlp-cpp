@@ -10,7 +10,7 @@ class mpc : public FeedForward<n_in, n_out, n_layer> {
 public:
   // * Constructors && Destructor using parent's one
   // Parent default contructor will be used by default if not specified.
-  mpc() {}
+  mpc() : FeedForward<n_in, n_out, n_layer>::FeedForward() {}
   mpc(const mpc &m) : FeedForward<n_in, n_out, n_layer>(m) {}
   ~mpc() {}
 
@@ -22,7 +22,7 @@ public:
   void setFct(double (*pf_a)(double), double (*pf_da)(double), int i_layer,
               std::string name = "n/a");
   // This method build the neural network using an array containing the
-  // number of neurons on each hidden layer as a param
+  // number of neurons on each hidden layer as an argument
   void build(int *Nb_Neurons, int size);
 
   // * Tests
@@ -56,7 +56,7 @@ void mpc<n_in, n_out, n_layer>::setFct(double (*pf_a)(double),
 template <int n_in, int n_out, int n_layer>
 void mpc<n_in, n_out, n_layer>::build(int *Nb_Neurons, int size) {
   if (size != n_layer) {
-    std::cout << "Error build: the number of layer and the size of the array "
+    std::cerr << "Error build: the number of layer and the size of the array "
                  "must be the same.\n             size req: "
               << n_layer << " , given : " << size << std::endl;
     exit(1);

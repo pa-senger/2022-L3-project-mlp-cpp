@@ -23,7 +23,7 @@ neuron::neuron(const std::size_t n)
       Weight_d_{new double[n + 1]} {
 
   if (n <= 0) {
-    std::cout << "Error constructor: a neuron must take an entry vector of at "
+    std::cerr << "Error constructor: a neuron must take an entry vector of at "
                  "least size 1.\n";
     exit(1);
   }
@@ -45,7 +45,7 @@ neuron::neuron(const std::size_t n, double (*pf_a)(double),
       Weight_d_{new double[n + 1]} {
 
   if (n <= 0) {
-    std::cout << "Error construtor: a neuron must take an entry vector of at "
+    std::cerr << "Error construtor: a neuron must take an entry vector of at "
                  "least size 1.\n";
     exit(1);
   }

@@ -97,7 +97,7 @@ double layer::getPo(const std::size_t i_neuron) const {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     res = arr_neurons_[i_neuron].getPo();
   } else {
-    std::cout << "Error getPo: there isn't as many neurons in the layer !"
+    std::cerr << "Error getPo: there isn't as many neurons in the layer !"
               << std::endl;
   }
 
@@ -109,7 +109,7 @@ void layer::setWeight(const double val, const std::size_t i_neuron,
   if (nb_neurons_ == 0 || i_neuron >= nb_neurons_ ||
       j_weight > (arr_neurons_[i_neuron].getSizeX()) ||
       arr_neurons_ == nullptr) {
-    std::cout << "Error setWeight: there isn't as many neurons or weights ! \n";
+    std::cerr << "Error setWeight: there isn't as many neurons or weights ! \n";
     exit(1);
   } else {
     arr_neurons_[i_neuron].setWeight(val, j_weight);
@@ -121,7 +121,7 @@ void layer::setWeightDerivative(const double val, const std::size_t i_neuron,
   if (nb_neurons_ == 0 || i_neuron >= nb_neurons_ ||
       j_weight >= (arr_neurons_[i_neuron].getSizeX()) ||
       arr_neurons_ == nullptr) {
-    std::cout << "Error setWeightDerivative: there isn't as many neurons or "
+    std::cerr << "Error setWeightDerivative: there isn't as many neurons or "
                  "weights ! \n";
     exit(1);
   } else {
@@ -134,7 +134,7 @@ void layer::setActivationFcts(double (*pf_a)(double), double (*pf_da)(double),
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setActivationFcts(pf_a, pf_da, name);
   } else {
-    std::cout
+    std::cerr
         << "Error setActivationFcts: there isn't as many neurons in the layer !"
         << std::endl;
   }
@@ -144,7 +144,7 @@ void layer::setActivationFctName(std::string name, const std::size_t i_neuron) {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setActivationFctName(name);
   } else {
-    std::cout << "Error setActivationFctName: there isn't as many neurons in "
+    std::cerr << "Error setActivationFctName: there isn't as many neurons in "
                  "the layer !"
               << std::endl;
   }
@@ -173,7 +173,7 @@ void layer::setBiais(const double val, const std::size_t i_neuron) {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setBiais(val);
   } else {
-    std::cout
+    std::cerr
         << "Error setBiais: there isn't as many neurons in the layer ! \n";
   }
 }
@@ -182,7 +182,7 @@ void layer::setDb(const double val, const std::size_t i_neuron) {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     arr_neurons_[i_neuron].setDb(val);
   } else {
-    std::cout << "Error setDb: there isn't as many neurons in the layer ! \n";
+    std::cerr << "Error setDb: there isn't as many neurons in the layer ! \n";
   }
 }
 
@@ -192,7 +192,7 @@ double layer::getBiais(const std::size_t i_neuron) const {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     res = arr_neurons_[i_neuron].getBiais();
   } else {
-    std::cout
+    std::cerr
         << "Error getBiais: there isn't as many neurons in the layer ! \n";
   }
 
@@ -205,7 +205,7 @@ double layer::getDb(const std::size_t i_neuron) const {
   if (i_neuron < nb_neurons_ && nb_neurons_ != 0 && arr_neurons_ != nullptr) {
     res = arr_neurons_[i_neuron].getDb();
   } else {
-    std::cout << "Error getDb: there isn't as many neurons in the layer ! \n";
+    std::cerr << "Error getDb: there isn't as many neurons in the layer ! \n";
   }
 
   return res;
@@ -286,7 +286,7 @@ double layer::evaluateFctDerivative(const double x,
 
 double *layer::evaluateLayer(const double *X, const std::size_t size_X) const {
   if (size_X != nb_data_) {
-    std::cout << "Error evaluateLayer: this size of data isn't compatible with "
+    std::cerr << "Error evaluateLayer: this size of data isn't compatible with "
                  "the layer !\n"
               << "    size required : " << nb_data_
               << ", size given : " << size_X << std::endl;
@@ -305,7 +305,7 @@ double *layer::evaluateLayer(const double *X, const std::size_t size_X) const {
 // the neuron is a reference not a copy.
 neuron &layer::operator()(const std::size_t i_neuron) const {
   if (arr_neurons_ == nullptr || nb_neurons_ == 0 || i_neuron >= nb_neurons_) {
-    std::cout
+    std::cerr
         << "Error operator(): there isn't as many neurons in this layer \n";
     exit(1);
   }

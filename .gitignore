@@ -48,4 +48,5 @@ build_debug
 log.txt
 build
 .cache
+.vscode
 
